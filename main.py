@@ -1,7 +1,7 @@
 from flask import Flask
 
 # FLASK BLUEPRINTS
-from LFP.Simulation.example_simulate_experiment import simulateLFP_experiment_bp
+from LFP.Simulation.LFP_experiment import simulateLFP_experiment_bp
 
 app = Flask(__name__)
 
