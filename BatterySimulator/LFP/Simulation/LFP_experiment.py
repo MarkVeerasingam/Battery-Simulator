@@ -1,10 +1,15 @@
+import os
 import pybamm
 from flask import Blueprint, request, jsonify
 
 simulateLFP_experiment_bp = Blueprint("LFP_experimentSimulation", __name__)
 
+PARAMETER_FILE = "/app/LFP/lfp_18650_cell_BPX.json"
+
 def load_parameters(filepath):
     """Load parameters from a BPX JSON file."""
+    if not os.path.exists(filepath):
+        raise FileNotFoundError(f"Parameter file {filepath} not found")
     return pybamm.ParameterValues.create_from_bpx(filepath)
 
 def create_model():
@@ -71,15 +76,12 @@ def run_simulation(parameter_file, experiment_lines):
         discharge_cap = solution['Discharge capacity [A.h]'].entries
         combined_data = []
 
-        # Format results for JSON response
-        for i in range(len(time_s)):
-            data_point = {
-                "time": time_s[i],
-                "voltage": voltage[i],
-                "current": current[i],
-                "discharge_capacity": discharge_cap[i]
-            }
-            combined_data.append(data_point)
+        combined_data = [{
+            "time": time_s[i],
+            "voltage": voltage[i],
+            "current": current[i],
+            "discharge_capacity": discharge_cap[i]
+        } for i in range(len(time_s))]
 
         return combined_data # return the formatted simulation results
     except Exception as e:
@@ -90,17 +92,14 @@ def simulate_battery_experiment():
     try:
         data = request.get_json()
 
-        # Import parameters from BPX JSON file
-        parameter_file = "BatterySimulator_SimulationBackend/LFP/lfp_18650_cell_BPX.json"
-
         """Custom Simulation"""
         # Extract experiment lines from POST request
-        experiment_lines = data.get('experimentLines', [])
+        experiment_lines = data.get('experimentLines')
         if not experiment_lines:
             raise ValueError("Experiment lines not provided in the request")
 
         # Run simulation with custom experiment lines
-        simulation_results = run_simulation(parameter_file, experiment_lines)
+        simulation_results = run_simulation(PARAMETER_FILE, experiment_lines)
 
         """Default simulation"""
         return jsonify({
@@ -110,17 +109,3 @@ def simulate_battery_experiment():
     
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})
-    
-if __name__ == "__main__":
-    experiment_lines = [
-        (
-            "Discharge at C/5 for 10 hours or until 2.5 V",
-            "Rest for 1 hour",
-            "Charge at 1 A until 3.5 V",
-            "Hold at 3.5 V until 10 mA",
-            "Rest for 1 hour",
-        ),
-    ] * 2
-
-    parameter_file = "BatterySimulator_SimulationBackend/LFP/lfp_18650_cell_BPX.json"
-    run_simulation(parameter_file, experiment_lines)
