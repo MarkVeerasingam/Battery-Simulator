@@ -1,2 +1,0 @@
-pybamm==24.1
-# liionpack==0.3.9

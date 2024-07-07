@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  battery-simulator:
+    container_name: battery-simulator
+    build:
+      context: ./BatterySimulator
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    volumes:
+      - ./BatterySimulator:/app
