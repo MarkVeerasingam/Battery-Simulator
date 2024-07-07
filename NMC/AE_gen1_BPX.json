@@ -1,0 +1,72 @@
+{
+      "Header": {
+            "BPX": 0.3,
+            "Title": "About:Energy Gen1 Demo 21700 NMC811|graphite 5 Ah cell",
+            "Description": "About:Energy Gen1 Demo 21700 NMC811|graphite 5 Ah cell physics-based parameterisation. This is a fictitious cell used for technology demonstration. Some data are taken from literature: Nyman et al. 2008 (doi:10.1016/j.electacta.2008.04.023); Chen et al. 2020 (doi:10.1149/1945-7111/ab9050); O'Regan et al. 2022 (doi:10.1016/j.electacta.2022.140700).",
+            "Model": "DFN"
+      },
+      "Parameterisation": {
+            "Cell": {
+                  "Ambient temperature [K]": 298.15,
+                  "Initial temperature [K]": 298.15,
+                  "Reference temperature [K]": 298.15,
+                  "Lower voltage cut-off [V]": 2.5,
+                  "Upper voltage cut-off [V]": 4.2,
+                  "Nominal cell capacity [A.h]": 5,
+                  "Specific heat capacity [J.K-1.kg-1]": 761,
+                  "Thermal conductivity [W.m-1.K-1]": 8,
+                  "Density [kg.m-3]": 3151,
+                  "Electrode area [m2]": 0.10752,
+                  "Number of electrode pairs connected in parallel to make a cell": 1,
+                  "External surface area [m2]": 0.00531,
+                  "Volume [m3]": 2.42e-05
+            },
+            "Electrolyte": {
+                  "Initial concentration [mol.m-3]": 1000,
+                  "Cation transference number": 0.2594,
+                  "Conductivity [S.m-1]": "0.1297 * (x / 1000) ** 3 - 2.51 * (x / 1000) ** 1.5 + 3.329 * (x / 1000)",
+                  "Diffusivity [m2.s-1]": "8.794e-11 * (x / 1000) ** 2 - 3.972e-10 * (x / 1000) + 4.862e-10",
+                  "Conductivity activation energy [J.mol-1]": 17100,
+                  "Diffusivity activation energy [J.mol-1]": 17100
+            },
+            "Negative electrode": {
+                  "Particle radius [m]": 5e-06,
+                  "Thickness [m]": 8.5e-05,
+                  "Diffusivity [m2.s-1]": 6e-15,
+                  "OCP [V]": "9.47057878e-01 * exp(-1.59418743e+02  * x) - 3.50928033e+04 + 1.64230269e-01 * tanh(-4.55509094e+01 * (x - 3.24116012e-02 )) + 3.69968491e-02 * tanh(-1.96718868e+01 * (x - 1.68334476e-01)) + 1.91517003e+04 * tanh(3.19648312e+00 * (x - 1.85139824e+00)) + 5.42448511e+04 * tanh(-3.19009848e+00 * (x - 2.01660395e+00))",
+                  "Entropic change coefficient [V.K-1]": "-1.112e-4 * x + 2.914e-5 + 3.561e-4 * exp(-((x - 0.08309) ** 2) / 0.004616)",
+                  "Conductivity [S.m-1]": 20,
+                  "Surface area per unit volume [m-1]": 420000,
+                  "Porosity": 0.25,
+                  "Transport efficiency": 0.125,
+                  "Reaction rate constant [mol.m-2.s-1]": 2e-05,
+                  "Minimum stoichiometry": 0.0041,
+                  "Maximum stoichiometry": 0.9805,
+                  "Maximum concentration [mol.m-3]": 30556,
+                  "Diffusivity activation energy [J.mol-1]": 30000,
+                  "Reaction rate constant activation energy [J.mol-1]": 55000
+            },
+            "Positive electrode": {
+                  "Particle radius [m]": 4.5e-06,
+                  "Thickness [m]": 7.5e-05,
+                  "Diffusivity [m2.s-1]": 4e-15,
+                  "OCP [V]": "-0.8090 * x + 4.4875 - 0.0428 * tanh(18.5138 * (x - 0.5542)) - 17.7326 * tanh(15.7890 * (x - 0.3117)) + 17.5842 * tanh(15.9308 * (x - 0.3120))",
+                  "Entropic change coefficient [V.K-1]": "4.006e-5 * exp(-((x - 0.2828) ** 2) / 0.0009855) - 6.656e-5 * exp(-((x - 0.8032) ** 2) / 0.02179)",
+                  "Conductivity [S.m-1]": 1,
+                  "Surface area per unit volume [m-1]": 450000,
+                  "Porosity": 0.335,
+                  "Transport efficiency": 0.19390,
+                  "Reaction rate constant [mol.m-2.s-1]": 5e-05,
+                  "Minimum stoichiometry": 0.2780,
+                  "Maximum stoichiometry": 0.9671,
+                  "Maximum concentration [mol.m-3]": 50884,
+                  "Diffusivity activation energy [J.mol-1]": 14000,
+                  "Reaction rate constant activation energy [J.mol-1]": 30000
+            },
+            "Separator": {
+                  "Thickness [m]": 1.2e-05,
+                  "Porosity": 0.47,
+                  "Transport efficiency": 0.3222
+            }
+      }
+}
