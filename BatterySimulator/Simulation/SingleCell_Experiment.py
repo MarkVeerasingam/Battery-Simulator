@@ -2,12 +2,12 @@ import os
 import pybamm
 from flask import Blueprint, request, jsonify
 
-simulateLFP_experiment_bp = Blueprint("LFP_experimentSimulation", __name__)
+bp_LFP_experiment = Blueprint("LFP_experimentSimulation", __name__)
 
 # Docker
-#PARAMETER_FILE = "/app/LFP/lfp_18650_cell_BPX.json"
+PARAMETER_FILE = "/app/LFP/lfp_18650_cell_BPX.json"
 # Localhost
-PARAMETER_FILE = "BatterySimulator/LFP/lfp_18650_cell_BPX.json"
+# PARAMETER_FILE = "BatterySimulator/LFP/lfp_18650_cell_BPX.json"
 
 def load_parameters(filepath):
     """Load parameters from a BPX JSON file."""
@@ -17,11 +17,17 @@ def load_parameters(filepath):
 
 def create_model():
     # Create a DFN model
+    # Need to investigate the difference in modelling DFN/SPM/SPMe through this func or through BPX JSON
     model = pybamm.lithium_ion.DFN()
     return model
 
+    """
+    I want to have some conditional statements in here from the post req saying if DFN/SPM/SPMe model DFN/SPM/SPMe.
+    """
+
 def create_solver():
     # solver
+    # solving fine for what is required, might look at a JAX solver later
     solver = pybamm.CasadiSolver("safe", atol=1e-6, rtol=1e-6)
     # Prevent solver failure if interpolant bounds are exceeded by a negligible amount
     solver._on_extrapolation = "warn"
@@ -90,7 +96,7 @@ def run_simulation(parameter_file, experiment_lines):
     except Exception as e:
             raise RuntimeError(f"Simulation failed: {str(e)}")
 
-@simulateLFP_experiment_bp.route('/simulate', methods=['POST'])
+@bp_LFP_experiment.route('/runExperiment', methods=['POST'])
 def simulate_battery_experiment():
     try:
         data = request.get_json()
