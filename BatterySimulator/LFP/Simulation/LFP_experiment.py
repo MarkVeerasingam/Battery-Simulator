@@ -4,7 +4,10 @@ from flask import Blueprint, request, jsonify
 
 simulateLFP_experiment_bp = Blueprint("LFP_experimentSimulation", __name__)
 
-PARAMETER_FILE = "/app/LFP/lfp_18650_cell_BPX.json"
+# Docker
+#PARAMETER_FILE = "/app/LFP/lfp_18650_cell_BPX.json"
+# Localhost
+PARAMETER_FILE = "BatterySimulator/LFP/lfp_18650_cell_BPX.json"
 
 def load_parameters(filepath):
     """Load parameters from a BPX JSON file."""
