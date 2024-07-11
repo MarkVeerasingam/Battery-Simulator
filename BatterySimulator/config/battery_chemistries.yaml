@@ -1,0 +1,3 @@
+bpx_chemistry_models:
+  LFP: "BatterySimulator/Simulation/LFP/lfp_18650_cell_BPX.json"
+  NMC: "BatterySimulator/Simulation/NMC/AE_gen1_BPX.json"

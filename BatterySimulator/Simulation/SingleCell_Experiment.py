@@ -5,7 +5,7 @@ from flask import Blueprint, request, jsonify
 bp_LFP_experiment = Blueprint("LFP_experimentSimulation", __name__)
 
 # Docker
-PARAMETER_FILE = "/app/LFP/lfp_18650_cell_BPX.json"
+PARAMETER_FILE = "/app/Simulation/LFP/lfp_18650_cell_BPX.json"
 # Localhost
 # PARAMETER_FILE = "BatterySimulator/LFP/lfp_18650_cell_BPX.json"
 
@@ -96,7 +96,7 @@ def run_simulation(parameter_file, experiment_lines):
     except Exception as e:
             raise RuntimeError(f"Simulation failed: {str(e)}")
 
-@bp_LFP_experiment.route('/runExperiment', methods=['POST'])
+@bp_LFP_experiment.route('/experiment', methods=['POST'])
 def simulate_battery_experiment():
     try:
         data = request.get_json()

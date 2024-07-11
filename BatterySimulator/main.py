@@ -1,13 +1,9 @@
-import os
-import psycopg2
-from dotenv import load_dotenv
 from flask import Flask
-from LFP.Simulation.LFP_experiment import simulateLFP_experiment_bp
-from datetime import datetime
+from Simulation.SingleCell_Experiment import bp_LFP_experiment
 
 # create flask instance
 app = Flask(__name__)
-app.register_blueprint(simulateLFP_experiment_bp, url_prefix='/LFP_experiment')
+app.register_blueprint(bp_LFP_experiment, url_prefix='/LFP/singleCell')
 
 # Database
 # url = os.getenv("DATABASE_URL")
