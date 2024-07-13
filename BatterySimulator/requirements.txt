@@ -4,3 +4,4 @@ bpx==0.3.1
 psycopg2-binary
 python-dotenv
 configparser==7.0.0
+pydantic==1.10.10
