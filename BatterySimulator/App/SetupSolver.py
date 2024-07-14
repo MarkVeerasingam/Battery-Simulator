@@ -1,7 +1,7 @@
 import pybamm
 from pydantic import StrictStr, StrictFloat, validator, BaseModel
 
-class Config_Solver(BaseModel):
+class SetupSolver(BaseModel):
     solver: StrictStr
     atol: StrictFloat = 1e-6
     rtol: StrictFloat = 1e-6

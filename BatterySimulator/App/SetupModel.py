@@ -4,7 +4,7 @@ from pydantic import BaseModel, StrictStr, validator
 NMC = r"C:\Users\markv\Documents\Repos\2024\BatterySimulator_v2\BatterySimulator_SimulationBackend\Li-Ion-Battery-Simulator\BatterySimulator\Models\NMC\AE_gen1_BPX.json"
 LFP = r"C:\Users\markv\Documents\Repos\2024\BatterySimulator_v2\BatterySimulator_SimulationBackend\Li-Ion-Battery-Simulator\BatterySimulator\Models\LFP\lfp_18650_cell_BPX.json"
 
-class ConfigModel(BaseModel):
+class SetupModel(BaseModel):
     bpx_model: StrictStr 
     electrochemical_model: StrictStr
 
@@ -38,7 +38,7 @@ class ConfigModel(BaseModel):
         return parameter_values
 
 def main():
-    setup_model = ConfigModel(bpx_model="LFP", electrochemical_model="DFN")
+    setup_model = SetupModel(bpx_model="LFP", electrochemical_model="DFN")
     parameter_values = setup_model.set_bpx_model()
 
     print(parameter_values)
