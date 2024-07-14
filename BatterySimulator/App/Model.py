@@ -1,8 +1,8 @@
 import pybamm
 from pydantic import BaseModel, StrictStr, validator
 
-NMC = r"C:\Users\markv\Documents\Repos\2024\BatterySimulator_v2\BatterySimulator_SimulationBackend\Li-Ion-Battery-Simulator\BatterySimulator\Models\NMC\AE_gen1_BPX.json"
-LFP = r"C:\Users\markv\Documents\Repos\2024\BatterySimulator_v2\BatterySimulator_SimulationBackend\Li-Ion-Battery-Simulator\BatterySimulator\Models\LFP\lfp_18650_cell_BPX.json"
+NMC = r"BatterySimulator\Models\NMC\AE_gen1_BPX.json"
+LFP = r"BatterySimulator\Models\LFP\lfp_18650_cell_BPX.json"
 
 class ConfigModel(BaseModel):
     bpx_model: StrictStr 
