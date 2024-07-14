@@ -1,8 +1,7 @@
 import pybamm
-from pydantic import BaseModel, validator
-
-from BatterySimulator.App.Model import ConfigModel
-from BatterySimulator.App.Solver import ConfigSolver
+from pydantic import BaseModel
+from App.Model import ConfigModel
+from App.Solver import ConfigSolver
 
 class BaseSimulation(BaseModel):
     config_model: ConfigModel
@@ -31,4 +30,18 @@ class TimeEvaluationSimulation(BaseSimulation):
                                 solver=simulation_model["solver"])
         
         sim.solve(self.t_eval)
+        sim.plot()
+
+class ExperimentSimulation(BaseSimulation):
+    experiment: list
+
+    def simulate(self):
+        simulation_model = self.construct_simulation_model()
+
+        sim = pybamm.Simulation(model=simulation_model["model"],
+                                parameter_values=simulation_model["parameter_values"],
+                                solver=simulation_model["solver"],
+                                experiment=self.experiment)
+        
+        sim.solve()
         sim.plot()
