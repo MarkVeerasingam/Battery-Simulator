@@ -30,9 +30,17 @@ class SimulationRunner:
 
     @model_params.setter
     def model_params(self, model_config):
+        if "bpx_model" in model_config:
+            # Create a new instance of BatteryModel 
+            new_battery_model = BatteryModel.create_from_config(model_config["bpx_model"])
+            self._config_battery_model = new_battery_model
+        
+        if "electrochemical_model" in model_config:
+            # Create a new instance of ElectrochemicalModel 
+            new_electrochemical_model = ElectrochemicalModel.create_from_config(model_config["electrochemical_model"])
+            self._config_electrochemical_model = new_electrochemical_model
+        
         self._model_params.update(model_config)
-        self._config_battery_model.update_model(bpx_model=self._model_params["bpx_model"])
-        self._config_electrochemical_model.update_model(electrochemical_model=self._model_params["electrochemical_model"])
 
     @property
     def solver_params(self):
