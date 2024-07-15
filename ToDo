@@ -1,2 +1,6 @@
-- Simulate LFP in a frontend using default experiement
-- 
+- [Feature] [High] Let user set a custom t_eval field for TimeEvaluationSimulation (should be able to hold fields like np.linspace(0, 3600, 300)) 
+- [Feature] [High] let user select what outputs they want to see from simulation
+- [Feature] [Low] Add electrochemical model support for May Particle Model (MPM)
+- [Feature] [Med] let the simulator simulate drive cycles
+- [Feature] [Low] add JAX solver support.
+
