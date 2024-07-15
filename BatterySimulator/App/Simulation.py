@@ -30,7 +30,9 @@ class TimeEvaluationSimulation(BaseSimulation):
                                 solver=simulation_model["solver"])
         
         sim.solve(self.t_eval)
+        self.results = sim.solution # store output results of simulation
         sim.plot()
+        return self.results
 
 class ExperimentSimulation(BaseSimulation):
     experiment: list

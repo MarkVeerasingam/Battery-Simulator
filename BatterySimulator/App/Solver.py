@@ -26,3 +26,11 @@ class ConfigSolver(BaseModel):
             return solver
         else:
             raise ValueError ("Invalid Solver, must be set as CasadiSolver")
+        
+    def update_solver(self, solver=None, atol=None, rtol=None):
+        if solver:
+            self.solver = solver
+        if atol:
+            self.atol = atol
+        if rtol:
+            self.rtol = rtol
