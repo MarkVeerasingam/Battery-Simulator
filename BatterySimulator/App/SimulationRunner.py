@@ -34,6 +34,12 @@ class SimulationRunner:
 
     def get_experiment(self):
         return self.experiment
+    
+    def set_time_eval(self, t_eval):
+        self.t_eval = t_eval
+
+    def get_time_eval(self):
+        return self.t_eval
 
     def run_time_evaluation_simulation(self):
         simulation = TimeEvaluationSimulation(
