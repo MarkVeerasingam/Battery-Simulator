@@ -1,20 +1,22 @@
 import pybamm
 from pydantic import BaseModel
-from App.Model import ConfigModel
+from App.BatteryModel import BatteryModel
+from App.ElectrochemicalModel import ElectrochemicalModel
 from App.Solver import ConfigSolver
 
 class BaseSimulation(BaseModel):
-    config_model: ConfigModel
+    config_battery_model: BatteryModel
+    config_electrochemical_model: ElectrochemicalModel
     config_solver: ConfigSolver
 
     def construct_simulation_model(self):
-        model = self.config_model.set_electrochemical_model()
-        parameter_values = self.config_model.set_bpx_model()
+        electrochemical_model = self.config_electrochemical_model.set_electrochemical_model()
+        battery_model = self.config_battery_model.set_bpx_model()
         solver = self.config_solver.set_solver()
 
         simulation_model = {
-            "model": model,
-            "parameter_values": parameter_values,
+            "model": electrochemical_model,
+            "parameter_values": battery_model,
             "solver": solver
         }
         return simulation_model
