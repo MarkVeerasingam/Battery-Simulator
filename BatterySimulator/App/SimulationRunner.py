@@ -4,11 +4,11 @@ from App.Simulation import TimeEvaluationSimulation, ExperimentSimulation
 
 class SimulationRunner:
     def __init__(self):
-        self.model_params = {"bpx_model": "LFP", "electrochemical_model": "DFN"}
-        self.solver_params = {"solver": "CasadiSolver", "atol": 1e-6, "rtol": 1e-6}
+        self._model_params = {"bpx_model": "LFP", "electrochemical_model": "DFN"}
+        self._solver_params = {"solver": "CasadiSolver", "atol": 1e-6, "rtol": 1e-6}
 
-        self.t_eval = [0, 3700]
-        self.experiment = [
+        self._t_eval = [0, 3700]
+        self._experiment = [
             (
                 "Discharge at C/5 for 10 hours or until 2.5 V",
                 "Rest for 1 hour",
@@ -18,35 +18,55 @@ class SimulationRunner:
             ),
         ] * 2
 
-        self.config_model = ConfigModel.create_from_config(**self.model_params)
-        self.config_solver = ConfigSolver.create_from_config(**self.solver_params)
+        self._config_model = ConfigModel.create_from_config(**self._model_params)
+        self._config_solver = ConfigSolver.create_from_config(**self._solver_params)
 
-    def set_model_config(self, model_config):
-        self.model_params.update(model_config)
-        self.config_model = ConfigModel.create_from_config(**self.model_params)
+    @property
+    def model_params(self):
+        return self._model_params
 
-    def set_solver_config(self, solver_config):
-        self.solver_params.update(solver_config)
-        self.config_solver = ConfigSolver.create_from_config(**self.solver_params)
+    @model_params.setter
+    def model_params(self, model_config):
+        self._model_params.update(model_config)
+        self._config_model.update_model(**self.model_params)
 
-    def set_experiment(self, experiment):
-        self.experiment = experiment
+    @property
+    def solver_params(self):
+        return self._solver_params
 
-    def get_experiment(self):
-        return self.experiment
+    @solver_params.setter
+    def solver_params(self, solver_config):
+        self._solver_params.update(solver_config)
+        self._config_solver.update_solver(**self._solver_params)
+
+    @property
+    def experiment(self):
+        return self._experiment
+
+    @experiment.setter
+    def experiment(self, experiment):
+        self._experiment = experiment
+    
+    @property
+    def t_eval(self):
+        return self._t_eval
+
+    @t_eval.setter
+    def t_eval(self, t_eval):
+        self._t_eval = t_eval
 
     def run_time_evaluation_simulation(self):
         simulation = TimeEvaluationSimulation(
-            config_model=self.config_model,
-            config_solver=self.config_solver,
-            t_eval=self.t_eval
+            config_model=self._config_model,
+            config_solver=self._config_solver,
+            t_eval=self._t_eval
         )
         simulation.simulate()
 
     def run_experiment_simulation(self):
         simulation = ExperimentSimulation(
-            config_model=self.config_model,
-            config_solver=self.config_solver,
-            experiment=self.experiment
+            config_model=self._config_model,
+            config_solver=self._config_solver,
+            experiment=self._experiment
         )
         simulation.simulate()

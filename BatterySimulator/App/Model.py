@@ -46,3 +46,9 @@ class ConfigModel(BaseModel):
             raise ValueError(f"Invalid electrochemical model: {self.electrochemical_model}")
         
         return model
+    
+    def update_model(self, bpx_model=None, electrochemical_model=None):
+        if bpx_model:
+            self.bpx_model = bpx_model
+        if electrochemical_model:
+            self.electrochemical_model = electrochemical_model
