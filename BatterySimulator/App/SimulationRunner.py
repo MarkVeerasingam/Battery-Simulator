@@ -1,4 +1,6 @@
-from App.Model import ConfigModel
+# SimulationRunner.py
+from App.BatteryModel import BatteryModel
+from App.ElectrochemicalModel import ElectrochemicalModel
 from App.Solver import ConfigSolver
 from App.Simulation import TimeEvaluationSimulation, ExperimentSimulation
 
@@ -18,7 +20,8 @@ class SimulationRunner:
             ),
         ] * 2
 
-        self._config_model = ConfigModel.create_from_config(**self._model_params)
+        self._config_battery_model = BatteryModel.create_from_config(self._model_params["bpx_model"])
+        self._config_electrochemical_model = ElectrochemicalModel.create_from_config(self._model_params["electrochemical_model"])
         self._config_solver = ConfigSolver.create_from_config(**self._solver_params)
 
     @property
@@ -28,7 +31,8 @@ class SimulationRunner:
     @model_params.setter
     def model_params(self, model_config):
         self._model_params.update(model_config)
-        self._config_model.update_model(**self.model_params)
+        self._config_battery_model.update_model(bpx_model=self._model_params["bpx_model"])
+        self._config_electrochemical_model.update_model(electrochemical_model=self._model_params["electrochemical_model"])
 
     @property
     def solver_params(self):
@@ -57,7 +61,8 @@ class SimulationRunner:
 
     def run_time_evaluation_simulation(self):
         simulation = TimeEvaluationSimulation(
-            config_model=self._config_model,
+            config_battery_model=self._config_battery_model,
+            config_electrochemical_model=self._config_electrochemical_model,
             config_solver=self._config_solver,
             t_eval=self._t_eval
         )
@@ -65,7 +70,8 @@ class SimulationRunner:
 
     def run_experiment_simulation(self):
         simulation = ExperimentSimulation(
-            config_model=self._config_model,
+            config_battery_model=self._config_battery_model,
+            config_electrochemical_model=self._config_electrochemical_model,
             config_solver=self._config_solver,
             experiment=self._experiment
         )
