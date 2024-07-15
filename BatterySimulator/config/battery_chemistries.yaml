@@ -1,3 +1,0 @@
-bpx_chemistry_models:
-  LFP: "BatterySimulator\Models\NMC\AE_gen1_BPX.json"
-  NMC: "BatterySimulator\Models\NMC\AE_gen1_BPX.json"
