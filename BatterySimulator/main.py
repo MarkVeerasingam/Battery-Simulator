@@ -33,4 +33,3 @@ if __name__ == '__main__':
     # simRunner.run_time_evaluation_simulation()
 
     print(f"Time(s):{time.time()-start_time:.2f}")
-
