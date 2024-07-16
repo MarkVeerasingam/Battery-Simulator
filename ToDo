@@ -1,4 +1,3 @@
-- [Cleanup] [High] Add suport to look for bpx models not by string but what is physically availible from a cell library
 - [Testing] [High] Add try-catch statements to Model.py and Solver.py when making models.
 - [Testing] [Med] Look at impletmenting PyTest to test simulations before running them.
 - [Testing] [High] Add try-catch statements to Model.py and Solver.py when making models.
