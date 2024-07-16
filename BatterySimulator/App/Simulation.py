@@ -15,8 +15,8 @@ class BaseSimulation(BaseModel):
         solver = self.config_solver.set_solver()
 
         simulation_model = {
-            "model": electrochemical_model,
-            "parameter_values": battery_model,
+            "electrochemical_model": electrochemical_model,
+            "battery_model": battery_model,
             "solver": solver
         }
         return simulation_model
@@ -27,8 +27,8 @@ class TimeEvaluationSimulation(BaseSimulation):
     def simulate(self):
         simulation_model = self.construct_simulation_model()
 
-        sim = pybamm.Simulation(model=simulation_model["model"],
-                                parameter_values=simulation_model["parameter_values"],
+        sim = pybamm.Simulation(model=simulation_model["electrochemical_model"],
+                                parameter_values=simulation_model["battery_model"],
                                 solver=simulation_model["solver"])
         
         sim.solve(self.t_eval)
@@ -42,8 +42,8 @@ class ExperimentSimulation(BaseSimulation):
     def simulate(self):
         simulation_model = self.construct_simulation_model()
 
-        sim = pybamm.Simulation(model=simulation_model["model"],
-                                parameter_values=simulation_model["parameter_values"],
+        sim = pybamm.Simulation(model=simulation_model["electrochemical_model"],
+                                parameter_values=simulation_model["battery_model"],
                                 solver=simulation_model["solver"],
                                 experiment=self.experiment)
         

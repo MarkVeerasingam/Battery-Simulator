@@ -7,7 +7,7 @@ from App.Simulation import TimeEvaluationSimulation, ExperimentSimulation
 class SimulationRunner:
     def __init__(self):
         self._electrochemical_params = {"electrochemical_model": "DFN"}
-        self._battery_params = {"battery_model": "LFP"}
+        self._battery_params = {"bpx_model": "LFP"}
         self._solver_params = {"solver": "CasadiSolver", "atol": 1e-6, "rtol": 1e-6}
 
         self._t_eval = [0, 3700]
@@ -21,8 +21,8 @@ class SimulationRunner:
             ),
         ] * 2
 
-        self._config_battery_model = BatteryModel.create_from_config(self._battery_params["battery_model"])
-        self._config_electrochemical_model = ElectrochemicalModel.create_from_config(self._electrochemical_params["electrochemical_model"])
+        self._config_battery_model = BatteryModel.create_from_config(self._battery_params["bpx_model"])
+        self._config_electrochemical_model = ElectrochemicalModel.create_from_config(self._battery_params["electrochemical_model"])
         self._config_solver = ConfigSolver.create_from_config(**self._solver_params)
 
     @property
@@ -34,20 +34,20 @@ class SimulationRunner:
         if "electrochemical_model" in electrochemical_config:
             # Create a new instance of ElectrochemicalModel 
             new_electrochemical_model = ElectrochemicalModel.create_from_config(electrochemical_config["electrochemical_model"])
-            self._config_electrochemical_model = new_electrochemical_model 
-        self._electrochemical_params.update(electrochemical_config)
+        self._config_electrochemical_model = new_electrochemical_model
+        
+        self._battery_params.update(electrochemical_config)
 
     @property
-    def battery_params(self):
+    def model_params(self):
         return self._battery_params
 
-    @battery_params.setter
-    def battery_params(self, model_config):
-        if "battery_model" in model_config:
+    @model_params.setter
+    def model_params(self, model_config):
+        if "bpx_model" in model_config:
             # Create a new instance of BatteryModel 
-            new_battery_model = BatteryModel.create_from_config(model_config["battery_model"])
-            self._config_battery_model = new_battery_model
-        self._battery_params.update(model_config)
+            new_battery_model = BatteryModel.create_from_config(model_config["bpx_model"])
+        self._config_battery_model = new_battery_model
 
     @property
     def solver_params(self):

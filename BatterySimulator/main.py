@@ -1,10 +1,14 @@
+import time
 from App.SimulationRunner import SimulationRunner
 
 if __name__ == '__main__':
+    start_time = time.time()
+
     simRunner = SimulationRunner()
 
     # DEFINE TYPE OF SIMULATION
-    simRunner.model_params = {"bpx_model": "NMC", "electrochemical_model": "DFN"}
+    simRunner.battery_params = {"battery_model": "LFP"}
+    simRunner.electrochemical_params = {"electrochemical_model": "DFN"}
     simRunner.solver_params = {"solver": "CasadiSolver", "atol": 1e-6, "rtol": 1e-6}
 
     # TIME EVALULATION SIMULATION
@@ -27,4 +31,6 @@ if __name__ == '__main__':
     # RUN SIMULATION
     simRunner.run_experiment_simulation()
     # simRunner.run_time_evaluation_simulation()
+
+    print(f"Time(s):{time.time()-start_time:.2f}")
 
