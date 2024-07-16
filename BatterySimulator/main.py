@@ -7,8 +7,8 @@ if __name__ == '__main__':
     simRunner = SimulationRunner()
 
     # DEFINE TYPE OF SIMULATION
-    simRunner.electrochemical_params = {"electrochemical_model": "DFN"}
     simRunner.battery_params = {"battery_model": "LFP"}
+    simRunner.electrochemical_params = {"electrochemical_model": "DFN"}
     simRunner.solver_params = {"solver": "CasadiSolver", "atol": 1e-6, "rtol": 1e-6}
 
     # TIME EVALULATION SIMULATION
