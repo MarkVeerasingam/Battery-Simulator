@@ -1,14 +1,10 @@
-- [Cleanup] [High] Add suport to look for bpx models not by string but what is physically availible from a cell library
 - [Testing] [High] Add try-catch statements to Model.py and Solver.py when making models.
 - [Testing] [Med] Look at impletmenting PyTest to test simulations before running them.
 - [Testing] [High] Add try-catch statements to Model.py and Solver.py when making models.
 - [Testing] [Med] Make validators more thorough for edge cases in Model.py (ties in with config file)
 
-- [Cleanup] [High] Seperate BPX Models and Electrochemical Modes into their own classes.
-
 - [Feature] [High] let user select what outputs they want to see from simulation
 - [Feature] [Low] Add electrochemical model support for May Particle Model (MPM)
-- [Feature] [Med] let the simulator simulate drive cycles
+- [Feature] [Med] let the simulator simulate drive cycles - may need to turn model.events = [] 
 - [Feature] [Low] add JAX solver support.
 - [Feature] [Low] Feature to set the mesh and discretise model the electrochemical model.
-- [Feature] [Low] Look at adding FastAPI
