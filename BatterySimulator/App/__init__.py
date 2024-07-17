@@ -1,4 +1,6 @@
-from App.BatteryModel.BatteryModel import BatteryModel
-from App.ElectrochemicalModel.ElectrochemicalModel import ElectrochemicalModel
-from App.Solver.Solver import ConfigSolver
-from App.Simulation import TimeEvaluationSimulation, ExperimentSimulation
+from App.CreateBatteryModel.BatteryModel import BatteryModel
+from App.CreateBatteryModel.ElectrochemicalModel import ElectrochemicalModel
+from App.CreateBatteryModel.Solver import Solver
+from App.Simulation import Simulation
+from App.Config import Configuration
+

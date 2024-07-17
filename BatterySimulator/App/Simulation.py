@@ -1,51 +1,26 @@
 import pybamm
-from pydantic import BaseModel
-from App.BatteryModel.BatteryModel import BatteryModel
-from App.ElectrochemicalModel.ElectrochemicalModel import ElectrochemicalModel
-from App.Solver.Solver import ConfigSolver
+from App.CreateBatteryModel.BatteryModel import BatteryModel
+from App.CreateBatteryModel.ElectrochemicalModel import ElectrochemicalModel
+from App.CreateBatteryModel.Solver import Solver
 
-class BaseSimulation(BaseModel):
-    config_battery_model: BatteryModel
-    config_electrochemical_model: ElectrochemicalModel
-    config_solver: ConfigSolver
+class Simulation:
+    def __init__(self, config):
+        self.electrochemical_model = ElectrochemicalModel.create(config.electrochemical_model)
+        self.battery_model = BatteryModel.create(config.battery_model)
+        self.solver = Solver.create(config.solver, config.atol, config.rtol)
 
-    def construct_simulation_model(self):
-        electrochemical_model = self.config_electrochemical_model.set_electrochemical_model()
-        battery_model = self.config_battery_model.set_bpx_model()
-        solver = self.config_solver.set_solver()
-
-        simulation_model = {
-            "electrochemical_model": electrochemical_model,
-            "battery_model": battery_model,
-            "solver": solver
-        }
-        return simulation_model
-
-class TimeEvaluationSimulation(BaseSimulation):
-    t_eval: list
-
-    def simulate(self):
-        simulation_model = self.construct_simulation_model()
-
-        sim = pybamm.Simulation(model=simulation_model["electrochemical_model"],
-                                parameter_values=simulation_model["battery_model"],
-                                solver=simulation_model["solver"])
+    def run(self, t_eval=None, experiment=None):
+        sim = pybamm.Simulation(
+            model=self.electrochemical_model,
+            parameter_values=self.battery_model,
+            solver=self.solver,
+            experiment=experiment
+        )
         
-        sim.solve(self.t_eval)
-        self.results = sim.solution # store output results of simulation
-        sim.plot()
-        return self.results
-
-class ExperimentSimulation(BaseSimulation):
-    experiment: list
-
-    def simulate(self):
-        simulation_model = self.construct_simulation_model()
-
-        sim = pybamm.Simulation(model=simulation_model["electrochemical_model"],
-                                parameter_values=simulation_model["battery_model"],
-                                solver=simulation_model["solver"],
-                                experiment=self.experiment)
+        if t_eval:
+            solution = sim.solve(t_eval)
+        else:
+            solution = sim.solve()
         
-        sim.solve()
         sim.plot()
+        return solution
