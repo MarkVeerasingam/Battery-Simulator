@@ -1,7 +1,7 @@
 # SimulationRunner.py
-from App.BatteryModel import BatteryModel
-from App.ElectrochemicalModel import ElectrochemicalModel
-from App.Solver import ConfigSolver
+from App.BatteryModel.BatteryModel import BatteryModel
+from App.ElectrochemicalModel.ElectrochemicalModel import ElectrochemicalModel
+from App.Solver.Solver import ConfigSolver
 from App.Simulation import TimeEvaluationSimulation, ExperimentSimulation
 
 class SimulationRunner:
