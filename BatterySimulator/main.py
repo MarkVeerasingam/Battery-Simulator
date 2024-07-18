@@ -1,10 +1,8 @@
 import time
 from App.CreateBatteryModel.Config import Configuration
 from App.SimulationRunner import SimulationRunner
-
-if __name__ == '__main__':
-    start_time = time.time()
-
+from App.Simulation import Simulation, DriveCycleSimulation
+def experiment():
     config = Configuration(
         battery_model="LFP",
         electrochemical_model="DFN",
@@ -28,5 +26,26 @@ if __name__ == '__main__':
     ] * 4)
 
     sim_runner.run_simulation()
+
+def drive_cycle():
+    config = Configuration(
+        battery_model="LFP",
+        electrochemical_model="DFN",
+        solver="CasadiSolver",
+        atol=1e-6,
+        rtol=1e-6
+    )
+     
+    sim = Simulation(config)
+    drive_cycle_sim = DriveCycleSimulation(sim)
+
+    drive_cycle_sim.solve(temperature=25, filename="LFP_25degC_1C.csv", title="Drive Cycle Simulation")
+
+
+if __name__ == '__main__':
+    start_time = time.time()
+
+    # experiment()    
+    drive_cycle()
 
     print(f"Time(s):{time.time()-start_time:.2f}")
