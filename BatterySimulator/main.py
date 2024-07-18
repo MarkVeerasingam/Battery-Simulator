@@ -1,5 +1,5 @@
 import time
-from App.Config import Configuration
+from App.CreateBatteryModel.Config import Configuration
 from App.SimulationRunner import SimulationRunner
 
 if __name__ == '__main__':
@@ -25,7 +25,7 @@ if __name__ == '__main__':
             "Hold at 3.5 V until 20 mA",
             "Rest for 1 hour",
         ),
-    ] * 2)
+    ] * 4)
 
     sim_runner.run_simulation()
 

@@ -1,4 +1,4 @@
-from App.Config import Configuration
+from App.CreateBatteryModel.Config import Configuration
 from App.Simulation import Simulation
 
 class SimulationRunner:
