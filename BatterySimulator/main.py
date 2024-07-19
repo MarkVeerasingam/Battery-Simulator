@@ -42,7 +42,7 @@ def drive_cycle():
     drive_cycle_simulation = DriveCycleSimulation(sim)
 
     temperature = 25  # Example temperature in °C
-    filename = "LFP_25degC_2C.csv"  
+    filename = "LFP_25degC_DriveCycle.csv"  
 
     drive_cycle_simulation.solve(temperature=temperature, filename=filename)
 
