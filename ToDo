@@ -3,6 +3,7 @@
 [In Progress]
 - [Feature] [Med] let the user define the drive cycle interpolation parameters/dimensions.
 
+- [Feature] [High] develop cell library on cell types + for models.py
 - [Testing] [High] Add try-catch statements to Model.py and Solver.py when making models.
 - [Testing] [Med] Look at impletmenting PyTest to test simulations before running them.
 - [Testing] [High] Add try-catch statements to Model.py and Solver.py when making models.
