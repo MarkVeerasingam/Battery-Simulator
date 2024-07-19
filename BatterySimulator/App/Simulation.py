@@ -11,6 +11,7 @@ class Simulation:
         self.solver = Solver.create(config.solver, config.atol, config.rtol)
 
     def run(self, t_eval=None, experiment=None):
+        # Create simulation object
         sim = pybamm.Simulation(
             model=self.electrochemical_model,
             parameter_values=self.battery_model,
@@ -18,10 +19,12 @@ class Simulation:
             experiment=experiment
         )
         
-        if t_eval:
+        # Solve the simulation
+        if t_eval is not None:
             solution = sim.solve(t_eval)
         else:
             solution = sim.solve()
-        
+
         sim.plot()
+        
         return solution
