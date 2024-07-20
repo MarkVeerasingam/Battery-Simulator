@@ -17,10 +17,12 @@ class BatteryConfiguration(BaseModel):
         description="The name of the electrochemical model",
         example="DFN"
     )
+
+class SolverConfiguration(BaseModel):
     solver: StrictStr = Field(
-        ..., 
-        description="The solver used for simulation",
-        example="CasadiSolver"
+    ..., 
+    description="The solver used for simulation",
+    example="CasadiSolver"
     )
     tolerance: Dict[str, StrictFloat] = Field(
         default={"atol": 1e-6, "rtol": 1e-6},
