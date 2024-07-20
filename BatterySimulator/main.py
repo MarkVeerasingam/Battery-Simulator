@@ -7,8 +7,8 @@ from App.DriveCycleSimulation import DriveCycleSimulation
 def experiment():
     config = BatteryConfiguration(
         battery_chemistry="NMC",
-        bpx_battery_models="lfp_18650_cell_BPX",
-        electrochemical_model="DFN",
+        bpx_battery_models="AE_gen1_BPX",
+        electrochemical_model="SPM",
         solver="CasadiSolver",
         tolerance={"atol": 1e-6, "rtol": 1e-6}
     )
@@ -31,7 +31,7 @@ def experiment():
 
 def drive_cycle():
     config = BatteryConfiguration(
-        battery_chemistry="LFP",
+        battery_chemistry="NMC",
         bpx_battery_models="lfp_18650_cell_BPX",
         electrochemical_model="DFN",
         solver="CasadiSolver",
@@ -50,7 +50,7 @@ def drive_cycle():
 if __name__ == '__main__':
     start_time = time.time()
 
-    experiment()    
-    # drive_cycle()
+    # experiment()    
+    drive_cycle()
 
     print(f"Time(s): {time.time() - start_time:.2f}")

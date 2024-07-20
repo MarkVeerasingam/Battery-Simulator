@@ -8,6 +8,7 @@ class BPXModel(BaseModel):
 class ChemistryModels(BaseModel):
     models: List[BPXModel]
 
+# A library of all avaible BPX Schema models for a given chemistry
 AVAILABLE_BATTERY_MODELS: Dict[str, ChemistryModels] = {
     "NMC": ChemistryModels(models=[
         BPXModel(name="AE_gen1_BPX", path="BatterySimulator/Models/NMC/AE_gen1_BPX.json"),
