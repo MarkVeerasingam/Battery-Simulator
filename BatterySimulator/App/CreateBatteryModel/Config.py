@@ -23,12 +23,16 @@ class BatteryConfiguration(BaseModel):
     )
 
 class BPXBatteryModels(BaseModel):
-    bpx_battery_models: Dict[StrictStr, StrictStr] = Field(
+    bpx_battery_models: Dict[StrictStr, Dict[StrictStr, StrictStr]] = Field(
         ..., 
-        description="Mapping of battery model names to their file paths",
+        description="Mapping of battery chemistry names to their BPX file paths",
         example={
-            "AE_gen1_BPX": "BatterySimulator/Models/NMC/AE_gen1_BPX.json",
-            "lfp_18650_cell_BPX": "BatterySimulator/Models/LFP/lfp_18650_cell_BPX.json"
+            "NMC": {
+                "AE_gen1_BPX": "BatterySimulator/Models/NMC/AE_gen1_BPX.json"
+            },
+            "LFP": {
+                "lfp_18650_cell_BPX": "BatterySimulator/Models/LFP/lfp_18650_cell_BPX.json"
+            }
         }
     )
 
