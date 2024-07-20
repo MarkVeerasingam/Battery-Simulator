@@ -1,16 +1,22 @@
 import pybamm
-import json
-
-CONFIG_PATH = 'BatterySimulator/config/config.json'
+from App.CreateBatteryModel.Config import BatteryConfiguration
+from App.CreateBatteryModel.CellLibrary import AVAILABLE_BATTERY_MODELS
 
 class BatteryModel:
     @staticmethod
-    def create(model_type: str):
-        if model_type not in {"LFP", "NMC"}:
-            raise ValueError(f"Invalid BPX Model Type: {model_type}. Use LFP or NMC")
+    def create(config: BatteryConfiguration):
+        chemistry = config.battery_chemistry
+        bpx_models = config.bpx_battery_models
+
+        # look for a valid chemistry
+        if chemistry not in AVAILABLE_BATTERY_MODELS:
+            raise ValueError(f"Invalid battery chemistry: {chemistry}. Use one of {list(AVAILABLE_BATTERY_MODELS.keys())}")
         
-        with open(CONFIG_PATH, "r") as f:
-            config = json.load(f)
+        # look for a valid model type for this chemistry
+        available_models = AVAILABLE_BATTERY_MODELS[chemistry].models
+        model = next((m for m in available_models if m.name == bpx_models), None)
+
+        if model is None:
+            raise ValueError(f"Invalid battery model: {bpx_models}. Available models for {chemistry}: {[m.name for m in available_models]}")
         
-        bpx_path = config["bpx_battery_models"][model_type]
-        return pybamm.ParameterValues.create_from_bpx(bpx_path)
+        return pybamm.ParameterValues.create_from_bpx(model.path)
