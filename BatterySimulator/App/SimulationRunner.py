@@ -4,11 +4,10 @@ from App.DriveCycleSimulation import DriveCycleSimulation
 
 class SimulationRunner:
     def __init__(self, battery_config: BatteryConfiguration, solver_config: SolverConfiguration):
-        # self._battery_config = battery_config
-        # self._solver_config = solver_config
         self.simulation = Simulation(battery_config, solver_config)
         self.experiment = None
         self.t_eval = None
+        self.drive_cycle = None
 
     def set_t_eval(self, t_eval):
         self.t_eval = t_eval
@@ -28,5 +27,7 @@ class SimulationRunner:
             temperature = 25  # Example temperature in °C
             filename = self.drive_cycle
             return drive_cycle_simulation.solve(temperature=temperature, filename=filename)
+        elif self.t_eval:
+            return self.simulation.run(t_eval=self.t_eval)
         else:
             raise ValueError("No experiment or drive cycle set.")
