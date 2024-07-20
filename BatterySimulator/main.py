@@ -6,15 +6,8 @@ from App.DriveCycleSimulation import DriveCycleSimulation
 
 def experiment():
     config = BatteryConfiguration(
-        battery_chemistry="LFP",
-        bpx_battery_models={
-            "NMC": {
-                "AE_gen1_BPX"
-            },
-            "LFP": {
-                "lfp_18650_cell_BPX"
-            }
-        },
+        battery_chemistry="NMC",
+        bpx_battery_models="lfp_18650_cell_BPX",
         electrochemical_model="DFN",
         solver="CasadiSolver",
         tolerance={"atol": 1e-6, "rtol": 1e-6}
@@ -39,14 +32,7 @@ def experiment():
 def drive_cycle():
     config = BatteryConfiguration(
         battery_chemistry="LFP",
-        bpx_battery_models={
-            "NMC": {
-                "AE_gen1_BPX": "BatterySimulator/Models/NMC/AE_gen1_BPX.json"
-            },
-            "LFP": {
-                "lfp_18650_cell_BPX": "BatterySimulator/Models/LFP/lfp_18650_cell_BPX.json"
-            }
-        },
+        bpx_battery_models="lfp_18650_cell_BPX",
         electrochemical_model="DFN",
         solver="CasadiSolver",
         tolerance={"atol": 1e-6, "rtol": 1e-6}
