@@ -1,9 +1,9 @@
 import pybamm
-from App.CreateBatteryModel.Config import BatteryConfiguration
+from App.CreateBatteryModel.Config import SolverConfiguration
 
 class Solver:
     @staticmethod
-    def create(config: BatteryConfiguration):
+    def create(config: SolverConfiguration):
         solver_type = config.solver
 
         # Default to 1e-6 if not provided
