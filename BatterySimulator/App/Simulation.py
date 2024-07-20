@@ -1,14 +1,18 @@
 import pybamm
-from App.CreateBatteryModel.Config import Configuration
+from App.CreateBatteryModel.Config import BatteryConfiguration
 from App.CreateBatteryModel.BatteryModel import BatteryModel
 from App.CreateBatteryModel.ElectrochemicalModel import ElectrochemicalModel
 from App.CreateBatteryModel.Solver import Solver
 
 class Simulation:
-    def __init__(self, config: Configuration):
+    def __init__(self, config: BatteryConfiguration):
         self.electrochemical_model = ElectrochemicalModel.create(config.electrochemical_model)
-        self.battery_model = BatteryModel.create(config.battery_model)
-        self.solver = Solver.create(config.solver, config.atol, config.rtol)
+        self.battery_model = BatteryModel.create(config.battery_chemistry)
+
+        atol = config.tolerance.get("atol", 1e-6)
+        rtol = config.tolerance.get("rtol", 1e-6)
+
+        self.solver = Solver.create(config.solver, atol, rtol)
 
     def run(self, t_eval=None, experiment=None):
         # Create simulation object
