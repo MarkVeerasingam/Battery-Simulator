@@ -1,19 +1,22 @@
 import time
-from App.CreateBatteryModel.Config import BatteryConfiguration
+from App.CreateBatteryModel.Config import BatteryConfiguration, SolverConfiguration
 from App.Simulation import Simulation
 from App.SimulationRunner import SimulationRunner
 from App.DriveCycleSimulation import DriveCycleSimulation
 
 def experiment():
-    config = BatteryConfiguration(
+    battery_config = BatteryConfiguration(
         battery_chemistry="NMC",
         bpx_battery_models="AE_gen1_BPX",
-        electrochemical_model="SPM",
+        electrochemical_model="SPM"
+    )
+
+    solver_config = SolverConfiguration(
         solver="CasadiSolver",
         tolerance={"atol": 1e-6, "rtol": 1e-6}
     )
 
-    sim_runner = SimulationRunner(config)
+    sim_runner = SimulationRunner(battery_config, solver_config)
 
     # Uncomment one of these to set the simulation type
     # sim_runner.set_t_eval([0, 7200])
@@ -32,13 +35,18 @@ def experiment():
 def drive_cycle():
     config = BatteryConfiguration(
         battery_chemistry="NMC",
-        bpx_battery_models="lfp_18650_cell_BPX",
+        bpx_battery_models="AE_gen1_BPX",
         electrochemical_model="DFN",
         solver="CasadiSolver",
         tolerance={"atol": 1e-6, "rtol": 1e-6}
     )
+
+    solver_config = SolverConfiguration(
+        solver="CasadiSolver",
+        tolerance={"atol": 1e-6, "rtol": 1e-6}
+    )
     
-    sim = Simulation(config)
+    sim = Simulation(config, solver_config)
 
     drive_cycle_simulation = DriveCycleSimulation(sim)
 
@@ -50,7 +58,7 @@ def drive_cycle():
 if __name__ == '__main__':
     start_time = time.time()
 
-    # experiment()    
-    drive_cycle()
+    experiment()    
+    # drive_cycle()
 
     print(f"Time(s): {time.time() - start_time:.2f}")
