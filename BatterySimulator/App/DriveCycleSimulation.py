@@ -10,19 +10,18 @@ class DriveCycleSimulation:
     
     def solve(self, temperature, filename, title=""):
         # Load drive cycle data
-        file_path = "BatterySimulator\\Models\\LFP\\data\\validation\\" + filename
+        file_path = "BatterySimulator/Models/LFP/data/validation/" + filename
         print(f"Loading data from: {file_path}")
         
         data = pd.read_csv(file_path, comment="#").to_numpy()
         print(f"Data loaded. Shape: {data.shape}")
 
-        # Extract time, voltage, and current data
+        # Extract time, current, and voltage data
         time_data = data[:, 0]
         current_data = data[:, 1]
         voltage_data = data[:, 2]
 
         # Create current interpolant
-        # timescale = self.simulation.battery_model.evaluate(self.simulation.electrochemical_model.timescale)
         current_interpolant = pybamm.Interpolant(
             time_data, -current_data, pybamm.t, interpolator="linear"
         )

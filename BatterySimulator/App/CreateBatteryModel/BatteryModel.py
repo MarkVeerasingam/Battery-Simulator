@@ -1,19 +1,21 @@
 import pybamm
-from App.CreateBatteryModel.Config import BatteryConfiguration, BPXBatteryModels
+from App.CreateBatteryModel.Config import BatteryConfiguration
 
 class BatteryModel:
     @staticmethod
-    def create(battery_config: BatteryConfiguration, bpx_models: BPXBatteryModels, model_name: str):
-        chemistry = battery_config.battery_chemistry
+    def create(config: BatteryConfiguration):
+        chemistry = config.battery_chemistry
+        bpx_models = config.bpx_battery_models
 
         # look for a valid chemistry
-        if chemistry not in bpx_models.bpx_battery_models:
-            raise ValueError(f"Invalid battery chemistry: {chemistry}. Use one of {list(bpx_models.bpx_battery_models.keys())}")
+        if chemistry not in bpx_models:
+            raise ValueError(f"Invalid battery chemistry: {chemistry}. Use one of {list(bpx_models.keys())}")
         
-        # look for a valid model type in said chemistry
-        available_models = bpx_models.bpx_battery_models[chemistry]
-        if model_name not in available_models:
+        # look for a valid model type for this chemistry
+        available_models = bpx_models[chemistry]
+        if not available_models:
             raise ValueError(f"No BPX models available for battery chemistry: {chemistry}")
+        
+        model_name, bpx_path = next(iter(available_models.items()))
 
-        bpx_path = bpx_models.bpx_battery_models[model_name]
         return pybamm.ParameterValues.create_from_bpx(bpx_path)

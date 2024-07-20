@@ -7,6 +7,18 @@ class BatteryConfiguration(BaseModel):
         description="The chemistry name of the battery model",
         example="LFP"
     )
+    bpx_battery_models: Dict[StrictStr, Dict[StrictStr, StrictStr]] = Field(
+        ..., 
+        description="Mapping of battery chemistry names to their BPX file paths",
+        example={
+            "NMC": {
+                "AE_gen1_BPX": "BatterySimulator/Models/NMC/AE_gen1_BPX.json"
+            },
+            "LFP": {
+                "lfp_18650_cell_BPX": "BatterySimulator/Models/LFP/lfp_18650_cell_BPX.json"
+            }
+        }
+    )
     electrochemical_model: StrictStr = Field(
         ..., 
         description="The name of the electrochemical model",
@@ -22,19 +34,6 @@ class BatteryConfiguration(BaseModel):
         description="Tolerance settings for the solver"
     )
 
-class BPXBatteryModels(BaseModel):
-    bpx_battery_models: Dict[StrictStr, Dict[StrictStr, StrictStr]] = Field(
-        ..., 
-        description="Mapping of battery chemistry names to their BPX file paths",
-        example={
-            "NMC": {
-                "AE_gen1_BPX": "BatterySimulator/Models/NMC/AE_gen1_BPX.json"
-            },
-            "LFP": {
-                "lfp_18650_cell_BPX": "BatterySimulator/Models/LFP/lfp_18650_cell_BPX.json"
-            }
-        }
-    )
 
 class DriveCycleData(BaseModel):
     drive_cycle_data: Dict[StrictStr, StrictStr] = Field(

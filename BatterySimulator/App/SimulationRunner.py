@@ -4,10 +4,10 @@ from App.DriveCycleSimulation import DriveCycleSimulation
 
 class SimulationRunner:
     def __init__(self, config: BatteryConfiguration):
+        self.config = config
         self.simulation = Simulation(config)
-        self.t_eval = None
         self.experiment = None
-        self.drive_cycle = None
+        self.t_eval = None
 
     def set_t_eval(self, t_eval):
         self.t_eval = t_eval

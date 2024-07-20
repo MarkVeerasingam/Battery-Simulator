@@ -6,14 +6,16 @@ from App.CreateBatteryModel.Solver import Solver
 
 class Simulation:
     def __init__(self, config: BatteryConfiguration):
-        self.electrochemical_model = ElectrochemicalModel.create(config.electrochemical_model)
-        self.battery_model = BatteryModel.create(config.battery_chemistry)
+        # create the electrochemical model to be used in the simulation
+        self.electrochemical_model = ElectrochemicalModel.create(config)
+        
+        # create the battery model to be used in the simulation
+        self.battery_model = BatteryModel.create(config)
+        
+        # create the solver to be used in the simulation
+        self.solver = Solver.create(config)
 
-        atol = config.tolerance.get("atol", 1e-6)
-        rtol = config.tolerance.get("rtol", 1e-6)
-
-        self.solver = Solver.create(config.solver, atol, rtol)
-
+    # run the simulation
     def run(self, t_eval=None, experiment=None):
         # Create simulation object
         sim = pybamm.Simulation(
