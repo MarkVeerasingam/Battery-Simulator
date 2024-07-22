@@ -3,14 +3,29 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import pybamm
 from App.Simulation import Simulation
+from App.CreateBatteryModel.Config import DriveCycleConfiguration
+from App.CreateBatteryModel.CellLibrary import AVAILABLE_DRIVE_CYCLES
 
 class DriveCycleSimulation:
     def __init__(self, simulation: Simulation):
         self.simulation = simulation
     
-    def solve(self, temperature, filename, title=""):
-        # Load drive cycle data
-        file_path = "BatterySimulator/Models/LFP/data/validation/" + filename
+    def solve(self, config: DriveCycleConfiguration, temperature: float = 25.0, title=""):
+        # Load drive cycle data from library 
+        # Ended up making a new class in Config.py called DriveCycleConfiguration to have chemistry and file path
+        # I made SimulationConfiguration in Config.py, a class that accepts any of the 3 existing simulations (t_Eval, exp, driveCycle)
+        # and acts as a manager to execute the simulation of those. Created that class to sepearte any modifications a user might change to a given sim.
+        # only added it for Drive Cycle as of right now... will implement t_eval and exp later
+        if config.chemistry not in AVAILABLE_DRIVE_CYCLES   :
+            raise ValueError(f"Invalid battery chemistry: {config.chemistry}. Use one of {list(AVAILABLE_DRIVE_CYCLES.keys())}")
+        
+        available_driveCycle = AVAILABLE_DRIVE_CYCLES[config.chemistry].driveCycle
+        driveCycle = next((dc for dc in available_driveCycle if dc.name == config.drive_cycle_file), None)
+
+        if driveCycle is None:
+            raise ValueError(f"Invalid drive cycle name: {config.drive_cycle_file}. Available cycles: {[dc.name for dc in driveCycle]}")
+
+        file_path =  driveCycle.path
         print(f"Loading data from: {file_path}")
         
         data = pd.read_csv(file_path, comment="#").to_numpy()

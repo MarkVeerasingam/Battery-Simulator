@@ -13,7 +13,7 @@ class ChemistryModels(BaseModel):
     models: List[BPXModel]
 
 class ChemistryDriveCycles(BaseModel):
-    models: List[DriveCycle]
+    driveCycle: List[DriveCycle]
 
 # A library of all avaible BPX Schema models of their given chemistry
 AVAILABLE_BATTERY_MODELS: Dict[str, ChemistryModels] = {
