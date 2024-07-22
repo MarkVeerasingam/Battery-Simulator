@@ -1,5 +1,5 @@
 from pydantic import BaseModel, StrictStr, StrictFloat, Field
-from typing import Dict
+from typing import Dict, Optional
 
 class BatteryConfiguration(BaseModel):
     battery_chemistry: StrictStr = Field(
@@ -29,13 +29,23 @@ class SolverConfiguration(BaseModel):
         description="Tolerance settings for the solver"
     )
 
-class DriveCycleData(BaseModel):
-    drive_cycle_data: Dict[StrictStr, StrictStr] = Field(
-        description="Drive cycle data for each models chemistry",
-        example={
-            "LFP_25degC_1C": "BatterySimulator/Models/LFP/data/validation/LFP_25degC_1C.csv"
-        }
+class DriveCycleConfiguration(BaseModel):
+    chemistry: StrictStr = Field(
+        ..., 
+        description="Chemistry of the battery for the drive cycle",
+        example="LFP"
     )
+    drive_cycle_file: StrictStr = Field(
+        ..., 
+        description="Drive cycle data file name",
+        example="LFP_25degC_1C.csv"
+    )
+
+class SimulationConfiguration(BaseModel):
+    battery: BatteryConfiguration
+    solver: SolverConfiguration
+    drive_cycle: Optional[DriveCycleConfiguration] = None
+
 
 # print(BatteryConfiguration.schema_json(indent=2))
 # print(BPXBatteryModels.schema_json(indent=2))

@@ -1,63 +1,71 @@
 import time
-from App.CreateBatteryModel.Config import BatteryConfiguration, SolverConfiguration
+from App.CreateBatteryModel.Config import BatteryConfiguration, SolverConfiguration, DriveCycleConfiguration
 from App.Simulation import Simulation
 from App.SimulationRunner import SimulationRunner
 from App.DriveCycleSimulation import DriveCycleSimulation
 
-def experiment():
+def battery():
     battery_config = BatteryConfiguration(
-        battery_chemistry="NMC",
-        bpx_battery_models="AE_gen1_BPX",
-        electrochemical_model="SPM"
+        battery_chemistry="LFP",
+        bpx_battery_models="lfp_18650_cell_BPX",
+        electrochemical_model="DFN"
     )
+    return battery_config
 
+def solver():
     solver_config = SolverConfiguration(
         solver="CasadiSolver",
         tolerance={"atol": 1e-6, "rtol": 1e-6}
     )
+    return solver_config
+
+def experiment():
+    battery_config = battery()
+    solver_config = solver()
+    
+    sim_runner = SimulationRunner(battery_config, solver_config)
+
+    sim_runner.set_experiment([
+        (
+            "Discharge at C/5 for 10 hours or until 2.5 V",
+            "Rest for 1 hour",
+            "Charge at 1 A until 3.5 V",
+            "Hold at 3.5 V until 10 mA",
+            "Rest for 1 hour",
+        ),
+    ] * 2)
+
+    sim_runner.run_simulation()
+
+def time_eval():
+    battery_config = battery()
+    solver_config = solver()
 
     sim_runner = SimulationRunner(battery_config, solver_config)
 
-    # Uncomment one of these to set the simulation type
-    # sim_runner.set_t_eval([0, 7200])
-    sim_runner.set_experiment([
-        (
-            "Discharge at C/5 for 5 hours or until 2.5 V",
-            "Rest for 30 minutes",
-            "Charge at 2 A until 3.5 V",
-            "Hold at 3.5 V until 20 mA",
-            "Rest for 1 hour",
-        ),
-    ] * 4)
+    sim_runner.set_t_eval([0, 7200])
 
     sim_runner.run_simulation()
 
 def drive_cycle():
-    config = BatteryConfiguration(
-        battery_chemistry="NMC",
-        bpx_battery_models="AE_gen1_BPX",
-        electrochemical_model="DFN",
-        solver="CasadiSolver",
-        tolerance={"atol": 1e-6, "rtol": 1e-6}
-    )
+    battery_config = battery()
+    solver_config = solver()
 
-    solver_config = SolverConfiguration(
-        solver="CasadiSolver",
-        tolerance={"atol": 1e-6, "rtol": 1e-6}
-    )
-    
-    sim = Simulation(config, solver_config)
+    sim = Simulation(battery_config, solver_config)
 
     drive_cycle_simulation = DriveCycleSimulation(sim)
 
-    temperature = 25  # Example temperature in °C
-    filename = "LFP_25degC_1C.csv"  
-
-    drive_cycle_simulation.solve(temperature=temperature, filename=filename)
+    driveCycle_config = DriveCycleConfiguration(
+        chemistry="NMC",
+        drive_cycle_file="NMC_25degC_1C"
+    )
+    
+    drive_cycle_simulation.solve(config=driveCycle_config, temperature=25)
 
 if __name__ == '__main__':
     start_time = time.time()
 
+    # time_eval()
     experiment()    
     # drive_cycle()
     
