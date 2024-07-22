@@ -16,14 +16,14 @@ class DriveCycleSimulation:
         # I made SimulationConfiguration in Config.py, a class that accepts any of the 3 existing simulations (t_Eval, exp, driveCycle)
         # and acts as a manager to execute the simulation of those. Created that class to sepearte any modifications a user might change to a given sim.
         # only added it for Drive Cycle as of right now... will implement t_eval and exp later
-        if config.chemistry not in AVAILABLE_DRIVE_CYCLES   :
+        if config.chemistry not in AVAILABLE_DRIVE_CYCLES:
             raise ValueError(f"Invalid battery chemistry: {config.chemistry}. Use one of {list(AVAILABLE_DRIVE_CYCLES.keys())}")
         
         available_driveCycle = AVAILABLE_DRIVE_CYCLES[config.chemistry].driveCycle
         driveCycle = next((dc for dc in available_driveCycle if dc.name == config.drive_cycle_file), None)
 
         if driveCycle is None:
-            raise ValueError(f"Invalid drive cycle name: {config.drive_cycle_file}. Available cycles: {[dc.name for dc in driveCycle]}")
+            raise ValueError(f"Invalid drive cycle name: {config.drive_cycle_file}. Available cycles: {[dc.name for dc in available_driveCycle]}")
 
         file_path =  driveCycle.path
         print(f"Loading data from: {file_path}")

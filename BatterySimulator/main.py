@@ -56,13 +56,11 @@ def drive_cycle():
     drive_cycle_simulation = DriveCycleSimulation(sim)
 
     driveCycle_config = DriveCycleConfiguration(
-        chemistry="LFP",
+        chemistry="NMC",
         drive_cycle_file="LFP_25degC_1C"
     )
     
-    temperature = 25  # in deg C
-
-    drive_cycle_simulation.solve(config=driveCycle_config, temperature=temperature)
+    drive_cycle_simulation.solve(config=driveCycle_config)
 
 if __name__ == '__main__':
     start_time = time.time()
