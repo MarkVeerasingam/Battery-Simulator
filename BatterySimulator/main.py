@@ -6,8 +6,8 @@ from App.DriveCycleSimulation import DriveCycleSimulation
 
 def battery():
     battery_config = BatteryConfiguration(
-        battery_chemistry="NMC",
-        bpx_battery_models="NMC_Pouch_cell",
+        battery_chemistry="LFP",
+        bpx_battery_models="lfp_18650_cell_BPX",
         electrochemical_model="DFN"
     )
     return battery_config
@@ -27,13 +27,13 @@ def experiment():
 
     sim_runner.set_experiment([
         (
-            "Discharge at C/5 for 5 hours or until 2.5 V",
-            "Rest for 30 minutes",
-            "Charge at 2 A until 3.5 V",
-            "Hold at 3.5 V until 20 mA",
+            "Discharge at C/5 for 10 hours or until 2.5 V",
+            "Rest for 1 hour",
+            "Charge at 1 A until 3.5 V",
+            "Hold at 3.5 V until 10 mA",
             "Rest for 1 hour",
         ),
-    ] * 4)
+    ] * 2)
 
     sim_runner.run_simulation()
 
@@ -66,7 +66,7 @@ if __name__ == '__main__':
     start_time = time.time()
 
     # time_eval()
-    # experiment()    
-    drive_cycle()
+    experiment()    
+    # drive_cycle()
     
     print(f"Time(s): {time.time() - start_time:.2f}")
