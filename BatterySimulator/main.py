@@ -6,8 +6,8 @@ from App.DriveCycleSimulation import DriveCycleSimulation
 
 def battery():
     battery_config = BatteryConfiguration(
-        battery_chemistry="LFP",
-        bpx_battery_models="lfp_18650_cell_BPX",
+        battery_chemistry="NMC",
+        bpx_battery_models="NMC_Pouch_cell",
         electrochemical_model="DFN"
     )
     return battery_config
@@ -57,10 +57,10 @@ def drive_cycle():
 
     driveCycle_config = DriveCycleConfiguration(
         chemistry="NMC",
-        drive_cycle_file="LFP_25degC_1C"
+        drive_cycle_file="NMC_25degC_1C"
     )
     
-    drive_cycle_simulation.solve(config=driveCycle_config)
+    drive_cycle_simulation.solve(config=driveCycle_config, temperature=25)
 
 if __name__ == '__main__':
     start_time = time.time()

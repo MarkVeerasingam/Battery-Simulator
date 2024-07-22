@@ -9,7 +9,9 @@ from App.CreateBatteryModel.CellLibrary import AVAILABLE_DRIVE_CYCLES
 class DriveCycleSimulation:
     def __init__(self, simulation: Simulation):
         self.simulation = simulation
-    
+        # Access and modify the electrochemical model to disable events
+        self.simulation.electrochemical_model.events = []
+
     def solve(self, config: DriveCycleConfiguration, temperature: float = 25.0, title=""):
         # Load drive cycle data from library 
         # Ended up making a new class in Config.py called DriveCycleConfiguration to have chemistry and file path
