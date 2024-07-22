@@ -1,5 +1,5 @@
 import time
-from App.CreateBatteryModel.Config import BatteryConfiguration, SolverConfiguration
+from App.CreateBatteryModel.Config import BatteryConfiguration, SolverConfiguration, DriveCycleConfiguration
 from App.Simulation import Simulation
 from App.SimulationRunner import SimulationRunner
 from App.DriveCycleSimulation import DriveCycleSimulation
@@ -50,15 +50,19 @@ def time_eval():
 def drive_cycle():
     battery_config = battery()
     solver_config = solver()
-    
+
     sim = Simulation(battery_config, solver_config)
 
     drive_cycle_simulation = DriveCycleSimulation(sim)
 
+    driveCycle_config = DriveCycleConfiguration(
+        chemistry="LFP",
+        drive_cycle_file="LFP_25degC_1C"
+    )
+    
     temperature = 25  # in deg C
-    filename = "LFP_25degC_1C.csv"  
 
-    drive_cycle_simulation.solve(temperature=temperature, filename=filename)
+    drive_cycle_simulation.solve(config=driveCycle_config, temperature=temperature)
 
 if __name__ == '__main__':
     start_time = time.time()

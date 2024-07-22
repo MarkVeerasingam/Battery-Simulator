@@ -31,6 +31,9 @@ class DriveCycleSimulation:
         data = pd.read_csv(file_path, comment="#").to_numpy()
         print(f"Data loaded. Shape: {data.shape}")
 
+        # This will only work for the exisint data provided from A:E BXP Models.
+        # to take in a file with current and voltage, this would break. - need to make a parser or smth..?
+
         # Extract time, current, and voltage data
         time_data = data[:, 0]
         current_data = data[:, 1]

@@ -29,14 +29,14 @@ AVAILABLE_BATTERY_MODELS: Dict[str, ChemistryModels] = {
 
 # A library of all avaible Drive cycles for models of their given chemistry
 AVAILABLE_DRIVE_CYCLES: Dict[str, ChemistryDriveCycles] = {
-    "NMC": ChemistryDriveCycles(models=[
+    "NMC": ChemistryDriveCycles(driveCycle=[
         DriveCycle(name="NMC_25degC_1C", path="BatterySimulator/Models/NMC/data/validation/NMC_25degC_1C.csv"),
         DriveCycle(name="NMC_25degC_2C", path="BatterySimulator/Models/NMC/data/validation/NMC_25degC_2C.csv"),
         DriveCycle(name="NMC_25degC_Co2", path="BatterySimulator/Models/NMC/data/validation/NMC_25degC_Co2.csv"),
         DriveCycle(name="NMC_25degC_Co20", path="BatterySimulator/Models/NMC/data/validation/NMC_25degC_Co20.csv"),
         DriveCycle(name="NMC_25degC_DriveCycle", path="BatterySimulator/Models/NMC/data/validation/NMC_25degC_DriveCycle.csv"),
     ]),
-    "LFP": ChemistryDriveCycles(models=[
+    "LFP": ChemistryDriveCycles(driveCycle=[
         DriveCycle(name="LFP_25degC_1C", path="BatterySimulator/Models/LFP/data/validation/LFP_25degC_1C.csv"),
         DriveCycle(name="LFP_25degC_2C", path="BatterySimulator/Models/LFP/data/validation/LFP_25degC_2C.csv"),
         DriveCycle(name="LFP_25degC_Co2", path="BatterySimulator/Models/LFP/data/validation/LFP_25degC_Co2.csv"),
