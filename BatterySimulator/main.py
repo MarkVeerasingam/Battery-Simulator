@@ -55,11 +55,11 @@ def drive_cycle():
 
     sim = Simulation(battery_config, solver_config)
 
-    drive_cycle_simulation = DriveCycleSimulation(sim)
+    drive_cycle_simulation = DriveCycleSimulation(simulation=sim)
 
     driveCycle_config = DriveCycleFile(
         chemistry="NMC",
-        drive_cycle_file="NMC_25degC_1C"
+        drive_cycle_file="NMC_25degC_DriveCycle"
     )
     
     drive_cycle_simulation.solve(config=driveCycle_config, temperature=25)
