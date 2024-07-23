@@ -29,7 +29,7 @@ class SolverConfiguration(BaseModel):
         description="Tolerance settings for the solver"
     )
 
-class DriveCycleConfiguration(BaseModel):
+class DriveCycleFile(BaseModel):
     chemistry: StrictStr = Field(
         ..., 
         description="Chemistry of the battery for the drive cycle",
@@ -41,10 +41,7 @@ class DriveCycleConfiguration(BaseModel):
         example="LFP_25degC_1C.csv"
     )
 
-class SimulationConfiguration(BaseModel):
-    battery: BatteryConfiguration
-    solver: SolverConfiguration
-    drive_cycle: Optional[DriveCycleConfiguration] = None
+
 
 
 # print(BatteryConfiguration.schema_json(indent=2))
