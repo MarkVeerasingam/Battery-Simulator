@@ -1,5 +1,5 @@
 import pybamm
-from App.CreateBatteryModel.Config import SolverConfiguration
+from config.Config import SolverConfiguration
 
 class Solver:
     @staticmethod

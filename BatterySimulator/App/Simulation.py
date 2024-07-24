@@ -1,5 +1,5 @@
 import pybamm
-from App.CreateBatteryModel.Config import BatteryConfiguration, SolverConfiguration
+from config.Config import BatteryConfiguration, SolverConfiguration
 from App.CreateBatteryModel.BatteryModel import BatteryModel
 from App.CreateBatteryModel.ElectrochemicalModel import ElectrochemicalModel
 from App.CreateBatteryModel.Solver import Solver

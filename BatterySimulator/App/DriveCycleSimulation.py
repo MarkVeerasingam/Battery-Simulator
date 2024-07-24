@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import pybamm
 from App.Simulation import Simulation
-from App.CreateBatteryModel.Config import DriveCycleFile
+from config.Config import DriveCycleFile
 from App.CreateBatteryModel.CellLibrary import AVAILABLE_DRIVE_CYCLES
 
 class DriveCycleSimulation:

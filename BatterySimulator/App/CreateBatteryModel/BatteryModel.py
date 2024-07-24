@@ -1,5 +1,5 @@
 import pybamm
-from App.CreateBatteryModel.Config import BatteryConfiguration
+from config.Config import BatteryConfiguration
 from App.CreateBatteryModel.CellLibrary import AVAILABLE_BATTERY_MODELS
 
 class BatteryModel:

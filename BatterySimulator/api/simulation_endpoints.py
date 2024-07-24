@@ -1,4 +1,4 @@
-from App.CreateBatteryModel.Config import DriveCycleFile
+from config.Config import DriveCycleFile
 from App.Simulation import Simulation
 from App.SimulationRunner import SimulationRunner, DriveCycleSimulation
 from api.configuration_endpoints import battery, solver
@@ -37,9 +37,9 @@ def drive_cycle():
     battery_config = battery()
     solver_config = solver()
 
-    sim = Simulation(battery_config, solver_config)
+    simulation = Simulation(battery_config, solver_config)
 
-    drive_cycle_simulation = DriveCycleSimulation(simulation=sim)
+    drive_cycle_simulation = DriveCycleSimulation(simulation=simulation)
 
     driveCycle_config = DriveCycleFile(
         chemistry="NMC",

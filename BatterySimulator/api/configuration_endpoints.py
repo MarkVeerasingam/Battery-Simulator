@@ -1,4 +1,4 @@
-from App.CreateBatteryModel.Config import BatteryConfiguration, SolverConfiguration
+from config.Config import BatteryConfiguration, SolverConfiguration
 
 def battery():
     battery_config = BatteryConfiguration(

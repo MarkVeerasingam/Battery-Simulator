@@ -1,4 +1,4 @@
-from App.CreateBatteryModel.Config import BatteryConfiguration, SolverConfiguration
+from config.Config import BatteryConfiguration, SolverConfiguration
 from App.Simulation import Simulation
 from App.DriveCycleSimulation import DriveCycleSimulation
 
