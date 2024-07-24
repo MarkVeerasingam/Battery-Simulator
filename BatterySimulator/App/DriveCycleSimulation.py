@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import pybamm
 from App.Simulation import Simulation
 from config.Config import DriveCycleFile
-from libraries.CellLibrary import AVAILABLE_DRIVE_CYCLES
+from libraries.DriveCycleLibrary import AVAILABLE_DRIVE_CYCLES
 
 class DriveCycleSimulation:
     def __init__(self, simulation: Simulation):
