@@ -1,5 +1,5 @@
 from pydantic import BaseModel, StrictStr, StrictFloat, Field
-from typing import Dict, Optional
+from typing import Dict, Optional, List
 
 class BatteryConfiguration(BaseModel):
     battery_chemistry: StrictStr = Field(
@@ -46,8 +46,8 @@ class DriveCycleFile(BaseModel):
     )
 
 class SimulationConfiguration(BaseModel):
-    t_eval: Optional[Dict[str, float]]= None
-    experiment: Optional[str] = None
+    t_eval: Optional[List[float]] = None  
+    experiment: Optional[List[str]] = None 
     drive_cycle: Optional[DriveCycleFile] = None
 
 # print(BatteryConfiguration.schema_json(indent=2))

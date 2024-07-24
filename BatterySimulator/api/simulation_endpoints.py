@@ -18,8 +18,7 @@ def experiment():
     )
 
     sim_runner = SimulationRunner(battery_config, solver_config)
-    sim_runner.set_configuration(simulation_config)
-    sim_runner.run_simulation()
+    sim_runner.run_simulation(config=simulation_config)
 
 def time_eval():
     battery_config = battery()
@@ -30,8 +29,7 @@ def time_eval():
     )
 
     sim_runner = SimulationRunner(battery_config, solver_config)
-    sim_runner.set_configuration(simulation_config)
-    sim_runner.run_simulation()
+    sim_runner.run_simulation(config=simulation_config)
 
 def drive_cycle():
     battery_config = battery()
@@ -45,5 +43,4 @@ def drive_cycle():
     )
 
     sim_runner = SimulationRunner(battery_config, solver_config)
-    sim_runner.set_configuration(simulation_config)
-    sim_runner.run_simulation()
+    sim_runner.run_simulation(config=simulation_config)
