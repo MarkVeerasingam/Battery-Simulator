@@ -37,8 +37,8 @@ def drive_cycle():
 
     simulation_config = SimulationConfiguration(
         drive_cycle=DriveCycleFile(
-            chemistry="NMC",
-            drive_cycle_file="NMC_25degC_DriveCycle"
+            chemistry="LFP",
+            drive_cycle_file="LFP_25degC_1C"
         )
     )
 

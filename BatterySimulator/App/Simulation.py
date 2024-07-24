@@ -40,31 +40,35 @@ class Simulation:
     def run_driveCycle(self, driveCycle: DriveCycleFile, temperature: float = 25.0, title=""):
         # Access and modify the electrochemical model to disable events
         self.electrochemical_model.events = []
-        
-        # line 44 - line 67 should all be in it's own def in utils for reading and parsing drive cycle data
-        # Load drive cycle data from driveCycleLibrary 
+
+        # this should be it's def in utils for retrieving drive cycles and parsing it
+        # Check if the chemistry is in the available drive cycles
         if driveCycle.chemistry not in AVAILABLE_DRIVE_CYCLES:
             raise ValueError(f"Invalid battery chemistry: {driveCycle.chemistry}. Use one of {list(AVAILABLE_DRIVE_CYCLES.keys())}")
-        
-        available_driveCycle = AVAILABLE_DRIVE_CYCLES[driveCycle.chemistry].driveCycle
-        driveCycle = next((dc for dc in available_driveCycle if dc.name == driveCycle.drive_cycle_file), None)
 
-        if driveCycle is None:
-            raise ValueError(f"Invalid drive cycle name: {driveCycle.drive_cycle_file}. Available cycles: {[dc.name for dc in available_driveCycle]}")
+        # Retrieve the drive cycles for the specified chemistry
+        available_driveCycles = AVAILABLE_DRIVE_CYCLES[driveCycle.chemistry].driveCycle
+        # Find the drive cycle with the specified name
+        selected_driveCycle = next((dc for dc in available_driveCycles if dc.name == driveCycle.drive_cycle_file), None)
 
-        file_path =  driveCycle.path
+        if selected_driveCycle is None:
+            raise ValueError(f"Invalid drive cycle name: {driveCycle.drive_cycle_file}. Available cycles: {[dc.name for dc in available_driveCycles]}")
+
+        file_path = selected_driveCycle.path
+
+        # Check if file path is empty
+        if not file_path:
+            raise ValueError("Drive cycle file path is empty")
+
         print(f"Loading data from: {file_path}")
         
+        # Load the drive cycle data
         data = pd.read_csv(file_path, comment="#").to_numpy()
         print(f"Data loaded. Shape: {data.shape}")
 
-        # This will only work for the exisint data provided from A:E BXP Models.
-        # to take in a file with current and voltage, this would break. - need to make a parser or smth..?
-
-        # Extract time, current, and voltage data
+        # Extract time and current data
         time_data = data[:, 0]
         current_data = data[:, 1]
-        # voltage_data = data[:, 2]
 
         # Create current interpolant
         current_interpolant = pybamm.Interpolant(
@@ -80,7 +84,7 @@ class Simulation:
 
         # Run simulation
         sol = self.run()
-        
+    
         return sol
     
     def execute_simulation(self, config: SimulationConfiguration):
