@@ -29,7 +29,11 @@ class SolverConfiguration(BaseModel):
         description="Tolerance settings for the solver"
     )
 
-class DriveCycleConfiguration(BaseModel):
+# need to make this so we can filter what chemistry that is availble for a given drive cycle
+# The difference between declaring this class and not one for Battery BPX models is that
+# 'BatteryConfiguration class already includes the necessary fields to specify the battery 
+# chemistry and model, leveraging the AVAILABLE_BATTERY_MODELS dictionary to validate and load the appropriate file.
+class DriveCycleFile(BaseModel):
     chemistry: StrictStr = Field(
         ..., 
         description="Chemistry of the battery for the drive cycle",
@@ -41,10 +45,6 @@ class DriveCycleConfiguration(BaseModel):
         example="LFP_25degC_1C.csv"
     )
 
-class SimulationConfiguration(BaseModel):
-    battery: BatteryConfiguration
-    solver: SolverConfiguration
-    drive_cycle: Optional[DriveCycleConfiguration] = None
 
 
 # print(BatteryConfiguration.schema_json(indent=2))

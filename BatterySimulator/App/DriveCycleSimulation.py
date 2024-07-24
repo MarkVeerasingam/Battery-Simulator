@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import pybamm
 from App.Simulation import Simulation
-from App.CreateBatteryModel.Config import DriveCycleConfiguration
+from App.CreateBatteryModel.Config import DriveCycleFile
 from App.CreateBatteryModel.CellLibrary import AVAILABLE_DRIVE_CYCLES
 
 class DriveCycleSimulation:
@@ -12,7 +12,7 @@ class DriveCycleSimulation:
         # Access and modify the electrochemical model to disable events
         self.simulation.electrochemical_model.events = []
 
-    def solve(self, config: DriveCycleConfiguration, temperature: float = 25.0, title=""):
+    def solve(self, config: DriveCycleFile, temperature: float = 25.0, title=""):
         # Load drive cycle data from library 
         # Ended up making a new class in Config.py called DriveCycleConfiguration to have chemistry and file path
         # I made SimulationConfiguration in Config.py, a class that accepts any of the 3 existing simulations (t_Eval, exp, driveCycle)
