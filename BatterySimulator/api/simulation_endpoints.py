@@ -4,8 +4,8 @@ from App.SimulationRunner import SimulationRunner, DriveCycleSimulation
 from api.configuration_endpoints import battery, solver
 
 def experiment():
-    battery_config = battery()
-    solver_config = solver()
+    battery_config = battery() # set the battery model configuration
+    solver_config = solver()   # set the simulation solver configuration 
     
     sim_runner = SimulationRunner(battery_config, solver_config)
 
