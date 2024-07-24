@@ -1,6 +1,6 @@
 import pandas as pd
 import pybamm
-from config.Config import BatteryConfiguration, SolverConfiguration, DriveCycleFile
+from config.Config import BatteryConfiguration, SolverConfiguration, DriveCycleFile, SimulationConfiguration
 from App.CreateBatteryModel.BatteryModel import BatteryModel
 from App.CreateBatteryModel.ElectrochemicalModel import ElectrochemicalModel
 from App.CreateBatteryModel.Solver import Solver
@@ -81,3 +81,13 @@ class Simulation:
         sol = self.run()
         
         return sol
+    
+    def execute_simulation(self, config: SimulationConfiguration):
+        if config.drive_cycle:
+            return self.run_driveCycle(driveCycle=config.drive_cycle)
+        elif config.experiment:
+            return self.run(experiment=config.experiment)
+        elif config.t_eval:
+            return self.run(t_eval=config.t_eval)
+        else:
+            raise ValueError("No valid simulation configuration provided.")
