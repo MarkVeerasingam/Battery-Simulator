@@ -9,6 +9,7 @@ class SimulationRunner:
     #     self.t_eval = None
     #     self.drive_cycle = None
         self.simulation = Simulation(battery_config=battery_config, solver_config=solver_config)
+        self.config = None
 
     # def set_t_eval(self, t_eval):
     #     self.t_eval = t_eval
