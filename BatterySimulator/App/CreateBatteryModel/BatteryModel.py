@@ -1,6 +1,6 @@
 import pybamm
 from config.Config import BatteryConfiguration
-from App.CreateBatteryModel.CellLibrary import AVAILABLE_BATTERY_MODELS
+from libraries.CellLibrary import AVAILABLE_BATTERY_MODELS
 
 class BatteryModel:
     @staticmethod
