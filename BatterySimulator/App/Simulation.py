@@ -41,6 +41,7 @@ class Simulation:
         # Access and modify the electrochemical model to disable events
         self.electrochemical_model.events = []
         
+        # line 44 - line 67 should all be in it's own def in utils for reading and parsing drive cycle data
         # Load drive cycle data from driveCycleLibrary 
         if driveCycle.chemistry not in AVAILABLE_DRIVE_CYCLES:
             raise ValueError(f"Invalid battery chemistry: {driveCycle.chemistry}. Use one of {list(AVAILABLE_DRIVE_CYCLES.keys())}")
@@ -63,7 +64,7 @@ class Simulation:
         # Extract time, current, and voltage data
         time_data = data[:, 0]
         current_data = data[:, 1]
-        voltage_data = data[:, 2]
+        # voltage_data = data[:, 2]
 
         # Create current interpolant
         current_interpolant = pybamm.Interpolant(
