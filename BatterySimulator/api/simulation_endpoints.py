@@ -1,5 +1,4 @@
 from config.Config import DriveCycleFile, SimulationConfiguration
-from App.Simulation import Simulation
 from App.SimulationRunner import SimulationRunner
 from api.configuration_endpoints import battery, solver
 
@@ -9,11 +8,11 @@ def experiment():
     
     simulation_config = SimulationConfiguration(
         experiment=[
-            "Discharge at C/5 for 10 hours or until 3.3 V",
+            "Discharge at C/5 for 10 hours or until 2.5 V",
             "Rest for 1 hour",
-            "Charge at 1 A until 4.1 V",
-            "Hold at 4.1 V until 10 mA",
-            "Rest for 1 hour"
+            "Charge at 1 A until 3.5 V",
+            "Hold at 3.5 V until 10 mA",
+            "Rest for 1 hour",
         ] * 4
     )
 
@@ -38,7 +37,7 @@ def drive_cycle():
     simulation_config = SimulationConfiguration(
         drive_cycle=DriveCycleFile(
             chemistry="LFP",
-            drive_cycle_file="LFP_25degC_1C"
+            drive_cycle_file="LFP_25degC_DriveCycle"
         )
     )
 

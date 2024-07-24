@@ -33,7 +33,7 @@ class Simulation:
         else:
             solution = sim.solve()
 
-        sim.plot()
+        # sim.plot()
         
         return solution
     
