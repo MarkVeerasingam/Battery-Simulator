@@ -26,7 +26,7 @@ class SimulationRunner:
             drive_cycle_simulation = DriveCycleSimulation(self.simulation)
             temperature = 25  # Example temperature in °C
             filename = self.drive_cycle
-            return drive_cycle_simulation.solve(temperature=temperature, filename=filename)
+            return self.simulation.run_driveCycle(driveCycle=self.drive_cycle)
         elif self.t_eval:
             return self.simulation.run(t_eval=self.t_eval)
         else:

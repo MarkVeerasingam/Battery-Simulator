@@ -46,4 +46,5 @@ def drive_cycle():
         drive_cycle_file="NMC_25degC_DriveCycle"
     )
     
-    drive_cycle_simulation.solve(config=driveCycle_config, temperature=25)
+    drive_cycle_simulation.set_drive_cycle(driveCycle_config)
+    drive_cycle_simulation.run_simulation()

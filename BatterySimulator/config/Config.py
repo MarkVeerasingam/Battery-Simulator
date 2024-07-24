@@ -45,7 +45,10 @@ class DriveCycleFile(BaseModel):
         example="LFP_25degC_1C.csv"
     )
 
-
+class SimulationConfiguration(BaseModel):
+    t_eval: Optional[Dict[str, float]]= None
+    experiment: Optional[str] = None
+    drive_cycle: Optional[DriveCycleFile] = None
 
 # print(BatteryConfiguration.schema_json(indent=2))
-# print(BPXBatteryModels.schema_json(indent=2))
+# print(BPXBatteryModels.schema_json(indent=2))s
