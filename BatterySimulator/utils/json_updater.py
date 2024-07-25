@@ -2,7 +2,7 @@ import json
 import pybamm
 
 def upload_new_bpx_model():
-    
+    return None
 
 # performs a mock sim of ([0,3600]) to get simulation solution results
 def perform_mock_simulation():
