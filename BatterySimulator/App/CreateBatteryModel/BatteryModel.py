@@ -20,3 +20,5 @@ class BatteryModel:
             raise ValueError(f"Invalid battery model: {bpx_models}. Available models for {chemistry}: {[m.name for m in available_models]}")
         
         return pybamm.ParameterValues.create_from_bpx(model.path)
+
+    

@@ -1,6 +1,15 @@
 import json
 import pybamm
 
+def upload_new_bpx_model():
+    
+
+# performs a mock sim of ([0,3600]) to get simulation solution results
+def perform_mock_simulation():
+    return None
+
+# parsing + appending simulation output data to a json
+
 """This file is temporary until i make something more sophisticated"""
 
 bpx_model = r'C:\Users\markv\Documents\Repos\2024\BatterySimulator_v2\BatterySimulator_SimulationBackend\Li-Ion-Battery-Simulator\BatterySimulator\Models\LFP\lfp_18650_cell_BPX.json'
