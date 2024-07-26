@@ -1,5 +1,6 @@
 import pandas as pd
 import pybamm
+import json
 from config.Config import BatteryConfiguration, SolverConfiguration, DriveCycleFile, SimulationConfiguration
 from App.CreateBatteryModel.BatteryModel import BatteryModel
 from App.CreateBatteryModel.ElectrochemicalModel import ElectrochemicalModel
@@ -8,6 +9,12 @@ from libraries.DriveCycleLibrary import AVAILABLE_DRIVE_CYCLES
 
 class Simulation:
     def __init__(self, battery_config: BatteryConfiguration, solver_config: SolverConfiguration):
+        self.battery_config = battery_config
+        self.solver_config = solver_config
+
+        # we need to gain access to the results of the simulation, this will represent the results of the simulation
+        self.results = None
+
         # create the electrochemical model to be used in the simulation
         self.electrochemical_model = ElectrochemicalModel.create(battery_config)
         
@@ -29,15 +36,17 @@ class Simulation:
         
         # Solve the simulation
         if t_eval is not None:
-            solution = sim.solve(t_eval)
+            solution = sim.solve(t_eval) # time evalulation needs to be solved inside the simulation as an input field. Every other simulation is okay with a regular solve()
         else:
             solution = sim.solve()
+
+        self.results = solution # store the results of the simulation
 
         # sim.plot()
         
         return solution
     
-    def run_driveCycle(self, driveCycle: DriveCycleFile, temperature: float = 25.0, title=""):
+    def run_driveCycle(self, driveCycle: DriveCycleFile, temperature: float = 25.0):
         # Access and modify the electrochemical model to disable events
         self.electrochemical_model.events = []
 
