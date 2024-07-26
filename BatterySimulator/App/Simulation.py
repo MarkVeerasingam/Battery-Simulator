@@ -6,7 +6,6 @@ from App.CreateBatteryModel.BatteryModel import BatteryModel
 from App.CreateBatteryModel.ElectrochemicalModel import ElectrochemicalModel
 from App.CreateBatteryModel.Solver import Solver
 from libraries.DriveCycleLibrary import AVAILABLE_DRIVE_CYCLES
-from libraries.CellLibrary import AVAILABLE_BATTERY_MODELS
 
 class Simulation:
     def __init__(self, battery_config: BatteryConfiguration, solver_config: SolverConfiguration):
@@ -43,16 +42,11 @@ class Simulation:
 
         self.results = solution # store the results of the simulation
 
-        # # get the key list of all the models output simulation parameters.
-        # keys = list(self.electrochemical_model.variables.keys())
-        # with open('simulation_keys.json', 'w') as f:
-        #     json.dump({"output_data": keys}, f, indent=4)
-
         # sim.plot()
         
         return solution
     
-    def run_driveCycle(self, driveCycle: DriveCycleFile, temperature: float = 25.0, title=""):
+    def run_driveCycle(self, driveCycle: DriveCycleFile, temperature: float = 25.0):
         # Access and modify the electrochemical model to disable events
         self.electrochemical_model.events = []
 
