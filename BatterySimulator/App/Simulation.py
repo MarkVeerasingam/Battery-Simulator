@@ -12,6 +12,8 @@ class Simulation:
     def __init__(self, battery_config: BatteryConfiguration, solver_config: SolverConfiguration):
         self.battery_config = battery_config
         self.solver_config = solver_config
+
+        # we need to gain access to the results of the simulation, this will represent the results of the simulation
         self.results = None
 
         # create the electrochemical model to be used in the simulation
@@ -35,17 +37,18 @@ class Simulation:
         
         # Solve the simulation
         if t_eval is not None:
-            solution = sim.solve(t_eval)
+            solution = sim.solve(t_eval) # time evalulation needs to be solved inside the simulation as an input field. Every other simulation is okay with a regular solve()
         else:
             solution = sim.solve()
 
-        self.results = solution # save the results of the simulation
+        self.results = solution # store the results of the simulation
 
-        keys = list(self.electrochemical_model.variables.keys())
-        with open('simulation_keys.json', 'w') as f:
-            json.dump({"output_data": keys}, f, indent=4)
+        # # get the key list of all the models output simulation parameters.
+        # keys = list(self.electrochemical_model.variables.keys())
+        # with open('simulation_keys.json', 'w') as f:
+        #     json.dump({"output_data": keys}, f, indent=4)
 
-        sim.plot()
+        # sim.plot()
         
         return solution
     

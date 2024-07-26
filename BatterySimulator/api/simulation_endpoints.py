@@ -18,6 +18,7 @@ def experiment():
 
     sim_runner = SimulationRunner(battery_config, solver_config)
     sim_runner.run_simulation(config=simulation_config)
+    sim_runner.display_results(["Time [s]", "Terminal voltage [V]"])
 
 def time_eval():
     battery_config = battery()
@@ -44,3 +45,4 @@ def drive_cycle():
 
     sim_runner = SimulationRunner(battery_config, solver_config)
     sim_runner.run_simulation(config=simulation_config)
+    sim_runner.display_results(["Time [s]", "Terminal voltage [V]"])

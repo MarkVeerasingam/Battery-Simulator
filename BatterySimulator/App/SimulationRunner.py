@@ -14,8 +14,10 @@ class SimulationRunner:
             print("No results to display. Run the simulation first.")
             return
 
+        # Access the data from the solution
         for param in selected_params:
             try:
+                # Access the data using the parameter names as keys
                 data = self.simulation.results[param].entries
                 print(f"\nData for {param}:")
                 print(data)
