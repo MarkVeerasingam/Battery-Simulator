@@ -10,16 +10,27 @@ class SimulationRunner:
         return self.simulation.execute_simulation(config)
 
     def display_results(self, selected_params: List[str]):
+        # Check if the simulation results are available
         if self.simulation.results is None:
             print("No results to display. Run the simulation first.")
             return
+
+        results = {}
 
         # Access the data from the solution
         for param in selected_params:
             try:
                 # Access the data using the parameter names as keys
                 data = self.simulation.results[param].entries
+                # Convert numpy array to list for JSON serialization
+                results[param] = data.tolist()  
                 print(f"\nData for {param}:")
                 print(data)
             except KeyError:
                 print(f"\nParameter '{param}' not found in the simulation results.")
+                results[param] = f"Parameter '{param}' not found in the simulation results."
+        
+        # return results as a dictionary
+        return results 
+
+    

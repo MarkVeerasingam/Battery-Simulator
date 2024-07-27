@@ -105,3 +105,5 @@ class Simulation:
             return self.run(t_eval=config.t_eval)
         else:
             raise ValueError("No valid simulation configuration provided.")
+        
+    
