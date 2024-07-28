@@ -23,6 +23,7 @@ def simulate():
 
     simulation_type = data.get('simulation_type')
 
+    # need to modify the '*4' to be configurable via post request
     if simulation_type == 'experiment':
         simulation_config = SimulationConfiguration(
             experiment=data.get('experiment', [
@@ -48,11 +49,17 @@ def simulate():
     else:
         return jsonify({'error': 'Invalid simulation type'}), 400
 
+    # Initialize the simulation runner
     sim_runner = SimulationRunner(battery_config, solver_config)
+
+    # run simulation
     sim_runner.run_simulation(config=simulation_config)
 
-    
-    results = sim_runner.display_results(["Time [s]", "Terminal voltage [V]"])
+    # Get the display parameters from the request, default params are below, if not provided
+    display_params = data.get('display_params', ["Time [s]", "Terminal voltage [V]"])
+
+    # Display the simulation results based on the requested parameters
+    results = sim_runner.display_results(display_params)
 
     return jsonify(results)
 
