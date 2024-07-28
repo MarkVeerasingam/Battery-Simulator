@@ -63,6 +63,6 @@ The API encapsulates various simulation features and functionalities that a user
     },
     "simulation_type": "time_eval",
     "t_eval": [0, 7200],
-    "display_params": ["Time [s]", "Terminal voltage [V]", "State of Charge [%]"]
+    "display_params": ["Time [s]", "Terminal voltage [V]", "Current [A]"]
 }
 ```
