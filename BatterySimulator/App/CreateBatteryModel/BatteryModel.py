@@ -1,6 +1,6 @@
 import pybamm
-from App.CreateBatteryModel.Config import BatteryConfiguration
-from App.CreateBatteryModel.CellLibrary import AVAILABLE_BATTERY_MODELS
+from config.Config import BatteryConfiguration
+from libraries.CellLibrary import AVAILABLE_BATTERY_MODELS
 
 class BatteryModel:
     @staticmethod
@@ -20,3 +20,5 @@ class BatteryModel:
             raise ValueError(f"Invalid battery model: {bpx_models}. Available models for {chemistry}: {[m.name for m in available_models]}")
         
         return pybamm.ParameterValues.create_from_bpx(model.path)
+
+    

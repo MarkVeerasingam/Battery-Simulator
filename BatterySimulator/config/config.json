@@ -1,6 +1,0 @@
-{
-  "bpx_battery_models": {
-    "NMC": "BatterySimulator/Models/NMC/AE_gen1_BPX.json",
-    "LFP": "BatterySimulator/Models/LFP/lfp_18650_cell_BPX.json"
-  }
-}
