@@ -1,4 +1,4 @@
-# Lithium Ion Battery Simulator
+# Battery Simulator 
 ## A Batteries-Included API for Battery Simulations
 
 This is a WIP API that contributes towards my final year project of a web based battery simulator for Atlantic Technological University.
