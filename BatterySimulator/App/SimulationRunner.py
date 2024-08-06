@@ -37,7 +37,7 @@ class SimulationRunner:
         """
 
         for i, current_time in enumerate(time_s):
-            time_label = f"{current_time}"
+            time_label = f"{current_time}s"
             results[time_label] = {}
             for param in selected_params:
                 try:
