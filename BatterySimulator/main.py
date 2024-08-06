@@ -1,6 +1,4 @@
-from flask import Flask
-
-from flask import request, jsonify
+from flask import Flask, request, jsonify
 from config.Config import BatteryConfiguration, SolverConfiguration, DriveCycleFile, SimulationConfiguration
 from App.SimulationRunner import SimulationRunner
 
@@ -56,7 +54,7 @@ def simulate():
     sim_runner.run_simulation(config=simulation_config)
 
     # Get the display parameters from the request, default params are below, if not provided
-    display_params = data.get('display_params', ["Time [s]", "Terminal voltage [V]"])
+    display_params = data.get('display_params', ["Terminal voltage [V]"])
 
     # Display the simulation results based on the requested parameters
     results = sim_runner.display_results(display_params)
