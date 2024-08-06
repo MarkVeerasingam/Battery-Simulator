@@ -17,6 +17,8 @@ class SimulationRunner:
 
         results = {}
 
+        time_s = self.simulation.results["Time [s]"].entries
+
         """
         this is the idea of how i want to display the results of parameters based on a rapid protoype form a jupyter notebook.
         
@@ -34,21 +36,22 @@ class SimulationRunner:
                     print(f"\nParameter '{param}' not found in the simulation results.")
         """
 
-        # Access the data from the solution
-        for param in selected_params:
-            try:
-                # Access the data using the parameter names as keys
-                # self.results = Solution in Simulation.py, we need to access this to get the entries of the simulation's output data
-                data = self.simulation.results[param].entries
-                # Convert numpy array to list for JSON serialization
-                results[param] = data.tolist()  
-                print(f"\nData for {param}:")
-                print(data)
-            except KeyError:
-                print(f"\nParameter '{param}' not found in the simulation results.")
-                results[param] = f"Parameter '{param}' not found in the simulation results."
-        
-        # return results as a dictionary
+        for i, current_time in enumerate(time_s):
+            time_label = f"Time(s): {current_time}"
+            results[time_label] = {}
+            for param in selected_params:
+                try:
+                    data = self.simulation.results[param].entries
+                    results[time_label][param] = data[i]
+                except KeyError:
+                    results[time_label][param] = None  # Parameter wasnt found
+
+        for time, params in results.items():
+            print(f"\nTime: {time} s")
+            for param, value in params.items():
+                print(f"{param}: {value}")
+
+        # return results as a dict
         return results 
 
     
