@@ -64,9 +64,8 @@ class Simulation:
         # generalistic approach to drive cycles
         selected_driveCycle = next((dc for dc in AVAILABLE_DRIVE_CYCLES if dc.name == driveCycle.drive_cycle_file), None)
 
-
         if selected_driveCycle is None:
-            raise ValueError(f"Invalid drive cycle name: {driveCycle.drive_cycle_file}. Available cycles: {[dc.name for dc in available_driveCycles]}")
+            raise ValueError(f"Invalid drive cycle name: {driveCycle.drive_cycle_file}. Available cycles: {[dc.name for dc in selected_driveCycle]}")
 
         file_path = selected_driveCycle.path
 
