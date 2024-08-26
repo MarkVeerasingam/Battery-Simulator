@@ -29,7 +29,7 @@ def simulate():
         drive_cycle = simulation.get('drive_cycle', {})
         simulation_config = SimulationConfiguration(
             drive_cycle=DriveCycleFile(
-                chemistry=drive_cycle.get('chemistry', 'NMC'),
+                # chemistry=drive_cycle.get('chemistry', 'NMC'),
                 drive_cycle_file=drive_cycle.get('drive_cycle_file', 'NMC_25degC_1C')
             )
         )

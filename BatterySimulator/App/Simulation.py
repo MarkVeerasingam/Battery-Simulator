@@ -52,13 +52,18 @@ class Simulation:
 
         # this should be it's def in utils for retrieving drive cycles and parsing it
         # Check if the chemistry is in the available drive cycles
-        if driveCycle.chemistry not in AVAILABLE_DRIVE_CYCLES:
-            raise ValueError(f"Invalid battery chemistry: {driveCycle.chemistry}. Use one of {list(AVAILABLE_DRIVE_CYCLES.keys())}")
+        # if driveCycle.chemistry not in AVAILABLE_DRIVE_CYCLES:
+        #     raise ValueError(f"Invalid battery chemistry: {driveCycle.chemistry}. Use one of {list(AVAILABLE_DRIVE_CYCLES.keys())}")
 
         # Retrieve the drive cycles for the specified chemistry
-        available_driveCycles = AVAILABLE_DRIVE_CYCLES[driveCycle.chemistry].driveCycle
+        # available_driveCycles = AVAILABLE_DRIVE_CYCLES[driveCycle.chemistry].driveCycle
+        
         # Find the drive cycle with the specified name
-        selected_driveCycle = next((dc for dc in available_driveCycles if dc.name == driveCycle.drive_cycle_file), None)
+        # selected_driveCycle = next((dc for dc in available_driveCycles if dc.name == driveCycle.drive_cycle_file), None)
+
+        # generalistic approach to drive cycles
+        selected_driveCycle = next((dc for dc in AVAILABLE_DRIVE_CYCLES if dc.name == driveCycle.drive_cycle_file), None)
+
 
         if selected_driveCycle is None:
             raise ValueError(f"Invalid drive cycle name: {driveCycle.drive_cycle_file}. Available cycles: {[dc.name for dc in available_driveCycles]}")

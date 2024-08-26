@@ -34,11 +34,11 @@ class SolverConfiguration(BaseModel):
 # 'BatteryConfiguration class already includes the necessary fields to specify the battery 
 # chemistry and model, leveraging the AVAILABLE_BATTERY_MODELS dictionary to validate and load the appropriate file.
 class DriveCycleFile(BaseModel):
-    chemistry: StrictStr = Field(
-        ..., 
-        description="Chemistry of the battery for the drive cycle",
-        example="LFP"
-    )
+    # chemistry: StrictStr = Field(
+    #     ..., 
+    #     description="Chemistry of the battery for the drive cycle",
+    #     example="LFP"
+    # )
     drive_cycle_file: StrictStr = Field(
         ..., 
         description="Drive cycle data file name",
