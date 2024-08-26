@@ -3,6 +3,7 @@ version: '3.7'
 services:
   battery-simulator:
     container_name: battery-simulator
+    image: batterysimulator:latest
     build:
       context: ./BatterySimulator
       dockerfile: Dockerfile
@@ -10,3 +11,4 @@ services:
       - "8084:8084"
     volumes:
       - ./BatterySimulator:/app
+    command: python main.py
