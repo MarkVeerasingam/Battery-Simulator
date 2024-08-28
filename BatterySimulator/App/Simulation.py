@@ -1,22 +1,23 @@
 import pandas as pd
 import pybamm
 import json
-from config.Config import BatteryConfiguration, SolverConfiguration, DriveCycleFile, SimulationConfiguration
+from config.Config import BatteryConfiguration, SolverConfiguration, DriveCycleFile, SimulationConfiguration, ElectrochemicalConfiguration
 from App.CreateBatteryModel.BatteryModel import BatteryModel
 from App.CreateBatteryModel.ElectrochemicalModel import ElectrochemicalModel
 from App.CreateBatteryModel.Solver import Solver
 from libraries.DriveCycleLibrary import AVAILABLE_DRIVE_CYCLES
 
 class Simulation:
-    def __init__(self, battery_config: BatteryConfiguration, solver_config: SolverConfiguration):
+    def __init__(self, battery_config: BatteryConfiguration, solver_config: SolverConfiguration, electrochemical_config: ElectrochemicalConfiguration):
         self.battery_config = battery_config
         self.solver_config = solver_config
+        self.electrochemical_model = electrochemical_config
 
         # we need to gain access to the results of the simulation, this will represent the results of the simulation
         self.results = None
 
         # create the electrochemical model to be used in the simulation
-        self.electrochemical_model = ElectrochemicalModel.create(battery_config)
+        self.electrochemical_model = ElectrochemicalModel.create(electrochemical_config)
         
         # create the battery model to be used in the simulation
         self.battery_model = BatteryModel.create(battery_config)

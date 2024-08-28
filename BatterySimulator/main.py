@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
-from config.Config import BatteryConfiguration, SolverConfiguration, DriveCycleFile, SimulationConfiguration
+from config.Config import BatteryConfiguration, ElectrochemicalConfiguration, SolverConfiguration, DriveCycleFile, SimulationConfiguration
 from App.SimulationRunner import SimulationRunner
 import pybamm
 
@@ -15,7 +15,12 @@ def simulate():
         battery_config = BatteryConfiguration(
             battery_chemistry=data.get('battery_chemistry', 'NMC'),
             bpx_battery_models=data.get('bpx_battery_models', 'NMC_Pouch_cell'),
-            electrochemical_model=data.get('electrochemical_model', 'DFN')
+        )
+
+        electrochemical_config = ElectrochemicalConfiguration(
+            electrochemical_model=data.get('electrochemical_model', 'DFN'),
+            cell_geometry=data.get('cell_geometry', 'arbitrary'),
+            thermal_model=data.get('thermal_model', 'isothermal')
         )
 
         solver_config = SolverConfiguration(
@@ -53,7 +58,7 @@ def simulate():
             return jsonify({'error': 'Invalid simulation type'}), 400
 
         # Initialize the simulation runner
-        sim_runner = SimulationRunner(battery_config, solver_config)
+        sim_runner = SimulationRunner(battery_config, solver_config, electrochemical_config)
 
         # Run simulation
         sim_runner.run_simulation(config=simulation_config)

@@ -1,13 +1,15 @@
 import pybamm
-from config.Config import BatteryConfiguration
+from config.Config import ElectrochemicalConfiguration
 
 class ElectrochemicalModel:
     @staticmethod
-    def create(config: BatteryConfiguration):
+    def create(config: ElectrochemicalConfiguration):
         electrochemical_model = config.electrochemical_model
 
+        options = {"cell geometry": config.cell_geometry, "thermal": config.thermal_model}
+
         if electrochemical_model == "DFN":
-            return pybamm.lithium_ion.DFN()
+            return pybamm.lithium_ion.DFN(options=options)
         elif electrochemical_model == "SPM":
             return pybamm.lithium_ion.SPM()
         elif electrochemical_model == "SPMe":
