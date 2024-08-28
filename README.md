@@ -15,19 +15,24 @@ The API encapsulates various simulation features and functionalities that a user
 ### "simulation" -> "type": tells the simulator what type of simulation to perform (experiment, drive_cycle or time_eval(time evaluation))
 ```
 {
-    "battery_chemistry": "NMC",
-    "bpx_battery_models": "NMC_Pouch_cell",
-    "electrochemical_model": "DFN",
+    "battery_model": {
+      "battery_chemistry": "LFP",
+      "bpx_battery_models": "lfp_18650_cell_BPX"
+    },
+    "electrochemical_model": {
+        "model": "DFN",
+        "cell_geometry": "arbitrary",
+        "thermal_model": "isothermal"
+    },
     "solver": "CasadiSolver",
     "tolerance": {
         "atol": 1e-6,
         "rtol": 1e-6
     },
     "simulation": {
-        "type": "drive_cycle",
+        "type": "drive_cycle", 
         "drive_cycle": {
-            "chemistry": "NMC",
-            "drive_cycle_file": "NMC_25degC_1C"
+            "drive_cycle_file": "LFP_25degC_1C"
         },
         "experiment": {
             "conditions": [
@@ -44,5 +49,6 @@ The API encapsulates various simulation features and functionalities that a user
     },
     "display_params": ["Terminal voltage [V]", "Current [A]", "Discharge capacity [A.h]"]
 }
+
 ```
 
