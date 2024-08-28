@@ -16,13 +16,14 @@ class Simulation:
         # we need to gain access to the results of the simulation, this will represent the results of the simulation
         self.results = None
 
-        # create the electrochemical model to be used in the simulation
+        # create the electrochemical model 
+        # idk how i feel about naming them all funcs of 'create'
         self.electrochemical_model = ElectrochemicalModel.create(electrochemical_config)
         
-        # create the battery model to be used in the simulation
+        # create the battery model 
         self.battery_model = BatteryModel.create(battery_config)
         
-        # create the solver to be used in the simulation
+        # create the solver
         self.solver = Solver.create(solver_config)
 
     # run the simulation

@@ -12,15 +12,17 @@ def simulate():
     try:
         data = request.json
 
+        battery_data = data.get('battery_model', {})
         battery_config = BatteryConfiguration(
-            battery_chemistry=data.get('battery_chemistry', 'NMC'),
-            bpx_battery_models=data.get('bpx_battery_models', 'NMC_Pouch_cell'),
+            battery_chemistry=battery_data.get('battery_chemistry', 'NMC'),
+            bpx_battery_models=battery_data.get('bpx_battery_models', 'NMC_Pouch_cell'),
         )
 
+        electrochemical_data = data.get('electrochemical_model', {})
         electrochemical_config = ElectrochemicalConfiguration(
-            electrochemical_model=data.get('electrochemical_model', 'DFN'),
-            cell_geometry=data.get('cell_geometry', 'arbitrary'),
-            thermal_model=data.get('thermal_model', 'isothermal')
+            electrochemical_model=electrochemical_data.get('model', 'DFN'),
+            cell_geometry=electrochemical_data.get('cell_geometry', 'arbitrary'),
+            thermal_model=electrochemical_data.get('thermal_model', 'isothermal')
         )
 
         solver_config = SolverConfiguration(
