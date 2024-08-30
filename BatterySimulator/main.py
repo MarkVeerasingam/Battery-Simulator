@@ -25,9 +25,11 @@ def simulate():
             thermal_model=electrochemical_data.get('thermal_model', 'isothermal')
         )
 
+        solver_data = data.get('solver_model', {})
         solver_config = SolverConfiguration(
-            solver=data.get('solver', 'CasadiSolver'),
-            tolerance=data.get('tolerance', {"atol": 1e-6, "rtol": 1e-6})
+            solver=solver_data.get('solver', 'CasadiSolver'),
+            tolerance=solver_data.get('tolerance', {"atol": 1e-6, "rtol": 1e-6}),
+            mode=solver_data.get('mode', 'safe'),
         )
 
         simulation = data.get('simulation', {})

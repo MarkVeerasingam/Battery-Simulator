@@ -32,13 +32,18 @@ class ElectrochemicalConfiguration(BaseModel):
 
 class SolverConfiguration(BaseModel):
     solver: StrictStr = Field(
-    ..., 
-    description="The solver used for simulation",
-    example="CasadiSolver"
+        ..., 
+        description="The solver used for simulation",
+        example="CasadiSolver"
     )
     tolerance: Dict[str, StrictFloat] = Field(
         default={"atol": 1e-6, "rtol": 1e-6},
-        description="Tolerance settings for the solver"
+        description="The relative and absolute tolerance for the solver, default is 1e-6."
+    )
+    mode: Optional[StrictStr] = Field(
+        default="safe",
+        description="The solver speed of CasadiSolver, can be fast or safe. Default is safe.",
+        example="safe"
     )
 
 class DriveCycleFile(BaseModel):
