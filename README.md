@@ -24,10 +24,13 @@ The API encapsulates various simulation features and functionalities that a user
         "cell_geometry": "arbitrary",
         "thermal_model": "isothermal"
     },
-    "solver": "CasadiSolver",
-    "tolerance": {
-        "atol": 1e-6,
-        "rtol": 1e-6
+    "solver_model": {
+        "solver": "CasadiSolver",
+        "tolerance": {
+            "atol": 1e-6,
+            "rtol": 1e-6
+        },
+        "mode": "safe"
     },
     "simulation": {
         "type": "drive_cycle", 
@@ -49,6 +52,5 @@ The API encapsulates various simulation features and functionalities that a user
     },
     "display_params": ["Terminal voltage [V]", "Current [A]", "Discharge capacity [A.h]"]
 }
-
 ```
 
