@@ -12,7 +12,11 @@ os.environ['XLA_FLAGS'] = (
 )
 
 # print out the available devices
-print('devices', jax.devices())
+print('Available devices:', jax.devices())
+
+# dummy device placement - test if it is simulating through CUDA
+test_array = jax.numpy.array([1.0, 2.0, 3.0])
+print('Test array is placed on:', test_array.addressable_data(0).device)
 
 pybamm.set_logging_level("INFO")
 model = pybamm.lithium_ion.SPM()
@@ -53,6 +57,10 @@ try:
 except RuntimeError as e:
     print(f"Initial solve failed: {e}")
 
+# Check where the solution array is stored (GPU or CPU)
+solution_device = jax.device_put(solution.y).device
+print('Solution array is placed on:', solution_device)
+
 # Create a new function for parallel execution
 def parallel_solve(inputs_array):
     solve_fn = solver.get_solve(model, t_eval)
@@ -64,15 +72,18 @@ inputs_array = {
 }
 
 # Execute in parallel
-print('running in parallel')
+print('Running in parallel')
 tic = time.perf_counter()
 try:
     result_array = parallel_solve(inputs_array)
 except RuntimeError as e:
     print(f"Parallel solve failed: {e}")
 
+# Check where the result array is stored (GPU or CPU)
+result_device = result_array.addressable_data(0).device
+print('Result array is placed on:', result_device)
+
 # Access the result to ensure it's actually computed
 print(result_array[0, 0, 0])
 toc = time.perf_counter()
-print('time elapsed: {} sec'.format(toc - tic))
-
+print('Time elapsed: {} sec'.format(toc - tic))
