@@ -1,4 +1,4 @@
-pybamm==24.5
+pybamm[iree,jax]==24.5
 Flask==3.0.0
 flask_cors==4.0.1
 bpx==0.3.1
