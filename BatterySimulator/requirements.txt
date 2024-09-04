@@ -1,10 +1,7 @@
 pybamm[jax]==24.5
 Flask==3.0.0
 flask_cors==4.0.1
-bpx==0.3.1
+bpx==0.4.0
 python-dotenv
 configparser==7.0.0
 pydantic==1.10.10
-# JAX + CUDA, this only works with linux/wsl2
-# jax[cuda12]==0.4.31
-# jaxlib==0.4.31+cuda12
