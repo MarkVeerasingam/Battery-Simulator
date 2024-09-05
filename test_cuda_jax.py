@@ -11,13 +11,6 @@ os.environ['XLA_FLAGS'] = (
     '--xla_force_host_platform_device_count={}'.format(ncpu)
 )
 
-# print out the available devices
-print('Available devices:', jax.devices())
-
-# dummy device placement - test if it is simulating through CUDA
-test_array = jax.numpy.array([1.0, 2.0, 3.0])
-print('Test array is placed on:', test_array.addressable_data(0).device)
-
 pybamm.set_logging_level("INFO")
 model = pybamm.lithium_ion.SPM()
 model.convert_to_format = "jax"
@@ -27,8 +20,11 @@ model.events = []
 geometry = model.default_geometry
 
 # load parameter values and process model and geometry
-param = model.default_parameter_values
+# param = model.default_parameter_values
+param = pybamm.ParameterValues("Chen2020")
+
 parameter = "Electrode height [m]"
+
 value = param[parameter]
 param.update({parameter: "[input]"})
 param.process_model(model)
@@ -58,7 +54,7 @@ except RuntimeError as e:
     print(f"Initial solve failed: {e}")
 
 # Check where the solution array is stored (GPU or CPU)
-solution_device = jax.device_put(solution.y).device
+solution_device = jax.device_put(solution.y).devices
 print('Solution array is placed on:', solution_device)
 
 # Create a new function for parallel execution
@@ -80,7 +76,7 @@ except RuntimeError as e:
     print(f"Parallel solve failed: {e}")
 
 # Check where the result array is stored (GPU or CPU)
-result_device = result_array.addressable_data(0).device
+result_device = result_array.addressable_data(0).devices
 print('Result array is placed on:', result_device)
 
 # Access the result to ensure it's actually computed
