@@ -21,7 +21,6 @@ class Simulation:
         # To store results
         self.results = None
 
-    # Separate function for running time_eval simulations
     def run_time_eval(self, t_eval):
         sim = pybamm.Simulation(
             model=self.electrochemical_model,
@@ -33,7 +32,6 @@ class Simulation:
         self.results = solution
         return solution
 
-    # Separate function for running experiment-based simulations
     def run_experiment(self, experiment):
         sim = pybamm.Simulation(
             model=self.electrochemical_model,
@@ -46,9 +44,8 @@ class Simulation:
         self.results = solution
         return solution
 
-    # Run drive cycle
     def run_driveCycle(self, driveCycle: DriveCycleFile, temperature: float = 25.0):
-        # Same as before
+        # remove events
         self.electrochemical_model.events = []
 
         selected_driveCycle = next((dc for dc in AVAILABLE_DRIVE_CYCLES if dc.name == driveCycle.drive_cycle_file), None)
