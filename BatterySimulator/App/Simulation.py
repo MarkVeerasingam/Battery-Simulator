@@ -13,103 +13,70 @@ class Simulation:
         self.solver_config = solver_config
         self.electrochemical_model = electrochemical_config
 
-        # we need to gain access to the results of the simulation, this will represent the results of the simulation
-        self.results = None
-
-        # create the electrochemical model 
-        # idk how i feel about naming them all funcs of 'create'
+        # Create the electrochemical model, battery model, and solver model
         self.electrochemical_model = ElectrochemicalModel.create(electrochemical_config)
-        
-        # create the battery model 
         self.battery_model = BatteryModel.create(battery_config)
-        
-        # create the solver
         self.solver = Solver.create(solver_config)
 
-    # run the simulation
-    def run(self, t_eval=None, experiment=None):
-        # Create simulation object
+        # To store results
+        self.results = None
+
+    def run_time_eval(self, t_eval):
+        sim = pybamm.Simulation(
+            model=self.electrochemical_model,
+            parameter_values=self.battery_model,
+            solver=self.solver
+        )
+        # Solve the simulation over the time evaluation period
+        solution = sim.solve(t_eval)
+        self.results = solution
+        return solution
+
+    def run_experiment(self, experiment):
         sim = pybamm.Simulation(
             model=self.electrochemical_model,
             parameter_values=self.battery_model,
             solver=self.solver,
             experiment=experiment
         )
-        
-        # Solve the simulation
-        if t_eval is not None:
-            solution = sim.solve(t_eval) # time evalulation needs to be solved inside the simulation as an input field. Every other simulation is okay with a regular solve()
-        else:
-            solution = sim.solve()
-
-        self.results = solution # store the results of the simulation
-
-        # sim.plot()
-        
+        # Solve the simulation based on the experiment conditions
+        solution = sim.solve()
+        self.results = solution
         return solution
-    
+
     def run_driveCycle(self, driveCycle: DriveCycleFile, temperature: float = 25.0):
-        # Access and modify the electrochemical model to disable events
+        # remove events
         self.electrochemical_model.events = []
 
-        # this should be it's def in utils for retrieving drive cycles and parsing it
-        # Check if the chemistry is in the available drive cycles
-        # if driveCycle.chemistry not in AVAILABLE_DRIVE_CYCLES:
-        #     raise ValueError(f"Invalid battery chemistry: {driveCycle.chemistry}. Use one of {list(AVAILABLE_DRIVE_CYCLES.keys())}")
-
-        # Retrieve the drive cycles for the specified chemistry
-        # available_driveCycles = AVAILABLE_DRIVE_CYCLES[driveCycle.chemistry].driveCycle
-        
-        # Find the drive cycle with the specified name
-        # selected_driveCycle = next((dc for dc in available_driveCycles if dc.name == driveCycle.drive_cycle_file), None)
-
-        # generalistic approach to drive cycles
         selected_driveCycle = next((dc for dc in AVAILABLE_DRIVE_CYCLES if dc.name == driveCycle.drive_cycle_file), None)
-
         if selected_driveCycle is None:
-            raise ValueError(f"Invalid drive cycle name: {driveCycle.drive_cycle_file}. Available cycles: {[dc.name for dc in selected_driveCycle]}")
-
+            raise ValueError(f"Invalid drive cycle name: {driveCycle.drive_cycle_file}.")
+        
         file_path = selected_driveCycle.path
-
-        # Check if file path is empty
         if not file_path:
             raise ValueError("Drive cycle file path is empty")
 
-        print(f"Loading data from: {file_path}")
-        
-        # Load the drive cycle data
         data = pd.read_csv(file_path, comment="#").to_numpy()
-        print(f"Data loaded. Shape: {data.shape}")
-
-        # Extract time and current data
         time_data = data[:, 0]
         current_data = data[:, 1]
 
-        # Create current interpolant
-        current_interpolant = pybamm.Interpolant(
-            time_data, -current_data, pybamm.t, interpolator="linear"
-        )
-
-        # Update battery model parameters
+        current_interpolant = pybamm.Interpolant(time_data, -current_data, pybamm.t, interpolator="linear")
         self.battery_model.update({
             "Current function [A]": current_interpolant,
             "Ambient temperature [K]": 273.15 + temperature,
             "Initial temperature [K]": 273.15 + temperature,
         })
 
-        # Run simulation
-        sol = self.run()
-    
+        sol = self.run_time_eval(t_eval=None)
         return sol
-    
+
+    # Main function to execute simulation based on configuration
     def execute_simulation(self, config: SimulationConfiguration):
         if config.drive_cycle:
             return self.run_driveCycle(driveCycle=config.drive_cycle)
         elif config.experiment:
-            return self.run(experiment=config.experiment)
+            return self.run_experiment(experiment=config.experiment)
         elif config.t_eval:
-            return self.run(t_eval=config.t_eval)
+            return self.run_time_eval(t_eval=config.t_eval)
         else:
             raise ValueError("No valid simulation configuration provided.")
-        
-    

@@ -7,6 +7,8 @@ import pybamm
 app = Flask(__name__)
 CORS(app)
 
+pybamm.set_logging_level("INFO")
+
 @app.route('/simulate', methods=['POST'])
 def simulate():
     try:

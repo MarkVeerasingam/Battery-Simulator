@@ -10,14 +10,9 @@ class SimulationRunner:
         return self.simulation.execute_simulation(config)
 
     def display_results(self, selected_params: List[str]):
-        # Check if the simulation results are available
         if self.simulation.results is None:
             print("No results to display. Run the simulation first.")
             return
-
-        results = {}
-
-        time_s = self.simulation.results["Time [s]"].entries
 
         """
         this is the idea of how i want to display the results of parameters based on a rapid protoype form a jupyter notebook.
@@ -36,6 +31,9 @@ class SimulationRunner:
                     print(f"\nParameter '{param}' not found in the simulation results.")
         """
 
+        results = {}
+        time_s = self.simulation.results["Time [s]"].entries
+
         for i, current_time in enumerate(time_s):
             time_label = f"{current_time}s"
             results[time_label] = {}
@@ -44,14 +42,11 @@ class SimulationRunner:
                     data = self.simulation.results[param].entries
                     results[time_label][param] = data[i]
                 except KeyError:
-                    results[time_label][param] = None  # Parameter wasnt found
+                    results[time_label][param] = None
 
         for time, params in results.items():
             print(f"\nTime: {time} s")
             for param, value in params.items():
                 print(f"{param}: {value}")
 
-        # return results as a dict
-        return results 
-
-    
+        return results

@@ -11,8 +11,8 @@ class ElectrochemicalModel:
         if electrochemical_model == "DFN":
             return pybamm.lithium_ion.DFN(options=options)
         elif electrochemical_model == "SPM":
-            return pybamm.lithium_ion.SPM()
+            return pybamm.lithium_ion.SPM(options=options)
         elif electrochemical_model == "SPMe":
-            return pybamm.lithium_ion.SPMe()
+            return pybamm.lithium_ion.SPMe(options=options)
         else:
             raise ValueError(f"Invalid Electrochemical Model Type: {electrochemical_model}")
