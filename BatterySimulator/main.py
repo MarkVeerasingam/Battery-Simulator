@@ -14,10 +14,10 @@ def simulate():
     try:
         data = request.json
 
-        battery_data = data.get('battery_model', {})
+        parameter_values = data.get('parameter_values', {})
         battery_config = BatteryConfiguration(
-            is_bpx=battery_data.get('is_bpx', True),
-            parameter_value=battery_data.get('parameter_value', 'NMC_Pouch_cell'),
+            is_bpx=parameter_values.get('is_bpx', True),
+            parameter_value=parameter_values.get('parameter_values', 'NMC_Pouch_cell'),
         )
 
         electrochemical_data = data.get('electrochemical_model', {})
