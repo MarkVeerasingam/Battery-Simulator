@@ -2,7 +2,7 @@ import pandas as pd
 import pybamm
 import json
 from config.Config import BatteryConfiguration, SolverConfiguration, DriveCycleFile, SimulationConfiguration, ElectrochemicalConfiguration
-from App.CreateBatteryModel.BatteryModel import BatteryModel
+from App.CreateBatteryModel.ParameterValues import ParameterValues
 from App.CreateBatteryModel.ElectrochemicalModel import ElectrochemicalModel
 from App.CreateBatteryModel.Solver import Solver
 from libraries.DriveCycleLibrary import AVAILABLE_DRIVE_CYCLES
@@ -15,7 +15,7 @@ class Simulation:
 
         # Create the electrochemical model, battery model, and solver model
         self.electrochemical_model = ElectrochemicalModel.create(electrochemical_config)
-        self.battery_model = BatteryModel.create(battery_config)
+        self.paramter_values = ParameterValues.create(battery_config)
         self.solver = Solver.create(solver_config)
 
         # To store results
@@ -24,7 +24,7 @@ class Simulation:
     def run_time_eval(self, t_eval):
         sim = pybamm.Simulation(
             model=self.electrochemical_model,
-            parameter_values=self.battery_model,
+            parameter_values=self.paramter_values,
             solver=self.solver
         )
         # Solve the simulation over the time evaluation period
@@ -35,7 +35,7 @@ class Simulation:
     def run_experiment(self, experiment):
         sim = pybamm.Simulation(
             model=self.electrochemical_model,
-            parameter_values=self.battery_model,
+            parameter_values=self.paramter_values,
             solver=self.solver,
             experiment=experiment
         )
@@ -61,7 +61,7 @@ class Simulation:
         current_data = data[:, 1]
 
         current_interpolant = pybamm.Interpolant(time_data, -current_data, pybamm.t, interpolator="linear")
-        self.battery_model.update({
+        self.paramter_values.update({
             "Current function [A]": current_interpolant,
             "Ambient temperature [K]": 273.15 + temperature,
             "Initial temperature [K]": 273.15 + temperature,
