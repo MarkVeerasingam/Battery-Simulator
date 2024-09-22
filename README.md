@@ -16,7 +16,6 @@ The API encapsulates various simulation features and functionalities that a user
 ```
 {
     "battery_model": {
-      "battery_chemistry": "LFP",
       "bpx_battery_models": "lfp_18650_cell_BPX"
     },
     "electrochemical_model": {
