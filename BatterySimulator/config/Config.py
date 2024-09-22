@@ -2,11 +2,11 @@ from pydantic import BaseModel, StrictStr, StrictFloat, Field
 from typing import Dict, Optional, List
 
 class BatteryConfiguration(BaseModel):
-    battery_chemistry: StrictStr = Field(
-        ..., 
-        description="The chemistry name of the battery model",
-        example="LFP"
-    )
+    # battery_chemistry: StrictStr = Field(
+    #     ..., 
+    #     description="The chemistry name of the battery model",
+    #     example="LFP"
+    # )
     bpx_battery_models: StrictStr = Field(
         ..., 
         description="The specific battery model name",

@@ -16,7 +16,7 @@ def simulate():
 
         battery_data = data.get('battery_model', {})
         battery_config = BatteryConfiguration(
-            battery_chemistry=battery_data.get('battery_chemistry', 'NMC'),
+            # battery_chemistry=battery_data.get('battery_chemistry', 'NMC'),
             bpx_battery_models=battery_data.get('bpx_battery_models', 'NMC_Pouch_cell'),
         )
 
