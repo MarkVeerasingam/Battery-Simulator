@@ -24,8 +24,14 @@ class BatteryModel:
         '''new logic to handle updated cell library so it no longer takes bpx without relying on a given chemistry'''
 
         model = config.parameter_value
-        
-        available_models = AVAILABLE_BPX_BATTERY_MODELS
-        model = next((m for m in available_models if m.name == model), None)
+        is_bpx = config.is_bpx
 
-        return pybamm.ParameterValues.create_from_bpx(model.path)
+        if (is_bpx == True):
+            available_models = AVAILABLE_BPX_BATTERY_MODELS
+
+            # look for a bpx model + it's path from AVAILABLE_BPX_BATTERY_MODELS 
+            model = next((m for m in available_models if m.name == model), None)
+
+            return pybamm.ParameterValues.create_from_bpx(model.path)
+        else:
+            return pybamm.ParameterValues(model)
