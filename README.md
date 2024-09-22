@@ -16,15 +16,16 @@ The API encapsulates various simulation features and functionalities that a user
 ```
 {
     "battery_model": {
-      "bpx_battery_models": "lfp_18650_cell_BPX"
+      "is_bpx": true,
+      "parameter_value": "lfp_18650_cell_BPX"
     },
     "electrochemical_model": {
-        "model": "DFN",
+        "model": "SPM",
         "cell_geometry": "arbitrary",
-        "thermal_model": "isothermal"
+        "thermal_model": "lumped"
     },
     "solver_model": {
-        "solver": "CasadiSolver",
+        "solver": "IDAKLUSolver",
         "tolerance": {
             "atol": 1e-6,
             "rtol": 1e-6
@@ -34,7 +35,7 @@ The API encapsulates various simulation features and functionalities that a user
     "simulation": {
         "type": "drive_cycle", 
         "drive_cycle": {
-            "drive_cycle_file": "LFP_25degC_1C"
+            "drive_cycle_file": "LFP_25degC_DriveCycle"
         },
         "experiment": {
             "conditions": [
