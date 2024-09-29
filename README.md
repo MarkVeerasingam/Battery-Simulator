@@ -53,4 +53,3 @@ The API encapsulates various simulation features and functionalities that a user
     "display_params": ["Terminal voltage [V]", "Current [A]", "Discharge capacity [A.h]"]
 }
 ```
-

@@ -1,5 +1,5 @@
 from config.Config import BatteryConfiguration, SolverConfiguration, SimulationConfiguration, ElectrochemicalConfiguration
-from App.Simulation import Simulation
+from App.Simulations.Simulation import Simulation
 from typing import List
 
 class SimulationRunner:
