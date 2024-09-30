@@ -2,7 +2,11 @@ import pandas as pd
 from libraries.DriveCycleLibrary import AVAILABLE_DRIVE_CYCLES
 
 def read_drive_cycle_data(drive_cycle_name: str):
-    """Read drive cycle data from a CSV file based on the drive cycle name."""
+    """
+    Read drive cycle data from a CSV file based on the drive cycle name.
+    This will most likely have to be some database code later on reading drive cycles from a db or have a DriveCycle_FileManager class which essentially handles the connection to a DB
+    From there the mangaer file caches it to an ORM assigned to a User instance of the API i.e. data is cached to the api on a per user basis
+    """
     selected_drive_cycle = next(
         (dc for dc in AVAILABLE_DRIVE_CYCLES if dc.name == drive_cycle_name), 
         None
