@@ -1,4 +1,4 @@
-from App.Simulations.BaseSimulation import BaseSimulation
+from App.Simulations.SimulationTypes.BaseSimulation import BaseSimulation
 
 class TimeEvalSimulation(BaseSimulation):
     def run(self, t_eval):

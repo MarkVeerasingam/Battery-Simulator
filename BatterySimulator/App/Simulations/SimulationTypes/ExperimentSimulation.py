@@ -1,5 +1,5 @@
 import pybamm
-from App.Simulations.BaseSimulation import BaseSimulation
+from App.Simulations.SimulationTypes.BaseSimulation import BaseSimulation
 
 class ExperimentSimulation(BaseSimulation):
     def run(self, experiment):

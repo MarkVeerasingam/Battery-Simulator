@@ -2,7 +2,7 @@ import pandas as pd
 import pybamm
 from config.Config import DriveCycleFile
 from libraries.DriveCycleLibrary import AVAILABLE_DRIVE_CYCLES 
-from App.Simulations.BaseSimulation import BaseSimulation
+from App.Simulations.SimulationTypes.BaseSimulation import BaseSimulation
 
 class DriveCycleSimulation(BaseSimulation):
     def run(self, drive_cycle: DriveCycleFile, temperature: float = 25.0):

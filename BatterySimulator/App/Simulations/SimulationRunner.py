@@ -1,9 +1,7 @@
 from App.CreateBatteryModel.ElectrochemicalModel import ElectrochemicalModel
 from App.CreateBatteryModel.ParameterValues import ParameterValues
 from App.CreateBatteryModel.Solver import Solver
-from App.Simulations.ExperimentSimulation import ExperimentSimulation
-from App.Simulations.TimeEvalSimulation import TimeEvalSimulation
-from App.Simulations.DriveCycleSimulation import DriveCycleSimulation
+from App.Simulations.SimulationTypes import DriveCycleSimulation, ExperimentSimulation, TimeEvalSimulation
 from config.Config import BatteryConfiguration, SolverConfiguration, SimulationConfiguration, ElectrochemicalConfiguration
 from typing import List
 
@@ -25,7 +23,7 @@ class SimulationRunner:
         # stores simulation results
         self.results = None
 
-    def run_simulation(self, config):
+    def run_simulation(self, config: SimulationConfiguration):
         """
         Run the simulation based on the provided configuration.
         
@@ -49,7 +47,7 @@ class SimulationRunner:
 
     def display_results(self, selected_params: List[str]):
         """
-        NEED TO DO SOMETHING NEW: CONSIDERING Output_Variables.
+        Legacy Code: This will be replaced with argument output_variables and output_variables will contain values of list[str] variables
 
         this is the idea of how i want to display the results of parameters based on a rapid protoype form a jupyter notebook.
         
@@ -66,11 +64,10 @@ class SimulationRunner:
                 except KeyError:
                     print(f"\nParameter '{param}' not found in the simulation results.")
         """
-
         if self.results is None:
             print("No results to display. Please run the simulation first.")
             return
-
+        
         results = {}
         time_s = self.results["Time [s]"].entries
 
@@ -91,3 +88,4 @@ class SimulationRunner:
                 print(f"{param}: {value}")
 
         return results
+        
