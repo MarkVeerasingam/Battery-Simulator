@@ -18,10 +18,6 @@ class SimulationService:
         self.solver = solver
 
     def execute_simulation(self, config: SimulationConfiguration):
-        """
-        Main function to execute the appropriate simulation based on the configuration.
-        Delegates to the appropriate simulation class.
-        """
         if config.drive_cycle:
             drive_cycle_sim = DriveCycleSimulation(self.electrochemical_model, self.parameter_values, self.solver)
             return drive_cycle_sim.run(config.drive_cycle)
