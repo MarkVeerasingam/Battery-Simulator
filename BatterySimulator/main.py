@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 from config.Config import BatteryConfiguration, ElectrochemicalConfiguration, SolverConfiguration, DriveCycleFile, SimulationConfiguration
-from App.SimulationRunner import SimulationRunner
+from App.Simulations.SimulationRunner import SimulationRunner
 import pybamm
 
 app = Flask(__name__)
