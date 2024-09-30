@@ -3,27 +3,27 @@ from App.CreateBatteryModel.ParameterValues import ParameterValues
 from App.CreateBatteryModel.Solver import Solver
 from App.Simulations.ExperimentSimulation import ExperimentSimulation
 from App.Simulations.TimeEvalSimulation import TimeEvalSimulation
+from App.Simulations.DriveCycleSimulation import DriveCycleSimulation
 from config.Config import BatteryConfiguration, SolverConfiguration, SimulationConfiguration, ElectrochemicalConfiguration
 from typing import List
 
 class SimulationRunner:
-    def __init__(self, battery_config, solver_config, electrochemical_config):
-            """
-            Initialize the SimulationRunner by creating the battery model components.
+    def __init__(self, battery_config: BatteryConfiguration, solver_config: SolverConfiguration,
+                 electrochemical_config: ElectrochemicalConfiguration):
+        """
+        Initialize the SimulationRunner by creating the battery model components.
 
-            Parameters:
-            - battery_config: The configuration for the battery model (parameters, chemistry).
-            - solver_config: The configuration for the solver (type, tolerance).
-            - electrochemical_config: The configuration for the electrochemical model (thermal, geometry).
-            """
-            # Create the electrochemical model
-            self.electrochemical_model = ElectrochemicalModel.create(electrochemical_config)
+        Parameters:
+        - battery_config: The configuration for the battery model (parameters, chemistry).
+        - solver_config: The configuration for the solver (type, tolerance).
+        - electrochemical_config: The configuration for the electrochemical model (thermal, geometry).
+        """
+        self.electrochemical_model = ElectrochemicalModel.create(electrochemical_config)
+        self.parameter_values = ParameterValues.create(battery_config)
+        self.solver = Solver.create(solver_config)
 
-            # Create the parameter values (either BPX or built-in pybamm sets)
-            self.parameter_values = ParameterValues.create(battery_config)
-
-            # Create the solver (CasadiSolver, IDAKLUSolver, etc.)
-            self.solver = Solver.create(solver_config)    
+        # stores simulation results
+        self.results = None
 
     def run_simulation(self, config):
         """
@@ -32,29 +32,25 @@ class SimulationRunner:
         Parameters:
         - config: The configuration for the simulation (experiment, t_eval, drive cycle).
         """
-        if config.experiment:
-            experiment_simulation = ExperimentSimulation(
-                electrochemical_model=self.electrochemical_model,
-                parameter_values=self.parameter_values,
-                solver=self.solver
-            )
-            return experiment_simulation.run(experiment=config.experiment)
-
+        if config.drive_cycle:
+            drive_cycle_sim = DriveCycleSimulation(self.electrochemical_model, self.parameter_values, self.solver)
+            run_sim = drive_cycle_sim.run(config.drive_cycle) 
+            self.results = run_sim  
+        elif config.experiment:
+            experiment_sim = ExperimentSimulation(self.electrochemical_model, self.parameter_values, self.solver)
+            run_sim = experiment_sim.run(config.experiment)  
+            self.results = run_sim 
         elif config.t_eval:
-            time_eval_simulation = TimeEvalSimulation(
-                electrochemical_model=self.electrochemical_model,
-                parameter_values=self.parameter_values,
-                solver=self.solver
-            )
-            return time_eval_simulation.run(t_eval=config.t_eval)
-        
-        # do drive cycle simulation logic next
-        
+            time_eval_sim = TimeEvalSimulation(self.electrochemical_model, self.parameter_values, self.solver)
+            run_sim = time_eval_sim.run(config.t_eval)  
+            self.results = run_sim 
         else:
-            raise ValueError("Invalid simulation type provided.")
+            raise ValueError("No valid simulation configuration provided.")
 
     def display_results(self, selected_params: List[str]):
         """
+        NEED TO DO SOMETHING NEW: CONSIDERING Output_Variables.
+
         this is the idea of how i want to display the results of parameters based on a rapid protoype form a jupyter notebook.
         
         solution = simulation.solve([0,3600]) # not exclusive to only time_eval, can work with any
