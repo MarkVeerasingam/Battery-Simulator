@@ -1,5 +1,4 @@
-import pybamm
-from config.Config import SolverConfiguration
+from config.Solver import SolverConfiguration
 from App.Solvers.SolverTypes.CasadiSolver import CasadiSolver
 from App.Solvers.SolverTypes.IDAKLUSolver import IDAKLUSolver
 

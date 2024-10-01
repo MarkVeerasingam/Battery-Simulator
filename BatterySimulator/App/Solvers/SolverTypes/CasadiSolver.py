@@ -1,5 +1,5 @@
 import pybamm
-from config.Config import SolverConfiguration
+from config.Solver import SolverConfiguration
 
 class CasadiSolver:
     @staticmethod

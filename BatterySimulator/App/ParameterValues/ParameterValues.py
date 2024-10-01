@@ -1,5 +1,5 @@
 import pybamm
-from config.Config import ParameterValueConfiguration
+from config.ParameterValues import ParameterValueConfiguration
 from libraries.CellLibrary import AVAILABLE_BPX_BATTERY_MODELS
 
 class ParameterValues:

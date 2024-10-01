@@ -1,4 +1,3 @@
-import pybamm
 from App.Simulations.SimulationTypes.BaseSimulation import BaseSimulation
 
 class ExperimentSimulation(BaseSimulation):
