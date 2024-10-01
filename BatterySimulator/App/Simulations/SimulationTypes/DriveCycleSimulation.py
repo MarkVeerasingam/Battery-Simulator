@@ -9,11 +9,10 @@ class DriveCycleSimulation(BaseSimulation):
         self.electrochemical_model.events = []
 
         time_data, current_data = read_drive_cycle_data(drive_cycle.drive_cycle_file)
-        current_interpolant = interpolate_drive_cycle_data(time_data, current_data)
 
         # Create an interpolant for the current function
-        current_interpolant = pybamm.Interpolant(time_data, -current_data, pybamm.t, interpolator="linear")
-        
+        current_interpolant = interpolate_drive_cycle_data(time_data, current_data)
+
         # Update parameter values
         self.parameter_values.update({
             "Current function [A]": current_interpolant,
