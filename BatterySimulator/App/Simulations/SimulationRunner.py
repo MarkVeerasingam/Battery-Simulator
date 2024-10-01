@@ -1,5 +1,5 @@
-from App.CreateBatteryModel.ElectrochemicalModel import ElectrochemicalModel
-from App.CreateBatteryModel.ParameterValues import ParameterValues
+from App.BatteryModel.ElectrochemicalModel import ElectrochemicalModel
+from App.ParameterValues.ParameterValues import ParameterValues
 from App.Solvers.SolverRunner import SolverRunner
 from App.Simulations.SimulationTypes import DriveCycleSimulation, ExperimentSimulation, TimeEvalSimulation
 from config.Config import ParameterValueConfiguration, SolverConfiguration, SimulationConfiguration, ElectrochemicalModelConfiguration
