@@ -1,18 +1,18 @@
-import pybamm
-from config.Config import ElectrochemicalConfiguration
+from config.Config import ElectrochemicalModelConfiguration
+from App.BatteryModel.PhysicsBasedModels.PhysicsBasedModels import PhysicsBasedModels
 
-class ElectrochemicalModel:
+class ModelRunner:
     @staticmethod
-    def create(config: ElectrochemicalConfiguration):
+    def create(config: ElectrochemicalModelConfiguration):
         electrochemical_model = config.electrochemical_model
 
         options = {"cell geometry": config.cell_geometry, "thermal": config.thermal_model}
 
         if electrochemical_model == "DFN":
-            return pybamm.lithium_ion.DFN(options=options)
+            return PhysicsBasedModels.create_dfn(options)
         elif electrochemical_model == "SPM":
-            return pybamm.lithium_ion.SPM(options=options)
+            return PhysicsBasedModels.create_spm(options)
         elif electrochemical_model == "SPMe":
-            return pybamm.lithium_ion.SPMe(options=options)
+            return PhysicsBasedModels.create_spme(options)
         else:
             raise ValueError(f"Invalid Electrochemical Model Type: {electrochemical_model}")

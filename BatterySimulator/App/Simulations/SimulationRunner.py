@@ -1,23 +1,23 @@
-from App.CreateBatteryModel.ElectrochemicalModel import ElectrochemicalModel
-from App.CreateBatteryModel.ParameterValues import ParameterValues
+from App.BatteryModel.ModelRunner import ModelRunner
+from App.ParameterValues.ParameterValues import ParameterValues
 from App.Solvers.SolverRunner import SolverRunner
 from App.Simulations.SimulationTypes import DriveCycleSimulation, ExperimentSimulation, TimeEvalSimulation
-from config.Config import BatteryConfiguration, SolverConfiguration, SimulationConfiguration, ElectrochemicalConfiguration
+from config.Config import ParameterValueConfiguration, SolverConfiguration, SimulationConfiguration, ElectrochemicalModelConfiguration
 from typing import List
 
 class SimulationRunner:
-    def __init__(self, battery_config: BatteryConfiguration, solver_config: SolverConfiguration,
-                 electrochemical_config: ElectrochemicalConfiguration):
+    def __init__(self, parameter_value_config: ParameterValueConfiguration, solver_config: SolverConfiguration,
+                 electrochemical_config: ElectrochemicalModelConfiguration):
         """
         Initialize the SimulationRunner by creating the battery model components.
 
         Parameters:
-        - battery_config: The configuration for the battery model (parameter_values, optional BPX).
+        - battery_config: The configuration for the parameter values of the model (parameter_values, optional BPX).
         - solver_config: The configuration for the solver (type, tolerance).
         - electrochemical_config: The configuration for the electrochemical model (thermal, geometry).
         """
-        self.electrochemical_model = ElectrochemicalModel.create(electrochemical_config)
-        self.parameter_values = ParameterValues.create(battery_config)
+        self.electrochemical_model = ModelRunner.create(electrochemical_config)
+        self.parameter_values = ParameterValues.create(parameter_value_config)
         self.solver = SolverRunner.create(solver_config)
 
         # stores simulation results
