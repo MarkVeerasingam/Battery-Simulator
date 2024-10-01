@@ -1,10 +1,10 @@
 import pybamm
-from config.Config import BatteryConfiguration
+from config.Config import ParameterValueConfiguration
 from libraries.CellLibrary import AVAILABLE_BPX_BATTERY_MODELS
 
 class ParameterValues:
     @staticmethod
-    def create(config: BatteryConfiguration):
+    def create(config: ParameterValueConfiguration):
         parameter_values = config.parameter_value
         is_bpx = config.is_bpx
 

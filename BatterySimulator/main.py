@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
-from config.Config import BatteryConfiguration, ElectrochemicalConfiguration, SolverConfiguration, DriveCycleFile, SimulationConfiguration
+from config.Config import ParameterValueConfiguration, ElectrochemicalModelConfiguration, SolverConfiguration, DriveCycleFile, SimulationConfiguration
 from App.Simulations.SimulationRunner import SimulationRunner
 import pybamm
 
@@ -15,13 +15,13 @@ def simulate():
         data = request.json
 
         parameter_values = data.get('parameter_values', {})
-        battery_config = BatteryConfiguration(
+        battery_config = ParameterValueConfiguration(
             is_bpx=parameter_values.get('is_bpx', True),
             parameter_value=parameter_values.get('parameter_values', 'NMC_Pouch_cell'),
         )
 
         electrochemical_data = data.get('electrochemical_model', {})
-        electrochemical_config = ElectrochemicalConfiguration(
+        electrochemical_config = ElectrochemicalModelConfiguration(
             electrochemical_model=electrochemical_data.get('model', 'DFN'),
             cell_geometry=electrochemical_data.get('cell_geometry', 'arbitrary'),
             thermal_model=electrochemical_data.get('thermal_model', 'isothermal')

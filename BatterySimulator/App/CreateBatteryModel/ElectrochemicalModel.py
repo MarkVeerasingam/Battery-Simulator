@@ -1,9 +1,9 @@
 import pybamm
-from config.Config import ElectrochemicalConfiguration
+from config.Config import ElectrochemicalModelConfiguration
 
 class ElectrochemicalModel:
     @staticmethod
-    def create(config: ElectrochemicalConfiguration):
+    def create(config: ElectrochemicalModelConfiguration):
         electrochemical_model = config.electrochemical_model
 
         options = {"cell geometry": config.cell_geometry, "thermal": config.thermal_model}
