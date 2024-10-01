@@ -1,4 +1,5 @@
 import pandas as pd
+import pybamm
 from libraries.DriveCycleLibrary import AVAILABLE_DRIVE_CYCLES
 
 def read_drive_cycle_data(drive_cycle_name: str):
@@ -30,5 +31,4 @@ def read_drive_cycle_data(drive_cycle_name: str):
 
 def interpolate_drive_cycle_data(time_data, current_data):
     """Interpolate the current data from the drive cycle."""
-    import pybamm
     return pybamm.Interpolant(time_data, -current_data, pybamm.t, interpolator="linear")
