@@ -1,5 +1,4 @@
-import pybamm
-from config.Config import DriveCycleFile
+from config.Simulation import DriveCycleFile
 from App.Simulations.Utils.drive_cycle_utils import read_drive_cycle_data, interpolate_drive_cycle_data
 from App.Simulations.SimulationTypes.BaseSimulation import BaseSimulation
 

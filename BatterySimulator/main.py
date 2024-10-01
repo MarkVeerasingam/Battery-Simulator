@@ -1,6 +1,9 @@
 from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
-from config.Config import ParameterValueConfiguration, ElectrochemicalModelConfiguration, SolverConfiguration, DriveCycleFile, SimulationConfiguration
+from config.ParameterValues import ParameterValueConfiguration
+from config.Model import ElectrochemicalModelConfiguration
+from config.Simulation import SimulationConfiguration, DriveCycleFile
+from config.Solver import SolverConfiguration
 from App.Simulations.SimulationRunner import SimulationRunner
 import pybamm
 

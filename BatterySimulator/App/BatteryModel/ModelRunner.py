@@ -1,4 +1,4 @@
-from config.Config import ElectrochemicalModelConfiguration
+from config.Model import ElectrochemicalModelConfiguration
 from App.BatteryModel.PhysicsBasedModels.PhysicsBasedModels import PhysicsBasedModels
 
 class ModelRunner:
