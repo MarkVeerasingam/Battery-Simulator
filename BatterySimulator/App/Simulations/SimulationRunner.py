@@ -1,4 +1,4 @@
-from App.BatteryModel.ElectrochemicalModel import ElectrochemicalModel
+from App.BatteryModel.ModelRunner import ModelRunner
 from App.ParameterValues.ParameterValues import ParameterValues
 from App.Solvers.SolverRunner import SolverRunner
 from App.Simulations.SimulationTypes import DriveCycleSimulation, ExperimentSimulation, TimeEvalSimulation
@@ -16,7 +16,7 @@ class SimulationRunner:
         - solver_config: The configuration for the solver (type, tolerance).
         - electrochemical_config: The configuration for the electrochemical model (thermal, geometry).
         """
-        self.electrochemical_model = ElectrochemicalModel.create(electrochemical_config)
+        self.electrochemical_model = ModelRunner.create(electrochemical_config)
         self.parameter_values = ParameterValues.create(parameter_value_config)
         self.solver = SolverRunner.create(solver_config)
 
