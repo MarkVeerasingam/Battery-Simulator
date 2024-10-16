@@ -15,14 +15,17 @@ The API encapsulates various simulation features and functionalities that a user
 ### "simulation" -> "type": tells the simulator what type of simulation to perform (experiment, drive_cycle or time_eval(time evaluation))
 ```
 {
-    "battery_model": {
-      "is_bpx": true,
-      "parameter_value": "lfp_18650_cell_BPX"
+    "parameter_values": {
+        "is_bpx": true,
+        "parameter_value": "lfp_18650_cell_BPX",  
+        "updated_parameters": {
+            "Ambient temperature [K]": 298.15
+        }
     },
     "electrochemical_model": {
-        "model": "SPM",
+        "electrochemical_model": "SPM", 
         "cell_geometry": "arbitrary",
-        "thermal_model": "lumped"
+        "thermal_model": "isothermal"
     },
     "solver_model": {
         "solver": "IDAKLUSolver",
@@ -33,22 +36,17 @@ The API encapsulates various simulation features and functionalities that a user
         "mode": "safe"
     },
     "simulation": {
-        "type": "drive_cycle", 
         "drive_cycle": {
             "drive_cycle_file": "LFP_25degC_DriveCycle"
-        },
-        "experiment": {
-            "conditions": [
-                "Discharge at C/5 for 10 hours or until 2.5 V",
-                "Rest for 1 hour",
-                "Charge at 1 A until 3.5 V",
-                "Hold at 3.5 V until 10 mA",
-                "Rest for 1 hour"
-            ]
-        },
-        "time_eval": {
-            "conditions": [0, 7200]
         }
+        // "experiment": [  
+        //     "Discharge at C/5 for 10 hours or until 2.5 V",
+        //     "Rest for 1 hour",
+        //     "Charge at 1 A until 3.5 V",
+        //     "Hold at 3.5 V until 10 mA",
+        //     "Rest for 1 hour"
+        // ],
+        // "t_eval": [0, 7200]  
     },
     "display_params": ["Terminal voltage [V]", "Current [A]", "Discharge capacity [A.h]"]
 }
