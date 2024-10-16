@@ -36,7 +36,7 @@ def simulate():
             solver=solver_data.get('solver', 'CasadiSolver'),
             tolerance=solver_data.get('tolerance', {"atol": 1e-6, "rtol": 1e-6}),
             mode=solver_data.get('mode', 'safe'),
-            output_variables=solver_data.get('output_variables', [])
+            # output_variables=solver_data.get('output_variables', []) # removed until next pybamm version release
         )
 
         simulation = data.get('simulation', {})
