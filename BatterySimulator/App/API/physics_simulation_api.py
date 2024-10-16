@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import Optional, Dict, Any, List
+from typing import Optional, List
 from config.ParameterValues import ParameterValueConfiguration
 from config.Model import ElectrochemicalModelConfiguration
 from config.Simulation import SimulationConfiguration, DriveCycleFile
@@ -10,10 +10,10 @@ from App.Simulations.SimulationRunner import SimulationRunner
 import pybamm
 
 # Initialize FastAPI
-app = FastAPI()
+physics_app = FastAPI()
 
 # Enable CORS
-app.add_middleware(
+physics_app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
@@ -31,7 +31,7 @@ class SimulationRequest(BaseModel):
 # Logging configuration
 pybamm.set_logging_level("INFO")
 
-@app.post("/simulate")
+@physics_app.post("/")
 async def simulate(request: SimulationRequest):
     try:
         # Extract the simulation + model configurations from the request
