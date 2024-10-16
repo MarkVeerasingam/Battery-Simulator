@@ -1,6 +1,6 @@
 pybamm[jax]==24.5
-Flask==3.0.0
-flask_cors==4.0.1
+fastapi==0.115.2
+uvicorn==0.32.0
 bpx==0.4.0
 python-dotenv
 configparser==7.0.0
