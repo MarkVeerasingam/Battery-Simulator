@@ -1,4 +1,3 @@
-import pybamm
 from config.ParameterValues import ParameterValueConfiguration
 from App.ParameterValues.ParameterValueTypes.StandardParameterValues import StandardParameterValues
 from App.ParameterValues.ParameterValueTypes.BPX import BPXParameterValues
