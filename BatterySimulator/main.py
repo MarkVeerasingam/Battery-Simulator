@@ -21,6 +21,7 @@ def simulate():
         battery_config = ParameterValueConfiguration(
             is_bpx=parameter_values.get('is_bpx', True),
             parameter_value=parameter_values.get('parameter_values', 'NMC_Pouch_cell'),
+            updated_parameters=parameter_values.get('updated_parameters', None) # this is optional, only used for updating parameter values
         )
 
         electrochemical_data = data.get('electrochemical_model', {})

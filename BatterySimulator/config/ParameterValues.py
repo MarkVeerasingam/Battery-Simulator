@@ -1,4 +1,5 @@
 from pydantic import BaseModel, StrictStr, Field
+from typing import Optional, Dict
 
 class ParameterValueConfiguration(BaseModel):
     is_bpx: bool = Field(
@@ -10,4 +11,9 @@ class ParameterValueConfiguration(BaseModel):
         ..., 
         description="The specific battery model name",
         example="lfp_18650_cell_BPX"
+    )
+    updated_parameters: Optional[Dict[str, float]] = Field(
+        default=None,
+        description="Optional dictionary of parameter names and their new values, e.g., {'Current [A]': 5.0, 'Temperature [K]': 298.15}.",
+        example={"Current [A]": 10.0, "Temperature [C]": 298.15}
     )
