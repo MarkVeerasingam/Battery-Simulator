@@ -6,7 +6,7 @@ class SolverRunner:
     @staticmethod
     def create(config: SolverConfiguration):
         solver_type = config.solver
-        
+
         if solver_type == "CasadiSolver":
             return CasadiSolver.create_casadi_solver(config)
         elif solver_type == "IDAKLUSolver":

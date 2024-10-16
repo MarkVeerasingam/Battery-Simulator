@@ -7,7 +7,8 @@ class IDAKLUSolver:
         """Create IDAKLUSolver."""
         atol = config.tolerance.get("atol", 1e-6)  
         rtol = config.tolerance.get("rtol", 1e-6) 
-
-        solver = pybamm.IDAKLUSolver(atol=atol, rtol=rtol)
+        output_variables = config.output_variables
+        
+        solver = pybamm.IDAKLUSolver(atol=atol, rtol=rtol, output_variables=output_variables)
         solver._on_extrapolation = "warn"
         return solver
