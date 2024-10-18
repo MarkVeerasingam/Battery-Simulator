@@ -25,3 +25,12 @@ class ParameterValuesRunner:
             param_values = ParameterValueUtils.update_ParameterValues(parameter_value=param_values, updated_parameters=updated_param_values)
 
         return param_values
+    
+    @staticmethod
+    def create_ecm_parameters(config: ParameterValueConfiguration):    
+        parameter_values = config.parameter_value   
+        # hardcoding ECM_Example parameter set for when using ECM Model.
+        # might look at expaning it to custom parameter sets down the line
+        parameter_values = "ECM_Example" 
+        param_values = StandardParameterValues.create(parameter_values)
+        return param_values        
