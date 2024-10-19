@@ -2,7 +2,6 @@ from fastapi import FastAPI
 import uvicorn
 from App.API.physics_simulation_api import physics_app
 from App.API.ecm_simulation_api import ecm_app 
-
 app = FastAPI()
 
 # Mount sub-apps
