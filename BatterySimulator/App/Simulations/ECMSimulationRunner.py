@@ -71,7 +71,7 @@ class SimulationRunner:
         if self.results is None:
             print("No results to display. Please run the simulation first.")
             return
-        
+
         results = {}
         time_s = self.results["Time [s]"].entries
 
