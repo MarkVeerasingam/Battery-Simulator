@@ -1,4 +1,4 @@
-from config.Model import ElectrochemicalModelConfiguration, ECMConfiguration
+from config.Model.Model import ElectrochemicalModelConfiguration, ECMConfiguration
 from App.BatteryModel.PhysicsBasedModels.PhysicsBasedModels import PhysicsBasedModels
 from App.BatteryModel.ECM.EquivalentCircuitModel import EquivalentCircuitModel
 

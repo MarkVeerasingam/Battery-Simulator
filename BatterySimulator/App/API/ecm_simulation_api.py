@@ -17,7 +17,7 @@ from App.Simulations.ECMSimulationRunner import SimulationRunner
 from App.ParameterValues.ParameterValuesRunner import ParameterValuesRunner
 from App.Solvers.SolverRunner import SolverRunner
 from config.ParameterValues import ParameterValueConfiguration
-from config.Model import ECMConfiguration
+from config.Model.Model import ECMConfiguration
 from config.Simulation import SimulationConfiguration
 from config.Solver import SolverConfiguration
 

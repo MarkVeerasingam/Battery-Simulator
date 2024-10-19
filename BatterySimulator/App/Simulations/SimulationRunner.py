@@ -3,7 +3,7 @@ from App.ParameterValues.ParameterValuesRunner import ParameterValuesRunner
 from App.Solvers.SolverRunner import SolverRunner
 from App.Simulations.SimulationTypes import DriveCycleSimulation, ExperimentSimulation, TimeEvalSimulation
 from config.ParameterValues import ParameterValueConfiguration
-from config.Model import ElectrochemicalModelConfiguration
+from config.Model.Model import ElectrochemicalModelConfiguration
 from config.Simulation import SimulationConfiguration
 from config.Solver import SolverConfiguration
 from typing import List
