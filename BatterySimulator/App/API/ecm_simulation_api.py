@@ -1,7 +1,12 @@
-from fastapi import FastAPI
+from fastapi import APIRouter
+from ecm_test import test_ecm_simulation
 
-ecm_app  = FastAPI()
+ecm_app = APIRouter()
 
-@ecm_app .post("/")
-async def read_root():
-    return {"message": "ECM Simulation Results will go here"}
+@ecm_app.get("/test")
+async def run_ecm_test():
+    """
+    Endpoint to run the ECM simulation test.
+    """
+    result = test_ecm_simulation()
+    return {"status": "success", "data": result}

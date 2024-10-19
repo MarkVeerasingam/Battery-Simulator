@@ -3,9 +3,9 @@ from App.Simulations.Utils.drive_cycle_utils import read_drive_cycle_data, inter
 from App.Simulations.SimulationTypes.BaseSimulation import BaseSimulation
 
 class DriveCycleSimulation(BaseSimulation):
-    def run(self, drive_cycle: DriveCycleFile, temperature: float = 25.0):
+    def run(self, drive_cycle: DriveCycleFile):
         # Clear any existing model events
-        self.electrochemical_model.events = []
+        self.model.events = []
 
         time_data, current_data = read_drive_cycle_data(drive_cycle.drive_cycle_file)
 
@@ -14,9 +14,7 @@ class DriveCycleSimulation(BaseSimulation):
 
         # Update parameter values
         self.parameter_values.update({
-            "Current function [A]": current_interpolant,
-            "Ambient temperature [K]": 273.15 + temperature,
-            "Initial temperature [K]": 273.15 + temperature,
+            "Current function [A]": current_interpolant
         })
 
         sol = self.run_simulation()  

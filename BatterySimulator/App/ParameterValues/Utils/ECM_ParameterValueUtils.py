@@ -1,10 +1,13 @@
 import pybamm
 
+# NOTE: Ideally i need to make a App/Config/ECM/Parameters.py class or something. in here i would add all the components (RC pairs) and all CircuitConfigurations (Initial SoC, Capacity, upper/lower voltage etc...)
+# down the line if this is to work with a ECM RC Parameter identification service that uses optimization and parameterization. I want that server to find the ideal RC values and pass them here?
+# additionally the user of ECM directly through the api will need to configure all the ECM values here
+
 class ECM_ParameterValueUtils:
     @staticmethod
     def update_1RC_thevenin_ParameterValues(parameter_values: pybamm.ParameterValues, updated_parameters: dict):
-        
-        # very simple logic, need to throw exception if a paramere is not in the parameter set
+        # very simple logic, need to throw exception if a paramere is not in the parameter set. in theory this wont ever be raised as all parameters are hardcoded below as of right now
         if updated_parameters:
             updated_parameters = {
                 "Cell capacity [A.h]": 5,
@@ -36,7 +39,6 @@ class ECM_ParameterValueUtils:
             "C2 [F]": 40000,
             "Element-2 initial overpotential [V]": 0,
         }
-        
         parameter_values.update(updated_parameters, check_already_exists=False)
-        
+    
         return parameter_values

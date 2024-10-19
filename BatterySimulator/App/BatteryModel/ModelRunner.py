@@ -1,6 +1,6 @@
 from config.Model import ElectrochemicalModelConfiguration, ECMConfiguration
 from App.BatteryModel.PhysicsBasedModels.PhysicsBasedModels import PhysicsBasedModels
-from BatterySimulator.App.BatteryModel.ECM.EquivalentCircuitModel import EquivalentCircuitModel
+from App.BatteryModel.ECM.EquivalentCircuitModel import EquivalentCircuitModel
 
 class ModelRunner:
     @staticmethod
@@ -24,8 +24,10 @@ class ModelRunner:
         # ECM modelling
         equivalent_circuit_model = config.equivalent_circuit_model
         
+        return EquivalentCircuitModel.create_thevenin()
+        
         # creating a generic ecm thevenin model with no model options as of right now
-        if equivalent_circuit_model == "ECM":
-            return EquivalentCircuitModel.create_thevenin()
-        else:
-            raise ValueError(f"Invalid ECM Model Type: {equivalent_circuit_model}") # this should never be raised, by default ecm is a hardcoded thevenin model
+        # if equivalent_circuit_model == "ECM":
+            # return EquivalentCircuitModel.create_thevenin()
+        # else:
+        #     raise ValueError(f"Invalid ECM Model Type: {equivalent_circuit_model}") # this should never be raised, by default ecm is a hardcoded thevenin model
