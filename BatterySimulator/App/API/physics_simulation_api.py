@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, List
 from config.ParameterValues import ParameterValueConfiguration
-from config.Model.Model import ElectrochemicalModelConfiguration
+from config.Models.PhysicsBasedModel import ElectrochemicalModelConfiguration
 from config.Simulation import SimulationConfiguration, DriveCycleFile
 from config.Solver import SolverConfiguration
 from App.Simulations.SimulationRunner import SimulationRunner
