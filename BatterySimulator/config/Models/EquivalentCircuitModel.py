@@ -11,6 +11,6 @@ class ECMConfiguration(BaseModel):
     )
     RC_pairs: Optional[StrictInt] = Field(
         default=1,
-        description="Specifies the number of RC elements in the Thevenin Model. Max value is 2RC. Default is 1RC.",
+        description="Specifies the number of RC elements in the Thevenin Model. Max value is 2RC. Default is 1RC. If left blank default is 1RC pair",
         example=2,
     )

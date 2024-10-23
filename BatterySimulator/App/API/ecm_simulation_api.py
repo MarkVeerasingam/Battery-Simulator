@@ -25,7 +25,9 @@ from config.Solver import SolverConfiguration
 def test_ecm_simulation():
     parameter_value_config = ParameterValueConfiguration(parameter_value="ECM_Example", is_bpx=False)
 
-    ecm_config = ECMConfiguration()
+    ecm_config = ECMConfiguration(
+        RC_pairs=2
+    )
 
     solver_config = SolverConfiguration(
         solver="IDAKLUSolver",

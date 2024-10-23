@@ -1,3 +1,4 @@
+from config.ParameterValues.ECM_Parameters import CircuitComponent, CircuitConfiguration
 import pybamm
 
 # NOTE: Ideally i need to make a App/Config/ECM/Parameters.py class or something. in here i would add all the components (RC pairs) and all CircuitConfigurations (Initial SoC, Capacity, upper/lower voltage etc...)
