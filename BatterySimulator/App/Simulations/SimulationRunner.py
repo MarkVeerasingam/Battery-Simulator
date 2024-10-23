@@ -2,7 +2,7 @@ from App.BatteryModel.ModelRunner import ModelRunner
 from App.ParameterValues.ParameterValuesRunner import ParameterValuesRunner
 from App.Solvers.SolverRunner import SolverRunner
 from App.Simulations.SimulationTypes import DriveCycleSimulation, ExperimentSimulation, TimeEvalSimulation
-from config.ParameterValues import ParameterValueConfiguration
+from config.ParameterValues.ParameterValues import ParameterValueConfiguration
 from config.Models.PhysicsBasedModel import ElectrochemicalModelConfiguration
 from config.Simulation import SimulationConfiguration
 from config.Solver import SolverConfiguration
