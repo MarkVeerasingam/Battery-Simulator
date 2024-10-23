@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 ecm_app = APIRouter()
 
-@ecm_app.get("/test")
+@ecm_app.get("/")
 async def run_ecm_test():
     """
     Endpoint to run the ECM simulation test.
@@ -16,8 +16,8 @@ async def run_ecm_test():
 from App.Simulations.ECMSimulationRunner import SimulationRunner
 from App.ParameterValues.ParameterValuesRunner import ParameterValuesRunner
 from App.Solvers.SolverRunner import SolverRunner
-from config.ParameterValues import ParameterValueConfiguration
-from config.Model import ECMConfiguration
+from config.ParameterValues.ParameterValues import ParameterValueConfiguration
+from config.Models.EquivalentCircuitModel import ECMConfiguration
 from config.Simulation import SimulationConfiguration
 from config.Solver import SolverConfiguration
 
