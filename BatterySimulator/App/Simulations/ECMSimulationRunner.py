@@ -9,7 +9,8 @@ from config.Solver import SolverConfiguration
 from typing import List
 
 class SimulationRunner:
-    def __init__(self, parameter_value_config: ParameterValueConfiguration, solver_config: SolverConfiguration, ecm_config: ECMConfiguration):
+    def __init__(self, parameter_value_config: ParameterValueConfiguration, solver_config: SolverConfiguration, 
+                 ecm_config: ECMConfiguration):
         """
         Initialize the SimulationRunner by creating the battery model components.
 
@@ -19,7 +20,7 @@ class SimulationRunner:
         - electrochemical_config: The configuration for the electrochemical model (thermal, geometry).
         """
         self.equivalent_circuit_model = ModelRunner.create_ecm(ecm_config)
-        self.parameter_values = ParameterValuesRunner.create(parameter_value_config)
+        self.parameter_values = ParameterValuesRunner.create_ecm(ecm_config=ecm_config, config=parameter_value_config)
         self.solver = SolverRunner.create(solver_config)
 
         # stores simulation results

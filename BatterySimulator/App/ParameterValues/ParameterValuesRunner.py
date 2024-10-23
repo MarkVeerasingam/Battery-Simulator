@@ -44,9 +44,10 @@ class ParameterValuesRunner:
         else:
             param_values = StandardParameterValues.create(parameter_values)
 
-        if ecm_config.RC_pairs==2:
-            param_values = ECM_ParameterValueUtils.update_2RC_thevenin_ParameterValues()
-        else:
-            param_values = ECM_ParameterValueUtils.update_1RC_thevenin_ParameterValues()
+        param_values = ECM_ParameterValueUtils.update_rc_parameter_values(
+            ecm_config=ecm_config,
+            parameter_values=param_values,
+            updated_parameters=updated_param_values
+        )
 
         return param_values
