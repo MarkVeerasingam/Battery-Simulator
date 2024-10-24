@@ -10,9 +10,8 @@ NMC and LFP chemistries.
 
 The API encapsulates various simulation features and functionalities that a user can call from.
 
-### Posting to the API:
-## http://localhost:8084/simulate
-### "simulation" -> "type": tells the simulator what type of simulation to perform (experiment, drive_cycle or time_eval(time evaluation))
+### Posting to the API: http://localhost:8084/simulate
+## Example Post Request
 ```
 {
     "parameter_values": {
@@ -39,15 +38,34 @@ The API encapsulates various simulation features and functionalities that a user
         "drive_cycle": {
             "drive_cycle_file": "LFP_25degC_DriveCycle"
         }
-        // "experiment": [  
-        //     "Discharge at C/5 for 10 hours or until 2.5 V",
-        //     "Rest for 1 hour",
-        //     "Charge at 1 A until 3.5 V",
-        //     "Hold at 3.5 V until 10 mA",
-        //     "Rest for 1 hour"
-        // ],
-        // "t_eval": [0, 7200]  
     },
     "display_params": ["Terminal voltage [V]", "Current [A]", "Discharge capacity [A.h]"]
 }
+```
+## Performing various simultion types
+### Experiment Simulation
+```
+"simulation": {
+        "experiment": [  
+             "Discharge at C/5 for 10 hours or until 2.5 V",
+             "Rest for 1 hour",
+             "Charge at 1 A until 3.5 V",
+             "Hold at 3.5 V until 10 mA",
+             "Rest for 1 hour"
+         ]
+    },
+```
+### Time Evaluation Simulation
+```
+"simulation": {
+         "t_eval": [0, 3600]  // simulate for one hour
+    },
+```
+### Drive Cycle Simulation
+```
+"simulation": {
+        "drive_cycle": {
+            "drive_cycle_file": "LFP_25degC_DriveCycle"
+        }
+    },
 ```
