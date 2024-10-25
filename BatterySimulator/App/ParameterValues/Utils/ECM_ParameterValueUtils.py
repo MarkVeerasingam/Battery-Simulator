@@ -1,4 +1,4 @@
-from config.ParameterValues.ECM_Parameters import CircuitComponent, CircuitConfiguration
+from config.ParameterValues.ECM_Parameters.ECM_Parameters import TheveninParameters
 from config.Models.EquivalentCircuitModel import ECMConfiguration
 import pybamm
 

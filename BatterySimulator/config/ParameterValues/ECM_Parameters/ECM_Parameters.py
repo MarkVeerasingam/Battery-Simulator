@@ -1,27 +1,31 @@
 from pydantic import BaseModel, Field, StrictStr, StrictFloat
 from typing import List, Optional
 
-class CircuitComponent(BaseModel):
-    name: StrictStr = Field(
-        ..., 
-        description="The name of the circuit component, e.g., R0, R1, C1, C2 etc.",
-        example="R0"
-    )
-    value: StrictFloat = Field(
-        ..., 
-        description="The value of the circuit component (e.g., resistance in ohms or capacitance in farads).",
+class TheveninParameters(BaseModel):
+    R0: Optional[StrictFloat] = Field(
+        default=1e-3,
+        description="",
         example=1e-3
     )
-    unit: StrictStr = Field(
-        ..., 
-        description="The unit of the circuit component, e.g., 'Ohm' for resistors, 'Farad' for capacitors.",
-        example="Ohm"
+    R1: Optional[StrictFloat] = Field(
+        default=2e-4,
+        description="",
+        example=2e-4
     )
-
-class CircuitConfiguration(BaseModel):
-    components: List[CircuitComponent] = Field(
-        ..., 
-        description="A list of circuit components for the model, each with a name, value, and unit."
+    R2: Optional[StrictFloat] = Field(
+        default=0.0003,
+        description="",
+        example=0.0003
+    )
+    C1: Optional[StrictFloat] = Field(
+        default=1e4,
+        description="",
+        example=1e4
+    )
+    C2: Optional[StrictFloat] = Field(
+        default=40000,
+        description="",
+        example=40000
     )
     initial_state_of_charge: Optional[StrictFloat] = Field(
         default=0.5,
