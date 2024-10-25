@@ -23,10 +23,14 @@ from config.Solver import SolverConfiguration
 
 
 def test_ecm_simulation():
-    parameter_value_config = ParameterValueConfiguration(parameter_value="ECM_Example", is_bpx=False)
+    parameter_value_config = ParameterValueConfiguration(
+        parameter_value="ECM_Example", 
+        is_bpx=False
+        updated_parameters=
+    )
 
     ecm_config = ECMConfiguration(
-        RC_pairs=2
+        RC_pairs=1
     )
 
     solver_config = SolverConfiguration(
