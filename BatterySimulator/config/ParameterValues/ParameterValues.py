@@ -14,8 +14,7 @@ class ParameterValueConfiguration(BaseModel):
         description="The specific battery model name",
         example="lfp_18650_cell_BPX"
     )
-    updated_parameters: Optional[Union[ElectrochemicalParameters, TheveninParameters]] = Field(
+    updated_parameters: Optional[Union[Dict[str, float], ElectrochemicalParameters, TheveninParameters]] = Field(
         default=None,
         description="Optional dictionary of parameter names and their new values, e.g., {'Current [A]': 5.0, 'Temperature [K]': 298.15}.",
-        example={"Current [A]": 10.0, "Temperature [C]": 298.15}
     )
