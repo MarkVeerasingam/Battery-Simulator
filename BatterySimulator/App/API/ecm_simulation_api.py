@@ -1,66 +1,55 @@
-from fastapi import APIRouter
-
-ecm_app = APIRouter()
-
-@ecm_app.get("/")
-async def run_ecm_test():
-    """
-    Endpoint to run the ECM simulation test.
-    """
-    result = test_ecm_simulation()
-    return {"status": "success", "data": result}
-
-
-# test for ecm
-
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 from App.Simulations.ECMSimulationRunner import SimulationRunner
 from config.ParameterValues.ParameterValues import ParameterValueConfiguration
 from config.Models.EquivalentCircuitModel import ECMConfiguration
 from config.Simulation import SimulationConfiguration
 from config.Solver import SolverConfiguration
+from typing import Optional, List
+import pybamm
 
+ecm_app = FastAPI()
 
-def test_ecm_simulation():
-    ecm_config = ECMConfiguration(
-        RC_pairs=2
-    )
-    parameter_value_config = ParameterValueConfiguration(
-        parameter_value="ECM_Example", 
-        is_bpx=False,
-        updated_parameters={
-            "Cell capacity [A.h]": 5,
-            "Nominal cell capacity [A.h]": 5,
-            "Current function [A]": 5,
-            "Initial SoC": 0.5,
-            "Upper voltage cut-off [V]": 4.2,
-            "Lower voltage cut-off [V]": 3.0,
-            "R0 [Ohm]": 1e-3,
-            "R1 [Ohm]": 2e-4,
-            "C1 [F]": 1e4,
-            "R2 [Ohm]": 0.0003,
-            "C2 [F]": 40000,
-        }
-    )
-    solver_config = SolverConfiguration(
-        solver="IDAKLUSolver",
-        tolerance={"atol": 1e-6, "rtol": 1e-6},
-        mode="safe"
-    )
-    simulation_config = SimulationConfiguration(
-        experiment=(
-            "Discharge at C/10 for 1 hour or until 3.3 V",
-            "Rest for 30 minutes",
-            "Rest for 2 hours",
-            "Charge at 100 A until 4.1 V",
-            "Hold at 4.1 V until 5 A",
-            "Rest for 30 minutes",
-            "Rest for 1 hour",
-        )
-    )
-    runner = SimulationRunner(parameter_value_config, solver_config, ecm_config)
-    # Run the simulation
-    runner.run_simulation(simulation_config)
-    # Display results for selected parameters
-    selected_params = ["Voltage [V]", "Current [A]", "Jig temperature [K]"]
-    results = runner.display_results(selected_params)
-    return results
+# Enable CORS
+ecm_app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+class SimulationRequest(BaseModel):
+    parameter_values: ParameterValueConfiguration
+    equivalent_circuit_model: ECMConfiguration
+    solver_model: SolverConfiguration
+    simulation: SimulationConfiguration
+    display_params: Optional[List[str]] = None
+
+pybamm.set_logging_level("INFO")
+
+@ecm_app.post("/")
+async def simulate(request: SimulationRequest):
+    try:
+        parameter_value_config = request.parameter_values
+        equivalent_circuit_model_config = request.equivalent_circuit_model
+        solver_config = request.solver_model
+        simulation_config = request.simulation
+
+        sim_runner = SimulationRunner(parameter_value_config=parameter_value_config,
+                                      solver_config=solver_config,
+                                      ecm_config=equivalent_circuit_model_config)
+        
+        sim_runner.run_simulation(simulation_config)
+
+        display_params = request.display_params or ["Voltage [V]", "Current [A]", "Jig temperature [K]"]
+        results = sim_runner.display_results(display_params)
+        
+        return results
+    
+    except pybamm.SolverError as e:
+        raise HTTPException(status_code=500, detail=f"SolverError occurred: {str(e)}")
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
