@@ -1,7 +1,19 @@
-from pydantic import BaseModel, Field, StrictFloat
+from pydantic import BaseModel, Field, StrictFloat, StrictInt
 from typing import  Optional
 
 class TheveninParameters(BaseModel):
+    element_1_initial_overpotential: StrictInt = Field(
+        alias="Element-1 initial overpotential [V]",
+        description="",
+        default=0,
+        example=0
+    )
+    element_2_initial_overpotential: Optional[StrictInt] = Field(
+        alias="Element-2 initial overpotential [V]",
+        description="",
+        default=0,
+        example=0
+    )
     R0: Optional[StrictFloat] = Field(
         alias="R0 [Ohm]",
         description="",

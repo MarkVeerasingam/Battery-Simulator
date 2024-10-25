@@ -43,12 +43,13 @@ class ParameterValueUtils:
         if isinstance(updated_parameters, TheveninParameters):
                 updated_parameters = updated_parameters.dict(exclude_unset=True, by_alias=True)
 
-        invalid_params = [key for key in updated_parameters if key not in parameter_values.keys()]
-        if invalid_params:
-            raise ValueError(f"Invalid parameters provided: {invalid_params}")
+        # invalid_params = [key for key in updated_parameters if key not in parameter_values.keys()]
+        # if invalid_params:
+        #     raise ValueError(f"Invalid parameters provided: {invalid_params}")
 
         try:
-            parameter_values.update(updated_parameters)
+            parameter_values.update(updated_parameters, 
+                                    pybamm.equivalent_circuit.Thevenin().default_parameter_values["Open-circuit voltage [V]"])
         except pybamm.ModelError as e:
             raise ValueError(f"Parameter error occurred: {e}")
         
