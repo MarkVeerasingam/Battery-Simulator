@@ -27,12 +27,13 @@ class ParameterValuesRunner:
             param_values = StandardParameterValues.create(parameter_values)
 
         if updated_param_values:
-            param_values = ParameterValueUtils.update_ParameterValues(parameter_values=param_values, updated_parameters=updated_param_values)
+            param_values = ParameterValueUtils.update_ParameterValues(parameter_values=param_values, 
+                                                                      updated_parameters=updated_param_values)
 
         return param_values
     
     @staticmethod
-    def create_ecm(config: ParameterValueConfiguration):
+    def create_ecm(config: ParameterValueConfiguration, ecm_config: ECMConfiguration):
 
         parameter_values = config.parameter_value
         updated_param_values = config.updated_parameters
@@ -44,6 +45,8 @@ class ParameterValuesRunner:
             param_values = StandardParameterValues.create(parameter_values)
 
         if updated_param_values:
-            param_values = ParameterValueUtils.update_rc_parameter_values(parameter_values=param_values, updated_parameters=updated_param_values)
+            param_values = ParameterValueUtils.update_rc_parameter_values(parameter_values=param_values, 
+                                                                          updated_parameters=updated_param_values,
+                                                                          ecm_config=ecm_config)
 
         return param_values

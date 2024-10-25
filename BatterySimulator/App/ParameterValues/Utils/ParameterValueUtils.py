@@ -38,7 +38,7 @@ class ParameterValueUtils:
     
     # used in ECM Thevenin model only
     @staticmethod
-    def update_rc_parameter_values(parameter_values: pybamm.ParameterValues, updated_parameters: Union[Dict, TheveninParameters]):
+    def update_rc_parameter_values(parameter_values: pybamm.ParameterValues, updated_parameters: TheveninParameters, ecm_config: ECMConfiguration):
 
         if isinstance(updated_parameters, TheveninParameters):
                 updated_parameters = updated_parameters.dict(exclude_unset=True, by_alias=True)
@@ -49,7 +49,17 @@ class ParameterValueUtils:
 
         try:
             parameter_values.update(updated_parameters, 
+                                    {"Element-1 initial overpotential [V]": 0},
                                     pybamm.equivalent_circuit.Thevenin().default_parameter_values["Open-circuit voltage [V]"])
+            
+            # if the Thevenin model is a 2RC simulation, then updated the second resistor and capacitor
+            if ecm_config.RC_pairs == 2:
+                if "R2 [Ohm]" in updated_parameters and "C2 [F]" in updated_parameters:
+                    parameter_values.update({
+                        "Element-2 initial overpotential [V]": 0,
+                        "R2 [Ohm]": updated_parameters["R2 [Ohm]"],
+                        "C2 [F]": updated_parameters["C2 [F]"]
+                        }, check_already_exists=False)
         except pybamm.ModelError as e:
             raise ValueError(f"Parameter error occurred: {e}")
         
