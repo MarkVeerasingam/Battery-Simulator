@@ -3,7 +3,6 @@ from config.ParameterValues.ECM_Parameters.ECM_Parameters import TheveninParamet
 from App.ParameterValues.ParameterValueTypes.StandardParameterValues import StandardParameterValues
 from App.ParameterValues.ParameterValueTypes.BPX import BPXParameterValues
 from App.ParameterValues.Utils.ParameterValueUtils import ParameterValueUtils
-from App.ParameterValues.Utils.ECM_ParameterValueUtils import ECM_ParameterValueUtils
 from config.Models.EquivalentCircuitModel import ECMConfiguration
 
 

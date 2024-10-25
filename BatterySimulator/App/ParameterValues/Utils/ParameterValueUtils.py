@@ -36,11 +36,16 @@ class ParameterValueUtils:
 
         return parameter_values
     
+    # used in ECM Thevenin model only
     @staticmethod
-    def update_rc_parameter_values(parameter_values: pybamm.ParameterValues, updated_parameters: TheveninParameters):
+    def update_rc_parameter_values(parameter_values: pybamm.ParameterValues, updated_parameters: Union[Dict, TheveninParameters]):
 
         if isinstance(updated_parameters, TheveninParameters):
                 updated_parameters = updated_parameters.dict(exclude_unset=True, by_alias=True)
+
+        invalid_params = [key for key in updated_parameters if key not in parameter_values.keys()]
+        if invalid_params:
+            raise ValueError(f"Invalid parameters provided: {invalid_params}")
 
         try:
             parameter_values.update(updated_parameters)
@@ -48,7 +53,3 @@ class ParameterValueUtils:
             raise ValueError(f"Parameter error occurred: {e}")
         
         return parameter_values
-
-
-
-
