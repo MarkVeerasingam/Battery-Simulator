@@ -1,4 +1,4 @@
-from pydantic import BaseModel, StrictStr, Field
+from pydantic import BaseModel, StrictStr, Field, conint, StrictInt
 from typing import Optional
 
 class ECMConfiguration(BaseModel):
@@ -9,8 +9,8 @@ class ECMConfiguration(BaseModel):
         description="Consists of an OCV element, a resistor element, and a number of RC elements (by default 1). The model is coupled to two lumped thermal models, one for the cell and one for the surrounding jig",
         example="Thevenin Equivalent Circuit Model"
     )
-    is_2RC: Optional[bool] = Field(
-    default=False,
-    description="If the Thevenin Model is a 2RC Model",
-    example=False,
+    RC_pairs: Optional[StrictInt] = Field(
+        default=1,
+        description="Specifies the number of RC elements in the Thevenin Model. Max value is 2RC. Default is 1RC. If left blank default is 1RC pair",
+        example=2,
     )
