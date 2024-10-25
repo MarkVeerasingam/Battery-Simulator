@@ -20,7 +20,7 @@ class SimulationRunner:
         - electrochemical_config: The configuration for the electrochemical model (thermal, geometry).
         """
         self.equivalent_circuit_model = ModelRunner.create_ecm(ecm_config)
-        self.parameter_values = ParameterValuesRunner.create_ecm(ecm_config=ecm_config, config=parameter_value_config)
+        self.parameter_values = ParameterValuesRunner.create_ecm(config=parameter_value_config, ecm_config=ecm_config)
         self.solver = SolverRunner.create(solver_config)
 
         # stores simulation results
