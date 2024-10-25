@@ -21,9 +21,9 @@ ecm_app.add_middleware(
 )
 
 class SimulationRequest(BaseModel):
-    parameter_values: ParameterValueConfiguration
     equivalent_circuit_model: ECMConfiguration
-    solver_model: SolverConfiguration
+    parameter_values: ParameterValueConfiguration
+    solver: SolverConfiguration
     simulation: SimulationConfiguration
     display_params: Optional[List[str]] = None
 
@@ -34,7 +34,7 @@ async def simulate(request: SimulationRequest):
     try:
         parameter_value_config = request.parameter_values
         equivalent_circuit_model_config = request.equivalent_circuit_model
-        solver_config = request.solver_model
+        solver_config = request.solver
         simulation_config = request.simulation
 
         sim_runner = SimulationRunner(parameter_value_config=parameter_value_config,
@@ -50,6 +50,5 @@ async def simulate(request: SimulationRequest):
     
     except pybamm.SolverError as e:
         raise HTTPException(status_code=500, detail=f"SolverError occurred: {str(e)}")
-
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
