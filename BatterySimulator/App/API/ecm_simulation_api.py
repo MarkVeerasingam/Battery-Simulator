@@ -25,8 +25,19 @@ from config.Solver import SolverConfiguration
 def test_ecm_simulation():
     parameter_value_config = ParameterValueConfiguration(
         parameter_value="ECM_Example", 
-        is_bpx=False
-        updated_parameters=
+        is_bpx=False,
+        updated_parameters={
+            "Cell capacity [A.h]": 5,
+            "Nominal cell capacity [A.h]": 5,
+            "Current function [A]": 5,
+            "Initial SoC": 0.5,
+            "Element-1 initial overpotential [V]": 0,
+            "Upper voltage cut-off [V]": 4.2,
+            "Lower voltage cut-off [V]": 3.0,
+            "R0 [Ohm]": 1e-3,
+            "R1 [Ohm]": 2e-4,
+            "C1 [F]": 1e4,
+        }
     )
 
     ecm_config = ECMConfiguration(
