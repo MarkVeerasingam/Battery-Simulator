@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   battery-simulator:
-    container_name: battery-simulator
+    container_name: battery-simulator-api
     image: batterysimulator:latest
     build:
       context: ./BatterySimulator
@@ -12,14 +12,18 @@ services:
     volumes:
       - ./BatterySimulator:/app
     command: [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8084", "--reload" ]
+    environment:
+      - REDIS_URL=${REDIS_URL}
 
-    redis:
-      container_name: redis-pybamm-api
-      image: redis:latest
-      ports:
-        - "6379:6379"
-      volumes:
-        - redis-data:/data
+  redis:
+    container_name: redis-pybamm-api
+    build:
+      context: ./Redis
+      dockerfile: Dockerfile
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
 
 volumes:
   redis-data:
