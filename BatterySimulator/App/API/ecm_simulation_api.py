@@ -1,12 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 from App.Simulations.ECMSimulationRunner import SimulationRunner
-from config.ParameterValues.ParameterValues import ParameterValueConfiguration
-from config.Models.EquivalentCircuitModel import ECMConfiguration
-from config.Simulation import SimulationConfiguration
-from config.Solver import SolverConfiguration
-from typing import Optional, List
+from App.API.DTO.SimulationRequest import ECM_SimulationRequest
 import pybamm
 
 ecm_app = FastAPI()
@@ -20,17 +15,10 @@ ecm_app.add_middleware(
     allow_headers=["*"],
 )
 
-class SimulationRequest(BaseModel):
-    equivalent_circuit_model: ECMConfiguration
-    parameter_values: ParameterValueConfiguration
-    solver: SolverConfiguration
-    simulation: SimulationConfiguration
-    display_params: Optional[List[str]] = None
-
 pybamm.set_logging_level("INFO")
 
 @ecm_app.post("/")
-async def simulate(request: SimulationRequest):
+async def simulate(request: ECM_SimulationRequest):
     try:
         parameter_value_config = request.parameter_values
         equivalent_circuit_model_config = request.equivalent_circuit_model
