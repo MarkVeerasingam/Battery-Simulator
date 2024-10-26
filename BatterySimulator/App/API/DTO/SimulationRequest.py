@@ -1,4 +1,4 @@
-from App.Simulations.ECMSimulationRunner import SimulationRunner
+from App.Simulations.ECMSimulationRunner import ECM_SimulationRunner
 from config.ParameterValues.ParameterValues import ParameterValueConfiguration
 from config.Models.EquivalentCircuitModel import ECMConfiguration
 from config.Models.PhysicsBasedModel import ElectrochemicalModelConfiguration
