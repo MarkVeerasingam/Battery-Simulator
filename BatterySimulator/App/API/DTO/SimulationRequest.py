@@ -4,7 +4,7 @@ from config.Models.EquivalentCircuitModel import ECMConfiguration
 from config.Models.PhysicsBasedModel import ElectrochemicalModelConfiguration
 from config.Simulation import SimulationConfiguration
 from config.Solver import SolverConfiguration
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
 
 class ECM_SimulationRequest(BaseModel):
@@ -15,8 +15,8 @@ class ECM_SimulationRequest(BaseModel):
     display_params: Optional[List[str]] = None
 
 class Physics_SimulationRequest(BaseModel):
-    parameter_values: ParameterValueConfiguration
-    electrochemical_model: ElectrochemicalModelConfiguration
-    solver_model: SolverConfiguration
-    simulation: SimulationConfiguration
-    display_params: Optional[List[str]] = None
+    parameter_values: ParameterValueConfiguration = Field(...)
+    electrochemical_model: ElectrochemicalModelConfiguration = Field(...)
+    solver_model: SolverConfiguration = Field(...)
+    simulation: SimulationConfiguration = Field(...)
+    display_params: Optional[List[str]] = Field(default=None)
