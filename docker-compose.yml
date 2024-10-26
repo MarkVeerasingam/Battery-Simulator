@@ -12,3 +12,11 @@ services:
     volumes:
       - ./BatterySimulator:/app
     command: [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8084", "--reload" ]
+
+    redis:
+      container_name: redis-pybamm-api
+      image: redis:latest
+      ports:
+        - "6379:6379"
+      volumes:
+        - redis-data:/data
