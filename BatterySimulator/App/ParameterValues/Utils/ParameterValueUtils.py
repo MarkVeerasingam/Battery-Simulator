@@ -43,6 +43,7 @@ class ParameterValueUtils:
         if isinstance(updated_parameters, TheveninParameters):
                 updated_parameters = updated_parameters.dict(exclude_unset=True, by_alias=True)
 
+        # may not be ideal as, if i have a 2RC config and i use this mehtod pybamm will flag R2 and C2 and missing or null parameters. This probably why pybamm requires a second .update() call just for 2RC
         # invalid_params = [key for key in updated_parameters if key not in parameter_values.keys()]
         # if invalid_params:
         #     raise ValueError(f"Invalid parameters provided: {invalid_params}")
@@ -54,12 +55,18 @@ class ParameterValueUtils:
             
             # if the Thevenin model is a 2RC simulation, then updated the second resistor and capacitor
             if ecm_config.RC_pairs == 2:
-                if "R2 [Ohm]" in updated_parameters and "C2 [F]" in updated_parameters:
-                    parameter_values.update({
-                        "Element-2 initial overpotential [V]": 0,
-                        "R2 [Ohm]": updated_parameters["R2 [Ohm]"],
-                        "C2 [F]": updated_parameters["C2 [F]"]
-                        }, check_already_exists=False)
+                missing_params = []
+                if "R2 [Ohm]" and "C2 [F]" not in updated_parameters:
+                    missing_params.append("R2 [Ohm], " + "C2 [F]")
+                if missing_params:
+                    raise ValueError(f"2RC configuration is enabled but missing parameters: {', '.join(missing_params)}.")
+                
+                parameter_values.update({
+                    "Element-2 initial overpotential [V]": 0,
+                    "R2 [Ohm]": updated_parameters["R2 [Ohm]"],
+                    "C2 [F]": updated_parameters["C2 [F]"]
+                    }, check_already_exists=False)
+                    
         except pybamm.ModelError as e:
             raise ValueError(f"Parameter error occurred: {e}")
         
