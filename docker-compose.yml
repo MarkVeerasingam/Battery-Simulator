@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   battery-simulator:
-    container_name: battery-simulator-api
+    container_name: pybamm-api
     image: batterysimulator:latest
     build:
       context: ./BatterySimulator
