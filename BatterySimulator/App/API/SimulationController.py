@@ -5,6 +5,7 @@ from App.API.DTO.SimulationRequest import Physics_SimulationRequest, ECM_Simulat
 from App.API.SimulationService import SimulationService
 from celery.result import AsyncResult
 import logging
+
 simulation_app = FastAPI()
 
 simulation_app.add_middleware(
@@ -15,15 +16,16 @@ simulation_app.add_middleware(
     allow_headers=["*"],
 )
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 @simulation_app.post("/physics")
 async def physics_simulate(request: Physics_SimulationRequest):
     try:
         request_dict = request.dict()
 
-        logging.info("Received request_dict: %s", request_dict)
+        logger.info("Received request_dict: %s", request_dict)
 
-        
         
         task = SimulationService.run_physics_simulation.delay(request_dict)
         return JSONResponse({"task_id": task.id}, status_code=202)
@@ -36,9 +38,8 @@ async def ecm_simulate(request: ECM_SimulationRequest):
     try:
         request_dict = request.dict()
 
-        request_dict = {key: (list(value) if isinstance(value, dict) else value) 
-                        for key, value in request_dict.items()}
-
+        logger.info("Received request_dict: %s", request_dict)
+        
         task = SimulationService.run_ecm_simulation.delay(request_dict)
         return JSONResponse({"task_id": task.id}, status_code=202)
 

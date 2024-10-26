@@ -28,8 +28,8 @@ class SimulationService:
         logger.info("Registered tasks: %s", celery.tasks.keys())
 
     @celery.task
-    def run_physics_simulation(request_dict: dict):
-        request = Physics_SimulationRequest(**request_dict)
+    def run_physics_simulation(request: Physics_SimulationRequest):
+        # request = Physics_SimulationRequest(**request_dict)
 
         battery_config = request.parameter_values
         electrochemical_config = request.electrochemical_model
@@ -45,8 +45,8 @@ class SimulationService:
         return results
 
     @celery.task
-    def run_ecm_simulation(request_dict: dict):
-        request = ECM_SimulationRequest(**request_dict)
+    def run_ecm_simulation(request: ECM_SimulationRequest):
+        # request = ECM_SimulationRequest(**request_dict)
 
         parameter_value_config = request.parameter_values
         equivalent_circuit_model_config = request.equivalent_circuit_model
