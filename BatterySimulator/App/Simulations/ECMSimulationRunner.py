@@ -28,7 +28,7 @@ class ECM_SimulationRunner:
         self.results = None
         
     # sepearting out for easier seperation of conern, physics based and ecm primary simulation runnder handlers should be seperated as this is what handles the heavy compute 
-    async def run_simulation(self, config: SimulationConfiguration):
+    def run_simulation(self, config: SimulationConfiguration):
         """
         Run the simulation based on the provided configuration.
         
@@ -38,16 +38,16 @@ class ECM_SimulationRunner:
         
         if config.drive_cycle:
             drive_cycle_sim = DriveCycleSimulation(self.equivalent_circuit_model, self.parameter_values, self.solver)
-            run_sim = await asyncio.to_thread(drive_cycle_sim.run, config.drive_cycle)
-            self.results = run_sim
+            run_sim = drive_cycle_sim.run(config.drive_cycle) 
+            self.results = run_sim  
         elif config.experiment:
             experiment_sim = ExperimentSimulation(self.equivalent_circuit_model, self.parameter_values, self.solver)
-            run_sim = await asyncio.to_thread(experiment_sim.run, config.experiment)
-            self.results = run_sim
+            run_sim = experiment_sim.run(config.experiment)  
+            self.results = run_sim 
         elif config.t_eval:
             time_eval_sim = TimeEvalSimulation(self.equivalent_circuit_model, self.parameter_values, self.solver)
-            run_sim = await asyncio.to_thread(time_eval_sim.run, config.t_eval)
-            self.results = run_sim
+            run_sim = time_eval_sim.run(config.t_eval)  
+            self.results = run_sim 
         else:
             raise ValueError("No valid simulation configuration provided.")
 

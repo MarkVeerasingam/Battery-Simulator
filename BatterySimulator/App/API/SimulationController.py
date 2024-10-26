@@ -26,7 +26,7 @@ async def physics_simulate(request: Physics_SimulationRequest):
         simulation_config = request.simulation
 
         sim_runner = SimulationRunner(battery_config, solver_config, electrochemical_config)
-        await sim_runner.run_simulation(config=simulation_config)
+        sim_runner.run_simulation(config=simulation_config)
 
         display_params = request.display_params or ["Terminal voltage [V]"]
         results = sim_runner.display_results(display_params)
@@ -51,7 +51,7 @@ async def ecm_simulate(request: ECM_SimulationRequest):
                                       solver_config=solver_config,
                                       ecm_config=equivalent_circuit_model_config)
 
-        await sim_runner.run_simulation(simulation_config)
+        sim_runner.run_simulation(simulation_config)
 
         display_params = request.display_params or ["Voltage [V]", "Current [A]", "Jig temperature [K]"]
         results = sim_runner.display_results(display_params)

@@ -1,4 +1,3 @@
-import asyncio
 from App.BatteryModel.ModelRunner import ModelRunner
 from App.ParameterValues.ParameterValuesRunner import ParameterValuesRunner
 from App.Solvers.SolverRunner import SolverRunner
@@ -27,26 +26,25 @@ class SimulationRunner:
         # stores simulation results
         self.results = None
 
-    async def run_simulation(self, config: SimulationConfiguration):
+    def run_simulation(self, config: SimulationConfiguration):
         """
         Run the simulation based on the provided configuration.
         
         Parameters:
         - config: The configuration for the simulation (experiment, t_eval, drive cycle).
         """
-        
         if config.drive_cycle:
             drive_cycle_sim = DriveCycleSimulation(self.electrochemical_model, self.parameter_values, self.solver)
-            run_sim = await asyncio.to_thread(drive_cycle_sim.run, config.drive_cycle)
-            self.results = run_sim
+            run_sim = drive_cycle_sim.run(config.drive_cycle) 
+            self.results = run_sim  
         elif config.experiment:
             experiment_sim = ExperimentSimulation(self.electrochemical_model, self.parameter_values, self.solver)
-            run_sim = await asyncio.to_thread(experiment_sim.run, config.experiment)
-            self.results = run_sim
+            run_sim = experiment_sim.run(config.experiment)  
+            self.results = run_sim 
         elif config.t_eval:
             time_eval_sim = TimeEvalSimulation(self.electrochemical_model, self.parameter_values, self.solver)
-            run_sim = await asyncio.to_thread(time_eval_sim.run, config.t_eval)
-            self.results = run_sim
+            run_sim = time_eval_sim.run(config.t_eval)  
+            self.results = run_sim 
         else:
             raise ValueError("No valid simulation configuration provided.")
 
