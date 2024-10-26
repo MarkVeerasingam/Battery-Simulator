@@ -43,6 +43,7 @@ class ParameterValueUtils:
         if isinstance(updated_parameters, TheveninParameters):
                 updated_parameters = updated_parameters.dict(exclude_unset=True, by_alias=True)
 
+        # may not be ideal as, if i have a 2RC config and i use this mehtod pybamm will flag R2 and C2 and missing or null parameters. This probably why pybamm requires a second .update() call just for 2RC
         # invalid_params = [key for key in updated_parameters if key not in parameter_values.keys()]
         # if invalid_params:
         #     raise ValueError(f"Invalid parameters provided: {invalid_params}")
