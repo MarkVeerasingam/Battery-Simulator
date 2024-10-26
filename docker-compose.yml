@@ -25,5 +25,19 @@ services:
     volumes:
       - redis-data:/data
 
+  celery:
+    container_name: celery-worker
+    build:
+      context: ./BatterySimulator
+      dockerfile: Dockerfile
+    volumes:
+      - ./BatterySimulator:/app
+    command: [ "celery", "-A", "celery", "worker", "--loglevel=info" ]
+    environment:
+      - REDIS_URL=${REDIS_URL}
+      - CELERY_BROKER_URL=${REDIS_URL}
+    depends_on:
+      - redis
+
 volumes:
   redis-data:

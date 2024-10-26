@@ -1,3 +1,3 @@
-FROM redis:latest
+FROM redis:alpine
 
 CMD ["redis-server"]
