@@ -12,11 +12,11 @@ class ECM_SimulationRequest(BaseModel):
     parameter_values: ParameterValueConfiguration
     solver: SolverConfiguration
     simulation: SimulationConfiguration
-    display_params: Optional[List[str]] = None
+    display_params: Optional[List[str]] 
 
 class Physics_SimulationRequest(BaseModel):
-    parameter_values: ParameterValueConfiguration = Field(...)
-    electrochemical_model: ElectrochemicalModelConfiguration = Field(...)
-    solver_model: SolverConfiguration = Field(...)
-    simulation: SimulationConfiguration = Field(...)
-    display_params: Optional[List[str]] = Field(default=None)
+    parameter_values: ParameterValueConfiguration 
+    electrochemical_model: ElectrochemicalModelConfiguration 
+    solver_model: SolverConfiguration
+    simulation: SimulationConfiguration 
+    display_params: Optional[List[str]] 
