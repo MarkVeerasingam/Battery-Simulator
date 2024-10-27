@@ -1,7 +1,9 @@
 pybamm[jax]==24.5
 fastapi==0.115.2
 uvicorn==0.32.0
+celery[redis]==5.4.0
+redis==5.2.0
 bpx==0.4.0
-python-dotenv
+python-dotenv==1.0.0
 configparser==7.0.0
 pydantic==1.10.10

@@ -1,3 +1,4 @@
+import asyncio
 from App.BatteryModel.ModelRunner import ModelRunner
 from App.ParameterValues.ParameterValuesRunner import ParameterValuesRunner
 from App.Solvers.SolverRunner import SolverRunner
@@ -8,7 +9,7 @@ from config.Simulation import SimulationConfiguration
 from config.Solver import SolverConfiguration
 from typing import List
 
-class SimulationRunner:
+class ECM_SimulationRunner:
     def __init__(self, parameter_value_config: ParameterValueConfiguration, solver_config: SolverConfiguration, 
                  ecm_config: ECMConfiguration):
         """

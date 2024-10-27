@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   battery-simulator:
-    container_name: battery-simulator
+    container_name: pybamm-api
     image: batterysimulator:latest
     build:
       context: ./BatterySimulator
@@ -12,3 +12,32 @@ services:
     volumes:
       - ./BatterySimulator:/app
     command: [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8084", "--reload" ]
+    environment:
+      - REDIS_URL=${REDIS_URL}
+
+  redis:
+    container_name: redis
+    build:
+      context: ./Redis
+      dockerfile: Dockerfile
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+  celery:
+    container_name: celery-worker
+    build:
+      context: ./BatterySimulator
+      dockerfile: Dockerfile
+    volumes:
+      - ./BatterySimulator:/app
+    command: [ "celery", "-A", "App.API.tasks:celery", "worker", "--loglevel=info" ]
+    environment:
+      - REDIS_URL=${REDIS_URL}
+      - CELERY_BROKER_URL=${REDIS_URL}
+    depends_on:
+      - redis
+
+volumes:
+  redis-data:

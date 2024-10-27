@@ -33,7 +33,6 @@ class SimulationRunner:
         Parameters:
         - config: The configuration for the simulation (experiment, t_eval, drive cycle).
         """
-        
         if config.drive_cycle:
             drive_cycle_sim = DriveCycleSimulation(self.electrochemical_model, self.parameter_values, self.solver)
             run_sim = drive_cycle_sim.run(config.drive_cycle) 
