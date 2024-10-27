@@ -32,7 +32,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./BatterySimulator:/app
-    command: [ "celery", "-A", "App.API.SimulationService:celery", "worker", "--loglevel=info" ]
+    command: [ "celery", "-A", "App.API.tasks:celery", "worker", "--loglevel=info" ]
     environment:
       - REDIS_URL=${REDIS_URL}
       - CELERY_BROKER_URL=${REDIS_URL}

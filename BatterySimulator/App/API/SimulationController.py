@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse 
 from App.API.DTO.SimulationRequest import Physics_SimulationRequest, ECM_SimulationRequest
-from App.API.SimulationService import SimulationService
+from App.API.tasks import run_physics_simulation, run_ecm_simulation 
 from celery.result import AsyncResult
 import logging
 
@@ -14,7 +14,7 @@ simulation_app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-)
+)   
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -26,8 +26,7 @@ async def physics_simulate(request: Physics_SimulationRequest):
 
         logger.info("Received request_dict: %s", request_dict)
 
-        
-        task = SimulationService.run_physics_simulation.delay(request_dict)
+        task = run_physics_simulation.delay(request_dict)
         return JSONResponse({"task_id": task.id}, status_code=202)
 
     except Exception as e:
@@ -40,7 +39,7 @@ async def ecm_simulate(request: ECM_SimulationRequest):
 
         logger.info("Received request_dict: %s", request_dict)
         
-        task = SimulationService.run_ecm_simulation.delay(request_dict)
+        task = run_ecm_simulation.delay(request_dict)
         return JSONResponse({"task_id": task.id}, status_code=202)
 
     except Exception as e:
@@ -55,4 +54,3 @@ async def get_result(task_id: str):
         return JSONResponse({"task_id": task_id, "status": result.state, "result": result.result}, status_code=200)
     else:
         return JSONResponse({"task_id": task_id, "status": "failure", "error": str(result.result)}, status_code=500)
-
