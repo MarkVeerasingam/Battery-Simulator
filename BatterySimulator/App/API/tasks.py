@@ -3,6 +3,8 @@ from App.Simulations.SimulationRunner import SimulationRunner
 from App.Simulations.ECMSimulationRunner import ECM_SimulationRunner
 from App.API.DTO.SimulationRequest import Physics_SimulationRequest, ECM_SimulationRequest
 
+# using celeray for a distrubted systems and async simulations. the broker most likely will be rabbitMQ or kafka with a backend of redis
+# Initialize a Celery instance with a Redis broker and backend
 celery = Celery(
     'tasks',
     broker='redis://redis:6379/0',
@@ -17,6 +19,10 @@ celery.conf.update(
 
 @celery.task
 def run_physics_simulation(request_dict):
+    # celery expects a dictionary that contains all necessary parameters
+    # Deserialize the request_dict into the DTO 
+    # I'm doing this because Pydantic enforces type safety and remains consistent with the whole simulation process.
+    # will at some stage do a check for the header types for the request
     request = Physics_SimulationRequest(**request_dict)
 
     battery_config = request.parameter_values
