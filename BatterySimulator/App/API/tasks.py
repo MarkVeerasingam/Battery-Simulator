@@ -7,6 +7,8 @@ import requests
 
 logger = setup_logger(__name__)
 
+WEBHOOK_URL = 'http://fastapi_app:8085/webhook'
+
 # using celeray for a distrubted systems and async simulations. the broker most likely will be rabbitMQ or kafka with a backend of redis
 # Initialize a Celery instance with a Redis broker and backend
 celery = Celery(
@@ -21,10 +23,8 @@ celery.conf.update(
     task_serializer='json'     
 )
 
-webhook_url = 'http://localhost:8084/simulate/webhook'
-
-@celery.task(bind=True) 
-def run_physics_simulation(self, request_dict):
+@celery.task() 
+def run_physics_simulation(request_dict):
     try:
         # celery expects a dictionary that contains all necessary parameters
         # Deserialize the request_dict into the DTO 
@@ -41,18 +41,22 @@ def run_physics_simulation(self, request_dict):
         sim_runner.run_simulation(config=simulation_config)
 
         display_params = request.display_params or ["Terminal voltage [V]"]
-
         results = sim_runner.display_results(display_params)
-        
-        requests.post(webhook_url, json={"task_id": self.request.id, "result": results})
+
+        payload = {
+            "task_id": request.task_id,  
+            "results": results,            
+        }
+    
+        response = requests.post(WEBHOOK_URL, json=payload)
+        logger.info(f"Webhook response: {response.status_code}, {response.text}")
 
         return results
     except Exception as e:
         logger.error(f"Physics simulation failed: {str(e)}")
-        requests.post(webhook_url, json={"task_id": self.request.id, "error": str(e)})
 
-@celery.task(bind=True) 
-def run_ecm_simulation(self, request_dict):
+@celery.task() 
+def run_ecm_simulation(request_dict):
     try:
         request = ECM_SimulationRequest(**request_dict)
 
@@ -66,16 +70,19 @@ def run_ecm_simulation(self, request_dict):
             solver_config=solver_config,
             ecm_config=equivalent_circuit_model_config,
         )
-
         sim_runner.run_simulation(simulation_config)
 
         display_params = request.display_params or ["Voltage [V]", "Current [A]", "Jig temperature [K]"]
-
         results = sim_runner.display_results(display_params)
 
-        requests.post(webhook_url, json={"task_id": self.request.id, "result": results})
+        payload = {
+            "task_id": request.task_id,  
+            "results": results,            
+        }
+
+        response = requests.post(WEBHOOK_URL, json=payload)
+        logger.info(f"Webhook response: {response.status_code}, {response.text}")
 
         return results
     except Exception as e:
-            logger.error(f"Physics simulation failed: {str(e)}")
-            requests.post(webhook_url, json={"task_id": self.request.id, "error": str(e)})
+        logger.error(f"Physics simulation failed: {str(e)}")

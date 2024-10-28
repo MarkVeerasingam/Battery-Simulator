@@ -39,5 +39,16 @@ services:
     depends_on:
       - redis
 
+  fastapi_app:
+    container_name: webhook
+    build:
+      context: ./Server
+      dockerfile: Dockerfile
+    ports:
+      - "8085:8085"
+    volumes:
+      - ./Server:/app
+    command: [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8085", "--reload" ]
+
 volumes:
   redis-data:
