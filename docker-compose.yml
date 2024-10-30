@@ -31,7 +31,7 @@ services:
       context: ./BatterySimulator
       dockerfile: Dockerfile
     volumes:
-      - ./BatterySimulator:/app
+      - ./BatterySimulator:/apps
     command: [ "celery", "-A", "App.API.tasks:celery", "worker", "--loglevel=info" ]
     environment:
       - REDIS_URL=${REDIS_URL}

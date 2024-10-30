@@ -54,6 +54,7 @@ def run_physics_simulation(request_dict):
         return results
     except Exception as e:
         logger.error(f"Physics simulation failed: {str(e)}")
+        raise
 
 @celery.task() 
 def run_ecm_simulation(request_dict):
@@ -74,7 +75,7 @@ def run_ecm_simulation(request_dict):
 
         display_params = request.display_params or ["Voltage [V]", "Current [A]", "Jig temperature [K]"]
         results = sim_runner.display_results(display_params)
-
+        
         payload = {
             "task_id": request.task_id,  
             "results": results,            
@@ -82,7 +83,7 @@ def run_ecm_simulation(request_dict):
 
         response = requests.post(WEBHOOK_URL, json=payload)
         logger.info(f"Webhook response: {response.status_code}, {response.text}")
-
         return results
     except Exception as e:
         logger.error(f"Physics simulation failed: {str(e)}")
+        raise

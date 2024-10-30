@@ -21,11 +21,10 @@ logger = setup_logger(__name__)
 @simulation_app.post("/physics")
 async def physics_simulate(request: Physics_SimulationRequest):
     try:
-        request.generate_task_id()
         request_dict = request.dict()
         logger.info("Received request_dict: %s", request_dict)
 
-        run_physics_simulation.delay(request_dict)
+        run_physics_simulation.apply_async(args=[request_dict], task_id=request.task_id)
 
         logger.info("Physics simulation task created with ID: %s", request.task_id)
         return JSONResponse({"task_id": request.task_id}, status_code=202)
@@ -36,11 +35,10 @@ async def physics_simulate(request: Physics_SimulationRequest):
 @simulation_app.post("/ecm")
 async def ecm_simulate(request: ECM_SimulationRequest):
     try:
-        request.generate_task_id()
         request_dict = request.dict()
         logger.info("Received request_dict: %s", request_dict)
 
-        run_ecm_simulation.delay(request_dict)
+        run_ecm_simulation.apply_async(args=[request_dict], task_id=request.task_id)
 
         logger.info("ECM simulation task created with ID: %s", request.task_id)
         return JSONResponse({"task_id": request.task_id}, status_code=202)
