@@ -2,6 +2,12 @@ from celery import Celery
 from App.Simulations.SimulationRunner import SimulationRunner
 from App.Simulations.ECMSimulationRunner import ECM_SimulationRunner
 from App.API.DTO.SimulationRequest import Physics_SimulationRequest, ECM_SimulationRequest
+from config.Utils.logger import setup_logger
+import requests
+
+logger = setup_logger(__name__)
+
+WEBHOOK_URL = 'http://fastapi_app:8085/webhook'
 
 # using celeray for a distrubted systems and async simulations. the broker most likely will be rabbitMQ or kafka with a backend of redis
 # Initialize a Celery instance with a Redis broker and backend
@@ -17,45 +23,67 @@ celery.conf.update(
     task_serializer='json'     
 )
 
-@celery.task
+@celery.task() 
 def run_physics_simulation(request_dict):
-    # celery expects a dictionary that contains all necessary parameters
-    # Deserialize the request_dict into the DTO 
-    # I'm doing this because Pydantic enforces type safety and remains consistent with the whole simulation process.
-    # will at some stage do a check for the header types for the request
-    request = Physics_SimulationRequest(**request_dict)
+    try:
+        # celery expects a dictionary that contains all necessary parameters
+        # Deserialize the request_dict into the DTO 
+        # I'm doing this because Pydantic enforces type safety and remains consistent with the whole simulation process.
+        # will at some stage do a check for the header types for the request
+        request = Physics_SimulationRequest(**request_dict)
 
-    battery_config = request.parameter_values
-    electrochemical_config = request.electrochemical_model
-    solver_config = request.solver_model
-    simulation_config = request.simulation
+        battery_config = request.parameter_values
+        electrochemical_config = request.electrochemical_model
+        solver_config = request.solver_model
+        simulation_config = request.simulation
 
-    sim_runner = SimulationRunner(battery_config, solver_config, electrochemical_config)
-    sim_runner.run_simulation(config=simulation_config)
+        sim_runner = SimulationRunner(battery_config, solver_config, electrochemical_config)
+        sim_runner.run_simulation(config=simulation_config)
 
-    display_params = request.display_params or ["Terminal voltage [V]"]
-    results = sim_runner.display_results(display_params)
+        display_params = request.display_params or ["Terminal voltage [V]"]
+        results = sim_runner.display_results(display_params)
 
-    return results
+        payload = {
+            "task_id": request.task_id,  
+            "results": results,            
+        }
+    
+        response = requests.post(WEBHOOK_URL, json=payload)
+        logger.info(f"Webhook response: {response.status_code}, {response.text}")
 
-@celery.task
+        return results
+    except Exception as e:
+        logger.error(f"Physics simulation failed: {str(e)}")
+        raise
+
+@celery.task() 
 def run_ecm_simulation(request_dict):
-    request = ECM_SimulationRequest(**request_dict)
+    try:
+        request = ECM_SimulationRequest(**request_dict)
 
-    parameter_value_config = request.parameter_values
-    equivalent_circuit_model_config = request.equivalent_circuit_model
-    solver_config = request.solver
-    simulation_config = request.simulation
+        parameter_value_config = request.parameter_values
+        equivalent_circuit_model_config = request.equivalent_circuit_model
+        solver_config = request.solver
+        simulation_config = request.simulation
 
-    sim_runner = ECM_SimulationRunner(
-        parameter_value_config=parameter_value_config,
-        solver_config=solver_config,
-        ecm_config=equivalent_circuit_model_config,
-    )
+        sim_runner = ECM_SimulationRunner(
+            parameter_value_config=parameter_value_config,
+            solver_config=solver_config,
+            ecm_config=equivalent_circuit_model_config,
+        )
+        sim_runner.run_simulation(simulation_config)
 
-    sim_runner.run_simulation(simulation_config)
+        display_params = request.display_params or ["Voltage [V]", "Current [A]", "Jig temperature [K]"]
+        results = sim_runner.display_results(display_params)
+        
+        payload = {
+            "task_id": request.task_id,  
+            "results": results,            
+        }
 
-    display_params = request.display_params or ["Voltage [V]", "Current [A]", "Jig temperature [K]"]
-    results = sim_runner.display_results(display_params)
-
-    return results
+        response = requests.post(WEBHOOK_URL, json=payload)
+        logger.info(f"Webhook response: {response.status_code}, {response.text}")
+        return results
+    except Exception as e:
+        logger.error(f"Physics simulation failed: {str(e)}")
+        raise
