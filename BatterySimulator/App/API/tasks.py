@@ -24,13 +24,13 @@ celery.conf.update(
 )
 
 @celery.task() 
-def run_physics_simulation(request_dict):
+def run_physics_simulation(simualtion_request):
     try:
         # celery expects a dictionary that contains all necessary parameters
         # Deserialize the request_dict into the DTO 
         # I'm doing this because Pydantic enforces type safety and remains consistent with the whole simulation process.
         # will at some stage do a check for the header types for the request
-        request = Physics_SimulationRequest(**request_dict)
+        request = Physics_SimulationRequest(**simualtion_request)
 
         battery_config = request.parameter_values
         electrochemical_config = request.electrochemical_model
@@ -57,9 +57,9 @@ def run_physics_simulation(request_dict):
         raise
 
 @celery.task() 
-def run_ecm_simulation(request_dict):
+def run_ecm_simulation(simualtion_request):
     try:
-        request = ECM_SimulationRequest(**request_dict)
+        request = ECM_SimulationRequest(**simualtion_request)
 
         parameter_value_config = request.parameter_values
         equivalent_circuit_model_config = request.equivalent_circuit_model

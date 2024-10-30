@@ -5,7 +5,7 @@ from config.Simulation import SimulationConfiguration
 from config.Solver import SolverConfiguration
 from pydantic import BaseModel, Field
 from typing import Optional, List
-from uuid import UUID, uuid4
+from uuid import uuid4
 
 class ECM_SimulationRequest(BaseModel):
     task_id: str = Field(default_factory=lambda: str(uuid4()))    
