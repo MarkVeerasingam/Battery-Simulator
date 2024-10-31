@@ -11,14 +11,15 @@ load_dotenv()
 logger = setup_logger(__name__)
 
 WEBHOOK_URL = 'http://fastapi_app:8085/webhook'
-
 RABBITMQ_URL = os.getenv('RABBITMQ_URL')
+REDIS_URL = os.getenv('REDIS_URL', 'redis://redis:6379/0')
 
 # using celeray for a distrubted systems and async simulations. the broker most likely will be rabbitMQ or kafka with a backend of redis
 # Initialize a Celery instance with a Redis broker and backend
 celery = Celery(
     'tasks',
     broker=RABBITMQ_URL,
+    backend=REDIS_URL
 )
 
 celery.conf.update(
@@ -28,13 +29,13 @@ celery.conf.update(
 )
 
 @celery.task() 
-def run_physics_simulation(simualtion_request):
+def run_physics_simulation(simulation_request):
     try:
         # celery expects a dictionary that contains all necessary parameters
         # Deserialize the request_dict into the DTO 
         # I'm doing this because Pydantic enforces type safety and remains consistent with the whole simulation process.
         # will at some stage do a check for the header types for the request
-        request = Physics_SimulationRequest(**simualtion_request)
+        request = Physics_SimulationRequest(**simulation_request)
 
         battery_config = request.parameter_values
         electrochemical_config = request.electrochemical_model
@@ -57,7 +58,7 @@ def run_physics_simulation(simualtion_request):
 
         return results
     except Exception as e:
-        logger.error(f"Physics simulation failed: {str(e)}")
+        logger.error(f"simulation failed: {str(e)}")
         raise
 
 @celery.task() 
@@ -89,5 +90,5 @@ def run_ecm_simulation(simualtion_request):
         logger.info(f"Webhook response: {response.status_code}, {response.text}")
         return results
     except Exception as e:
-        logger.error(f"Physics simulation failed: {str(e)}")
+        logger.error(f"simulation failed: {str(e)}")
         raise

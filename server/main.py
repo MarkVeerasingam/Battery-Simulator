@@ -17,11 +17,6 @@ async def webhook(request: Request):
     payload = await request.json()
     task_id = payload.get("task_id")
     results = payload.get("results")
-    error = payload.get("error") 
-
-    if error:
-        logger.error(f"Received error for task_id {task_id}: {error}")
-        return JSONResponse(content={"message": "Error occurred", "error": error}, status_code=500)
     
     if results:
         store_simulation_results(task_id, results)
