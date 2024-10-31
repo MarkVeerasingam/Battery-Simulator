@@ -13,7 +13,7 @@ WEBHOOK_URL = 'http://fastapi_app:8085/webhook'
 # Initialize a Celery instance with a Redis broker and backend
 celery = Celery(
     'tasks',
-    broker='redis://redis:6379/0',
+    broker='amqp://guest:guest@rabbitmq:5672',
     backend='redis://redis:6379/0'
 )
 
