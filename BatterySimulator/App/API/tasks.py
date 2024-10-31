@@ -3,18 +3,22 @@ from App.Simulations.SimulationRunner import SimulationRunner
 from App.Simulations.ECMSimulationRunner import ECM_SimulationRunner
 from App.API.DTO.SimulationRequest import Physics_SimulationRequest, ECM_SimulationRequest
 from config.Utils.logger import setup_logger
+from dotenv import load_dotenv
 import requests
+import os
 
+load_dotenv()
 logger = setup_logger(__name__)
 
 WEBHOOK_URL = 'http://fastapi_app:8085/webhook'
+
+RABBITMQ_URL = os.getenv('RABBITMQ_URL')
 
 # using celeray for a distrubted systems and async simulations. the broker most likely will be rabbitMQ or kafka with a backend of redis
 # Initialize a Celery instance with a Redis broker and backend
 celery = Celery(
     'tasks',
-    broker='amqp://guest:guest@rabbitmq:5672',
-    backend='redis://redis:6379/0'
+    broker=RABBITMQ_URL,
 )
 
 celery.conf.update(
