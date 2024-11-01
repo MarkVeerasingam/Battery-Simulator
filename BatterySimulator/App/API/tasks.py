@@ -50,21 +50,30 @@ def run_physics_simulation(simulation_request):
 
         payload = {
             "task_id": request.task_id,  
+            "status": "success",
             "results": results,            
         }
-    
+
         response = requests.post(WEBHOOK_URL, json=payload)
         logger.info(f"Webhook response: {response.status_code}, {response.text}")
-
         return results
     except Exception as e:
-        logger.error(f"simulation failed: {str(e)}")
+        error_message = f"simulation failed: {str(e)}"
+        logger.error(error_message)
+        
+        payload = {
+            "task_id": request.task_id,
+            "status": "failure",
+            "error": error_message,
+        }
+        response = requests.post(WEBHOOK_URL, json=payload)
+        logger.info(f"Webhook failure notification response: {response.status_code}, {response.text}")
         raise
 
 @celery.task() 
-def run_ecm_simulation(simualtion_request):
+def run_ecm_simulation(simulation_request):
     try:
-        request = ECM_SimulationRequest(**simualtion_request)
+        request = ECM_SimulationRequest(**simulation_request)
 
         parameter_value_config = request.parameter_values
         equivalent_circuit_model_config = request.equivalent_circuit_model
@@ -83,6 +92,7 @@ def run_ecm_simulation(simualtion_request):
         
         payload = {
             "task_id": request.task_id,  
+            "status": "success",
             "results": results,            
         }
 
@@ -90,5 +100,14 @@ def run_ecm_simulation(simualtion_request):
         logger.info(f"Webhook response: {response.status_code}, {response.text}")
         return results
     except Exception as e:
-        logger.error(f"simulation failed: {str(e)}")
+        error_message = f"simulation failed: {str(e)}"
+        logger.error(error_message)
+
+        payload = {
+            "task_id": simulation_request.get("task_id"),
+            "status": "failure",
+            "error": error_message,
+        }
+        response = requests.post(WEBHOOK_URL, json=payload)
+        logger.info(f"Webhook failure notification response: {response.status_code}, {response.text}")
         raise

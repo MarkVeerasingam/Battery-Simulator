@@ -17,13 +17,16 @@ async def webhook(request: Request):
     payload = await request.json()
     task_id = payload.get("task_id")
     results = payload.get("results")
+    status = payload.get("status")
+    error = payload.get("error")
     
-    if results:
+    if status == "success":
         store_simulation_results(task_id, results)
-        logger.info(f"Stored results for task_id {task_id}")
-        logger.info(f"Simualtion: {results}")
+        logger.info(f"Stored results for task_id {task_id}: {results}")
+    elif status == "failure":
+        logger.warning(f"Received failure notification for task_id {task_id}: {error}")        
     else:
-        logger.warning(f"No results received for task_id {task_id}")
+        logger.warning(f"No results or error received for task_id {task_id}")
 
     return JSONResponse(content={"message": "success"}, status_code=200)
 
