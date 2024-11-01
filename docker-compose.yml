@@ -14,7 +14,6 @@ services:
     command: [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8084", "--reload" ]
     environment:
       - RABBITMQ_URL=${RABBITMQ_URL}
-      - REDIS_URL=${REDIS_URL}
 
   celery:
     container_name: celery-worker
@@ -27,10 +26,8 @@ services:
     command: [ "celery", "-A", "App.API.tasks:celery", "worker", "--loglevel=info" ]
     environment:
       - BROKER_URL=${RABBITMQ_URL}
-      - BACKEND_URL=${REDIS_URL}
     depends_on:
       - rabbitmq
-      - redis
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -43,12 +40,6 @@ services:
       RABBITMQ_DEFAULT_PASS: guest
     volumes:
       - ./BatterySimulator/config/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
-
-  redis:
-    container_name: redis
-    image: redis:alpine
-    ports:
-      - "6379:6379"
 
   fastapi_app:
     container_name: webhook

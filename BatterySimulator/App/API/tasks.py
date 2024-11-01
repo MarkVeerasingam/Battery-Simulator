@@ -12,14 +12,12 @@ logger = setup_logger(__name__)
 
 WEBHOOK_URL = 'http://fastapi_app:8085/webhook'
 RABBITMQ_URL = os.getenv('RABBITMQ_URL')
-REDIS_URL = os.getenv('REDIS_URL', 'redis://redis:6379/0')
 
 # using celeray for a distrubted systems and async simulations. the broker most likely will be rabbitMQ or kafka with a backend of redis
 # Initialize a Celery instance with a Redis broker and backend
 celery = Celery(
     'tasks',
-    broker=RABBITMQ_URL,
-    backend=REDIS_URL
+    broker=RABBITMQ_URL
 )
 
 celery.conf.update(
