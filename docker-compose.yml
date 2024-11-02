@@ -14,6 +14,8 @@ services:
     command: [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8084", "--reload" ]
     environment:
       - RABBITMQ_URL=${RABBITMQ_URL}
+    networks:
+      - network
 
   celery:
     container_name: celery-worker
@@ -22,24 +24,13 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./BatterySimulator:/app
-    image: madefire/chordtest
     command: [ "celery", "-A", "App.API.tasks:celery", "worker", "--loglevel=info" ]
     environment:
       - BROKER_URL=${RABBITMQ_URL}
     depends_on:
-      - rabbitmq
-
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
-    volumes:
-      - ./BatterySimulator/config/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - battery-simulator
+    networks:
+      - network
 
   fastapi_app:
     container_name: webhook
@@ -51,3 +42,8 @@ services:
     volumes:
       - ./Server:/app
     command: [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8085", "--reload" ]
+    networks:
+      - network
+
+networks:
+  network:
