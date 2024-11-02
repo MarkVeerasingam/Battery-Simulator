@@ -3,18 +3,21 @@ from App.Simulations.SimulationRunner import SimulationRunner
 from App.Simulations.ECMSimulationRunner import ECM_SimulationRunner
 from App.API.DTO.SimulationRequest import Physics_SimulationRequest, ECM_SimulationRequest
 from config.Utils.logger import setup_logger
+from dotenv import load_dotenv
 import requests
+import os
 
+load_dotenv()
 logger = setup_logger(__name__)
 
 WEBHOOK_URL = 'http://fastapi_app:8085/webhook'
+RABBITMQ_URL = os.getenv('RABBITMQ_URL')
 
 # using celeray for a distrubted systems and async simulations. the broker most likely will be rabbitMQ or kafka with a backend of redis
 # Initialize a Celery instance with a Redis broker and backend
 celery = Celery(
     'tasks',
-    broker='redis://redis:6379/0',
-    backend='redis://redis:6379/0'
+    broker=RABBITMQ_URL
 )
 
 celery.conf.update(
@@ -24,13 +27,13 @@ celery.conf.update(
 )
 
 @celery.task() 
-def run_physics_simulation(request_dict):
+def run_physics_simulation(simulation_request):
     try:
         # celery expects a dictionary that contains all necessary parameters
         # Deserialize the request_dict into the DTO 
         # I'm doing this because Pydantic enforces type safety and remains consistent with the whole simulation process.
         # will at some stage do a check for the header types for the request
-        request = Physics_SimulationRequest(**request_dict)
+        request = Physics_SimulationRequest(**simulation_request)
 
         battery_config = request.parameter_values
         electrochemical_config = request.electrochemical_model
@@ -45,21 +48,30 @@ def run_physics_simulation(request_dict):
 
         payload = {
             "task_id": request.task_id,  
+            "status": "success",
             "results": results,            
         }
-    
+
         response = requests.post(WEBHOOK_URL, json=payload)
         logger.info(f"Webhook response: {response.status_code}, {response.text}")
-
         return results
     except Exception as e:
-        logger.error(f"Physics simulation failed: {str(e)}")
+        error_message = f"simulation failed: {str(e)}"
+        logger.error(error_message)
+        
+        payload = {
+            "task_id": request.task_id,
+            "status": "failure",
+            "error": error_message,
+        }
+        response = requests.post(WEBHOOK_URL, json=payload)
+        logger.info(f"Webhook failure notification response: {response.status_code}, {response.text}")
         raise
 
 @celery.task() 
-def run_ecm_simulation(request_dict):
+def run_ecm_simulation(simulation_request):
     try:
-        request = ECM_SimulationRequest(**request_dict)
+        request = ECM_SimulationRequest(**simulation_request)
 
         parameter_value_config = request.parameter_values
         equivalent_circuit_model_config = request.equivalent_circuit_model
@@ -78,6 +90,7 @@ def run_ecm_simulation(request_dict):
         
         payload = {
             "task_id": request.task_id,  
+            "status": "success",
             "results": results,            
         }
 
@@ -85,5 +98,14 @@ def run_ecm_simulation(request_dict):
         logger.info(f"Webhook response: {response.status_code}, {response.text}")
         return results
     except Exception as e:
-        logger.error(f"Physics simulation failed: {str(e)}")
+        error_message = f"simulation failed: {str(e)}"
+        logger.error(error_message)
+
+        payload = {
+            "task_id": simulation_request.get("task_id"),
+            "status": "failure",
+            "error": error_message,
+        }
+        response = requests.post(WEBHOOK_URL, json=payload)
+        logger.info(f"Webhook failure notification response: {response.status_code}, {response.text}")
         raise
