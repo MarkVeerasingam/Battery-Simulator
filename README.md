@@ -42,6 +42,46 @@ The API encapsulates various simulation features and functionalities that a user
     "display_params": ["Terminal voltage [V]", "Current [A]", "Discharge capacity [A.h]"]
 }
 ```
+
+## Performing Equvialent Circuit Model Simulation
+```
+{
+    "equivalent_circuit_model": {
+        "RC_pairs": 2
+    },
+    "parameter_values": {
+        "parameter_value": "ECM_Example",
+        "updated_parameters": {
+            "Cell capacity [A.h]": 5,
+            "Nominal cell capacity [A.h]": 5,
+            "Current function [A]": 5,
+            "Initial SoC": 0.5,
+            "Upper voltage cut-off [V]": 4.2,
+            "Lower voltage cut-off [V]": 3.0,
+            "R0 [Ohm]": 0.001,
+            "R1 [Ohm]": 0.0002, 
+            "C1 [F]": 10000,
+            "R2 [Ohm]": 0.0003,
+            "C2 [F]": 40000
+        }
+    },
+    "solver": {
+        "solver": "IDAKLUSolver"
+    },
+    "simulation": {
+        "experiment": [
+            "Discharge at C/10 for 1 hour or until 3.3 V",
+            "Rest for 30 minutes",
+            "Rest for 2 hours",
+            "Charge at 100 A until 4.1 V",
+            "Hold at 4.1 V until 5 A",
+            "Rest for 30 minutes",
+            "Rest for 1 hour"
+        ]
+    },
+    "display_params": ["Voltage [V]", "Current [A]", "Jig temperature [K]"]
+}
+```
 ## Performing various simultion types
 ### Experiment Simulation
 ```
