@@ -1,14 +1,9 @@
 # Battery Simulator 
-## A Batteries-Included API for Battery Simulations
+## A Batteries-Included API for Lithium Ion Battery Simulations
 
-This is a WIP API that contributes towards my final year project of a web based battery simulator for Atlantic Technological University.
+This is an API for simulation lithium ion battery behaviour a part of my final year project of a Battery Simulator for Atlantic Technological University.
 
-Python based lithium ion battery simulator api, built on [Pybamm](https://github.com/pybamm-team/PyBaMM) - Please go check them out!
-
-This API models batteries from the [BPX](https://github.com/FaradayInstitution/BPX) JSON Schema. 2 Lithium Ion Models are provided in this API by About:Energy,
-NMC and LFP chemistries.
-
-The API encapsulates various simulation features and functionalities that a user can call from.
+This API is built on [Pybamm](https://github.com/pybamm-team/PyBaMM), a battery simulation python package - Please go check them out!
 
 ### Posting to the API: http://localhost:8084/simulate
 ## Example Post Request
