@@ -10,7 +10,7 @@ import os
 load_dotenv()
 logger = setup_logger(__name__)
 
-WEBHOOK_URL = 'http://fastapi_app:8085/webhook'
+WEBHOOK_URL = 'http://simulationNotification:8082/notification'
 RABBITMQ_URL = os.getenv('RABBITMQ_URL')
 
 # using celeray for a distrubted systems and async simulations. the broker most likely will be rabbitMQ or kafka with a backend of redis
@@ -44,7 +44,9 @@ def run_physics_simulation(simulation_request):
         sim_runner.run_simulation(config=simulation_config)
 
         display_params = request.display_params or ["Terminal voltage [V]"]
-        results = sim_runner.display_results(display_params)
+        results = sim_runner.display_results(display_params) # result is in dict, where {time(s):{output_variables}}
+
+        print("result data type:" + str(type(results)))
 
         payload = {
             "task_id": request.task_id,  
@@ -87,6 +89,8 @@ def run_ecm_simulation(simulation_request):
 
         display_params = request.display_params or ["Voltage [V]", "Current [A]", "Jig temperature [K]"]
         results = sim_runner.display_results(display_params)
+        
+        print("result data type:" + str(type(results)))
         
         payload = {
             "task_id": request.task_id,  
