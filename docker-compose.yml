@@ -1,8 +1,8 @@
 version: '3.7'
 
 services:
-  battery-simulator:
-    container_name: pybamm-api
+  battery_simulator:
+    container_name: batterySimulationAPI
     image: batterysimulator:latest
     build:
       context: ./BatterySimulator
@@ -15,10 +15,10 @@ services:
     environment:
       - RABBITMQ_URL=${RABBITMQ_URL}
     networks:
-      - network
+      - battery_simulator_network
 
   celery:
-    container_name: celery-worker
+    container_name: celeryWorker
     build:
       context: ./BatterySimulator
       dockerfile: Dockerfile
@@ -28,22 +28,11 @@ services:
     environment:
       - BROKER_URL=${RABBITMQ_URL}
     depends_on:
-      - battery-simulator
+      - battery_simulator
     networks:
-      - network
-
-  fastapi_app:
-    container_name: webhook
-    build:
-      context: ./Server
-      dockerfile: Dockerfile
-    ports:
-      - "8085:8085"
-    volumes:
-      - ./Server:/app
-    command: [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8085", "--reload" ]
-    networks:
-      - network
+      - battery_simulator_network
 
 networks:
-  network:
+  battery_simulator_network:
+    driver: bridge
+    name: battery_simulator_network

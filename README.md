@@ -1,14 +1,9 @@
 # Battery Simulator 
-## A Batteries-Included API for Battery Simulations
+## A Batteries-Included API for Lithium Ion Battery Simulations
 
-This is a WIP API that contributes towards my final year project of a web based battery simulator for Atlantic Technological University.
+This is an API for simulation lithium ion battery behaviour a part of my final year project of a Battery Simulator for Atlantic Technological University.
 
-Python based lithium ion battery simulator api, built on [Pybamm](https://github.com/pybamm-team/PyBaMM) - Please go check them out!
-
-This API models batteries from the [BPX](https://github.com/FaradayInstitution/BPX) JSON Schema. 2 Lithium Ion Models are provided in this API by About:Energy,
-NMC and LFP chemistries.
-
-The API encapsulates various simulation features and functionalities that a user can call from.
+This API is built on [Pybamm](https://github.com/pybamm-team/PyBaMM), a battery simulation python package - Please go check them out!
 
 ### Posting to the API: http://localhost:8084/simulate
 ## Example Post Request
@@ -40,6 +35,46 @@ The API encapsulates various simulation features and functionalities that a user
         }
     },
     "display_params": ["Terminal voltage [V]", "Current [A]", "Discharge capacity [A.h]"]
+}
+```
+
+## Performing Equvialent Circuit Model Simulation
+```
+{
+    "equivalent_circuit_model": {
+        "RC_pairs": 2
+    },
+    "parameter_values": {
+        "parameter_value": "ECM_Example",
+        "updated_parameters": {
+            "Cell capacity [A.h]": 5,
+            "Nominal cell capacity [A.h]": 5,
+            "Current function [A]": 5,
+            "Initial SoC": 0.5,
+            "Upper voltage cut-off [V]": 4.2,
+            "Lower voltage cut-off [V]": 3.0,
+            "R0 [Ohm]": 0.001,
+            "R1 [Ohm]": 0.0002, 
+            "C1 [F]": 10000,
+            "R2 [Ohm]": 0.0003,
+            "C2 [F]": 40000
+        }
+    },
+    "solver": {
+        "solver": "IDAKLUSolver"
+    },
+    "simulation": {
+        "experiment": [
+            "Discharge at C/10 for 1 hour or until 3.3 V",
+            "Rest for 30 minutes",
+            "Rest for 2 hours",
+            "Charge at 100 A until 4.1 V",
+            "Hold at 4.1 V until 5 A",
+            "Rest for 30 minutes",
+            "Rest for 1 hour"
+        ]
+    },
+    "display_params": ["Voltage [V]", "Current [A]", "Jig temperature [K]"]
 }
 ```
 ## Performing various simultion types
