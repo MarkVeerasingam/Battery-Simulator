@@ -32,6 +32,16 @@ services:
     networks:
       - battery_simulator_network
 
+  simulation_notification:
+    container_name: simulationNotificationService
+    image: simulation_notification_service:latest
+    depends_on:
+      - celery
+    ports:
+      - "8082:8082"
+    networks:
+      - battery_simulator_network
+
 networks:
   battery_simulator_network:
     driver: bridge

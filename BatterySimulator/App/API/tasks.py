@@ -10,7 +10,7 @@ import os
 load_dotenv()
 logger = setup_logger(__name__)
 
-WEBHOOK_URL = 'http://simulationNotification:8082/notification'
+WEBHOOK_URL = 'http://simulationNotificationService:8082/notification'
 RABBITMQ_URL = os.getenv('RABBITMQ_URL')
 
 # using celeray for a distrubted systems and async simulations. the broker most likely will be rabbitMQ or kafka with a backend of redis
