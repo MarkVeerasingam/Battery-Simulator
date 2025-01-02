@@ -22,7 +22,6 @@ logger = setup_logger(__name__)
 async def physics_simulate(request: Physics_SimulationRequest):
     try:
         simulation_request = request.dict()
-        logger.info("Received simualtion request: %s", simulation_request)
 
         run_physics_simulation.apply_async(args=[simulation_request], task_id=request.task_id)
 
@@ -36,7 +35,6 @@ async def physics_simulate(request: Physics_SimulationRequest):
 async def ecm_simulate(request: ECM_SimulationRequest):
     try:
         simulation_request = request.dict()
-        logger.info("Received simualtion request: %s", simulation_request)
 
         run_ecm_simulation.apply_async(args=[simulation_request], task_id=request.task_id)
 

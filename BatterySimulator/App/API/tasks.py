@@ -4,14 +4,17 @@ from App.Simulations.ECMSimulationRunner import ECM_SimulationRunner
 from App.API.DTO.SimulationRequest import Physics_SimulationRequest, ECM_SimulationRequest
 from config.Utils.logger import setup_logger
 from dotenv import load_dotenv
+import pika
 import requests
 import os
+import json
 
 load_dotenv()
 logger = setup_logger(__name__)
 
 WEBHOOK_URL = 'http://simulationNotificationService:8082/notification'
-RABBITMQ_URL = os.getenv('RABBITMQ_URL')
+# RABBITMQ_URL = os.getenv('RABBITMQ_URL')
+RABBITMQ_URL = 'amqp://guest:guest@rabbitmq:5672/'
 
 # using celeray for a distrubted systems and async simulations. the broker most likely will be rabbitMQ or kafka with a backend of redis
 # Initialize a Celery instance with a Redis broker and backend
@@ -25,6 +28,34 @@ celery.conf.update(
     result_serializer='json', 
     task_serializer='json'     
 )
+
+def publish_to_simulation_results_queue(payload):
+    try:
+        connection = pika.BlockingConnection(pika.URLParameters(RABBITMQ_URL))
+        channel = connection.channel()
+
+        # Declare the queue 'simulation_results'
+        channel.queue_declare(queue='simulation_results', durable=True)
+
+        # Convert the payload to JSON to ensure it's properly serialized
+        message = json.dumps(payload)
+
+        # Publish the message to the 'simulation_results' queue
+        channel.basic_publish(
+            exchange='',
+            routing_key='simulation_results',
+            body=message,
+            properties=pika.BasicProperties(
+                delivery_mode=2,  
+            )
+        )
+
+        # Close the connection
+        connection.close()
+
+    except Exception as e:
+        logger.error(f"Failed to publish message to RabbitMQ: {str(e)}")
+        raise
 
 @celery.task() 
 def run_physics_simulation(simulation_request):
@@ -46,16 +77,17 @@ def run_physics_simulation(simulation_request):
         display_params = request.display_params or ["Terminal voltage [V]"]
         results = sim_runner.display_results(display_params) # result is in dict, where {time(s):{output_variables}}
 
-        print("result data type:" + str(type(results)))
-
         payload = {
             "task_id": request.task_id,  
             "status": "success",
             "results": results,            
         }
 
-        response = requests.post(WEBHOOK_URL, json=payload)
-        logger.info(f"Webhook response: {response.status_code}, {response.text}")
+        # response = requests.post(WEBHOOK_URL, json=payload)
+        # logger.info(f"Webhook response: {response.status_code}, {response.text}")
+
+        publish_to_simulation_results_queue(payload)
+
         return results
     except Exception as e:
         error_message = f"simulation failed: {str(e)}"
@@ -66,13 +98,19 @@ def run_physics_simulation(simulation_request):
             "status": "failure",
             "error": error_message,
         }
-        response = requests.post(WEBHOOK_URL, json=payload)
-        logger.info(f"Webhook failure notification response: {response.status_code}, {response.text}")
+        
+        # response = requests.post(WEBHOOK_URL, json=payload)
+        # logger.info(f"Webhook failure notification response: {response.status_code}, {response.text}")
+
+        publish_to_simulation_results_queue(payload)
+
         raise
 
 @celery.task() 
 def run_ecm_simulation(simulation_request):
     try:
+        logger.info(f"Received message: {simulation_request}")
+        
         request = ECM_SimulationRequest(**simulation_request)
 
         parameter_value_config = request.parameter_values
@@ -89,17 +127,18 @@ def run_ecm_simulation(simulation_request):
 
         display_params = request.display_params or ["Voltage [V]", "Current [A]", "Jig temperature [K]"]
         results = sim_runner.display_results(display_params)
-        
-        print("result data type:" + str(type(results)))
-        
+                
         payload = {
             "task_id": request.task_id,  
             "status": "success",
             "results": results,            
         }
 
-        response = requests.post(WEBHOOK_URL, json=payload)
-        logger.info(f"Webhook response: {response.status_code}, {response.text}")
+        # response = requests.post(WEBHOOK_URL, json=payload)
+        # logger.info(f"Webhook response: {response.status_code}, {response.text}")
+
+        publish_to_simulation_results_queue(payload)
+
         return results
     except Exception as e:
         error_message = f"simulation failed: {str(e)}"
@@ -110,6 +149,10 @@ def run_ecm_simulation(simulation_request):
             "status": "failure",
             "error": error_message,
         }
-        response = requests.post(WEBHOOK_URL, json=payload)
-        logger.info(f"Webhook failure notification response: {response.status_code}, {response.text}")
+
+        # response = requests.post(WEBHOOK_URL, json=payload)
+        # logger.info(f"Webhook failure notification response: {response.status_code}, {response.text}")
+
+        publish_to_simulation_results_queue(payload)
+
         raise

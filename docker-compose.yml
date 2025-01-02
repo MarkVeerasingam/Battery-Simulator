@@ -1,6 +1,18 @@
 version: '3.7'
 
 services:
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - battery_simulator_network
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
   battery_simulator:
     container_name: batterySimulationAPI
     image: batterysimulator:latest
@@ -13,7 +25,7 @@ services:
       - ./BatterySimulator:/app
     command: [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8084", "--reload" ]
     environment:
-      - RABBITMQ_URL=${RABBITMQ_URL}
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
     networks:
       - battery_simulator_network
 
@@ -26,9 +38,10 @@ services:
       - ./BatterySimulator:/app
     command: [ "celery", "-A", "App.API.tasks:celery", "worker", "--loglevel=info" ]
     environment:
-      - BROKER_URL=${RABBITMQ_URL}
+      - BROKER_URL=amqp://guest:guest@rabbitmq:5672
     depends_on:
       - battery_simulator
+      - rabbitmq
     networks:
       - battery_simulator_network
 
@@ -41,6 +54,22 @@ services:
       - "8082:8082"
     networks:
       - battery_simulator_network
+
+  simulation_manager:
+    container_name: simulationManager
+    image: simulation_manager:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
+      - producer.enabled=true
+    networks:
+      - battery_simulator_network
+    depends_on:
+      - rabbitmq
 
 networks:
   battery_simulator_network:
