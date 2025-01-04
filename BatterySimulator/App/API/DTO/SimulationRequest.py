@@ -8,7 +8,8 @@ from typing import Optional, List
 from uuid import uuid4
 
 class ECM_SimulationRequest(BaseModel):
-    task_id: str = Field(default_factory=lambda: str(uuid4()))    
+    user_id: str
+    task_id: str   
     equivalent_circuit_model: ECMConfiguration
     parameter_values: ParameterValueConfiguration
     solver: SolverConfiguration
@@ -16,7 +17,8 @@ class ECM_SimulationRequest(BaseModel):
     display_params: Optional[List[str]]
 
 class Physics_SimulationRequest(BaseModel):
-    task_id: str = Field(default_factory=lambda: str(uuid4()))    
+    user_id: str
+    task_id: str 
     parameter_values: ParameterValueConfiguration 
     electrochemical_model: ElectrochemicalModelConfiguration 
     solver_model: SolverConfiguration

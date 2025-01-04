@@ -25,7 +25,7 @@ async def physics_simulate(request: Physics_SimulationRequest):
 
         run_physics_simulation.apply_async(args=[simulation_request], task_id=request.task_id)
 
-        logger.info("Physics simulation task created with ID: %s", request.task_id)
+        logger.info(f"Task created: task_id={request.task_id}, user_id={request.user_id}")
         return JSONResponse({"task_id": request.task_id}, status_code=202)
 
     except Exception as e:
@@ -34,11 +34,13 @@ async def physics_simulate(request: Physics_SimulationRequest):
 @simulation_app.post("/ecm")
 async def ecm_simulate(request: ECM_SimulationRequest):
     try:
+        logger.info(f"Received request: task_id={request.task_id}")
+
         simulation_request = request.dict()
 
         run_ecm_simulation.apply_async(args=[simulation_request], task_id=request.task_id)
 
-        logger.info("ECM simulation task created with ID: %s", request.task_id)
+        logger.info(f"Task created: task_id={request.task_id}")
         return JSONResponse({"task_id": request.task_id}, status_code=202)
 
     except Exception as e:

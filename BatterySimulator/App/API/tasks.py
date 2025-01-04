@@ -78,7 +78,8 @@ def run_physics_simulation(simulation_request):
         results = sim_runner.display_results(display_params) # result is in dict, where {time(s):{output_variables}}
 
         payload = {
-            "task_id": request.task_id,  
+            "user_id": request.user_id, 
+            "task_id": request.task_id,
             "status": "success",
             "results": results,            
         }
@@ -94,9 +95,10 @@ def run_physics_simulation(simulation_request):
         logger.error(error_message)
         
         payload = {
+            "user_id": request.user_id, 
             "task_id": request.task_id,
-            "status": "failure",
-            "error": error_message,
+            "status": "success",
+            "results": results,            
         }
         
         # response = requests.post(WEBHOOK_URL, json=payload)
@@ -129,7 +131,8 @@ def run_ecm_simulation(simulation_request):
         results = sim_runner.display_results(display_params)
                 
         payload = {
-            "task_id": request.task_id,  
+            "user_id": request.user_id, 
+            "task_id": request.task_id,
             "status": "success",
             "results": results,            
         }
@@ -145,6 +148,7 @@ def run_ecm_simulation(simulation_request):
         logger.error(error_message)
 
         payload = {
+            "user_id": simulation_request.get("user_id"), 
             "task_id": simulation_request.get("task_id"),
             "status": "failure",
             "error": error_message,

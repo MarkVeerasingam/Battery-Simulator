@@ -13,6 +13,18 @@ services:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
 
+  mongodb:
+    container_name: mongodb
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    networks:
+      - battery_simulator_network
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=simulationDB
+
   battery_simulator:
     container_name: batterySimulationAPI
     image: batterysimulator:latest
@@ -65,11 +77,17 @@ services:
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=guest
       - SPRING_RABBITMQ_PASSWORD=guest
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/simulationDB
       - producer.enabled=true
     networks:
       - battery_simulator_network
     depends_on:
       - rabbitmq
+      - mongodb
+
+volumes:
+  mongodb_data:
+
 
 networks:
   battery_simulator_network:
