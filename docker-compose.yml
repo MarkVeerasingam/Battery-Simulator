@@ -1,18 +1,6 @@
 version: '3.7'
 
 services:
-  rabbitmq:
-    container_name: rabbitmq
-    image: rabbitmq:3-management
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    networks:
-      - battery_simulator_network
-    environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
-
   mongodb:
     container_name: mongodb
     image: mongo:latest
@@ -36,8 +24,6 @@ services:
     volumes:
       - ./BatterySimulator:/app
     command: [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8084", "--reload" ]
-    environment:
-      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
     networks:
       - battery_simulator_network
 
@@ -50,44 +36,24 @@ services:
       - ./BatterySimulator:/app
     command: [ "celery", "-A", "App.API.tasks:celery", "worker", "--loglevel=info" ]
     environment:
-      - BROKER_URL=amqp://guest:guest@rabbitmq:5672
+      - BROKER_URL=redis://redis:6379/0 
+      - RESULT_BACKEND=redis://redis:6379/0  
     depends_on:
       - battery_simulator
-      - rabbitmq
+      - redis 
     networks:
       - battery_simulator_network
 
-  simulation_notification:
-    container_name: simulationNotificationService
-    image: simulation_notification_service:latest
-    depends_on:
-      - celery
+  redis:
+    container_name: redis
+    image: redis:latest
     ports:
-      - "8082:8082"
+      - "6379:6379" 
     networks:
       - battery_simulator_network
-
-  simulation_manager:
-    container_name: simulationManager
-    image: simulation_manager:latest
-    ports:
-      - "8080:8080"
-    environment:
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=guest
-      - SPRING_RABBITMQ_PASSWORD=guest
-      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/simulationDB
-      - producer.enabled=true
-    networks:
-      - battery_simulator_network
-    depends_on:
-      - rabbitmq
-      - mongodb
 
 volumes:
   mongodb_data:
-
 
 networks:
   battery_simulator_network:

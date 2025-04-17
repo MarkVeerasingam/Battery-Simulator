@@ -1,12 +1,10 @@
-from celery import Celery
+from celery import Celery, shared_task
 from App.Simulations.SimulationRunner import SimulationRunner
 from App.Simulations.ECMSimulationRunner import ECM_SimulationRunner
 from App.API.DTO.SimulationRequest import Physics_SimulationRequest, ECM_SimulationRequest
 from config.Utils.logger import setup_logger
 from dotenv import load_dotenv
-import pika
-import requests
-import os
+import redis
 import json
 
 load_dotenv()
@@ -14,13 +12,14 @@ logger = setup_logger(__name__)
 
 WEBHOOK_URL = 'http://simulationNotificationService:8082/notification'
 # RABBITMQ_URL = os.getenv('RABBITMQ_URL')
-RABBITMQ_URL = 'amqp://guest:guest@rabbitmq:5672/'
+REDIS_URL = 'redis://redis:6379/0'
 
 # using celeray for a distrubted systems and async simulations. the broker most likely will be rabbitMQ or kafka with a backend of redis
 # Initialize a Celery instance with a Redis broker and backend
 celery = Celery(
     'tasks',
-    broker=RABBITMQ_URL
+    broker=REDIS_URL,
+    backend=REDIS_URL
 )
 
 celery.conf.update(
@@ -31,33 +30,17 @@ celery.conf.update(
 
 def publish_to_simulation_results_queue(payload):
     try:
-        connection = pika.BlockingConnection(pika.URLParameters(RABBITMQ_URL))
-        channel = connection.channel()
+        # Connect to Redis
+        r = redis.StrictRedis.from_url(REDIS_URL)
 
-        # Declare the queue 'simulation_results'
-        channel.queue_declare(queue='simulation_results', durable=True)
-
-        # Convert the payload to JSON to ensure it's properly serialized
-        message = json.dumps(payload)
-
-        # Publish the message to the 'simulation_results' queue
-        channel.basic_publish(
-            exchange='',
-            routing_key='simulation_results',
-            body=message,
-            properties=pika.BasicProperties(
-                delivery_mode=2,  
-            )
-        )
-
-        # Close the connection
-        connection.close()
+        # Publish the payload (results) to a Redis channel/queue
+        r.publish('simulation_results', json.dumps(payload))  
 
     except Exception as e:
         logger.error(f"Failed to publish message to RabbitMQ: {str(e)}")
         raise
 
-@celery.task() 
+@shared_task() 
 def run_physics_simulation(simulation_request):
     try:
         # celery expects a dictionary that contains all necessary parameters
@@ -78,7 +61,6 @@ def run_physics_simulation(simulation_request):
         results = sim_runner.display_results(display_params) # result is in dict, where {time(s):{output_variables}}
 
         payload = {
-            "user_id": request.user_id, 
             "task_id": request.task_id,
             "status": "success",
             "results": results,            
@@ -95,7 +77,6 @@ def run_physics_simulation(simulation_request):
         logger.error(error_message)
         
         payload = {
-            "user_id": request.user_id, 
             "task_id": request.task_id,
             "status": "success",
             "results": results,            
@@ -131,7 +112,6 @@ def run_ecm_simulation(simulation_request):
         results = sim_runner.display_results(display_params)
                 
         payload = {
-            "user_id": request.user_id, 
             "task_id": request.task_id,
             "status": "success",
             "results": results,            
@@ -148,7 +128,6 @@ def run_ecm_simulation(simulation_request):
         logger.error(error_message)
 
         payload = {
-            "user_id": simulation_request.get("user_id"), 
             "task_id": simulation_request.get("task_id"),
             "status": "failure",
             "error": error_message,
