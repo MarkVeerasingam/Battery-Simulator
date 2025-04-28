@@ -22,3 +22,13 @@ class Physics_SimulationRequest(BaseModel):
     solver_model: SolverConfiguration
     simulation: SimulationConfiguration 
     display_params: Optional[List[str]] 
+
+class ParameterizedECMRequest(BaseModel):
+    task_id: str = Field(default_factory=lambda: str(uuid4()))
+    battery_label: str
+    cycle_number: int
+    equivalent_circuit_model: ECMConfiguration
+    parameter_values: ParameterValueConfiguration
+    solver: SolverConfiguration
+    simulation: SimulationConfiguration
+    display_params: Optional[List[str]]

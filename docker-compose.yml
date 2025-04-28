@@ -11,7 +11,7 @@ services:
     volumes:
       - mongodb_data:/data/db
     environment:
-      - MONGO_INITDB_DATABASE=simulationDB
+      - MONGO_INITDB_DATABASE=BatteryData
 
   battery_simulator:
     container_name: batterySimulationAPI
@@ -21,6 +21,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8084:8084"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/ 
     volumes:
       - ./BatterySimulator:/app
     command: [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8084", "--reload" ]
@@ -38,9 +40,11 @@ services:
     environment:
       - BROKER_URL=redis://redis:6379/0 
       - RESULT_BACKEND=redis://redis:6379/0  
+      - MONGO_URI=mongodb://mongodb:27017/ 
     depends_on:
       - battery_simulator
       - redis 
+      - mongodb 
     networks:
       - battery_simulator_network
 
@@ -51,6 +55,8 @@ services:
       - "6379:6379" 
     networks:
       - battery_simulator_network
+    tmpfs:
+      - /data
 
 volumes:
   mongodb_data:
